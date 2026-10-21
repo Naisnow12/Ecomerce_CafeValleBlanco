@@ -1,0 +1,17 @@
+//base/reset
+/* styles.scss */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* Evita que los paddings sumen ancho extra */
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* Corta cualquier contenido que se escape por los lados */
+    width: 100%;
+}
