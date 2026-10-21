@@ -1,0 +1,57 @@
+.main-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+
+    /* Fila 1: Alineación distribuida (Extremos) */
+    .top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+    }
+
+    /* Fila 2: Navegación Centrada */
+    .nav-row {
+        display: flex;
+        justify-content: center;
+        padding: 0.75rem 0;
+        border-top: 1px solid #f3f4f6;
+
+        .nav-list {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            a {
+                text-decoration: none;
+                color: #4b5563;
+                font-weight: 500;
+                transition: color 0.2s ease;
+
+                &:hover,
+                &.active {
+                    color: #2563eb;
+                    /* Color de acento */
+                }
+            }
+        }
+    }
+}
