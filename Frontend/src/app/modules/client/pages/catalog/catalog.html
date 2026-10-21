@@ -1,1 +1,475 @@
-<p>catalog works!</p>
+<div class="catalog-page">
+    <div class="catalog-container">
+
+        <!-- Cabecera de la Página -->
+        <header class="catalog-header">
+            <div class="header-intro">
+                <h1 class="page-title">Colección de Cafés de Especialidad</h1>
+                <p class="page-description">
+                    Granos cosechados éticamente a más de 1.400 metros de altitud, tostados en lotes pequeños en nuestro
+                    tambor de hierro fundido para desvelar notas puras y complejas.
+                </p>
+            </div>
+
+            <!-- Selector de Ordenamiento -->
+            <div class="sort-wrapper">
+                <select class="sort-select">
+                    <option value="sca">Mayor Puntuación SCA (+88 a +92)</option>
+                    <option value="price-asc">Precio: Menor a Mayor</option>
+                    <option value="price-desc">Precio: Mayor a Menor</option>
+                    <option value="recent">Más Recientes</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Layout Principal: Filtros + Grilla -->
+        <div class="catalog-layout">
+
+            <!-- ================= SIDEBAR DE FILTROS ================= -->
+            <aside class="filters-sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">Filtros Avanzados</h2>
+                    <button type="button" class="btn-clear">LIMPIAR TODO</button>
+                </div>
+
+                <!-- Sección: Perfil de Tueste -->
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        PERFIL DE TUESTE
+                        <span class="icon">&#x2139;</span>
+                    </h3>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" checked />
+                        <span class="badge-color tueste-claro"></span>
+                        <span class="label-text">Tueste Claro / Filtro</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" checked />
+                        <span class="badge-color tueste-medio"></span>
+                        <span class="label-text">Tueste Medio / Omniroast</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" />
+                        <span class="badge-color tueste-oscuro"></span>
+                        <span class="label-text">Tueste Medio-Oscuro / Espresso</span>
+                    </label>
+                </div>
+
+                <!-- Sección: Notas de Cata -->
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        NOTAS DE CATA
+                        <span class="icon">&#x2139;</span>
+                    </h3>
+                    <div class="pills-container">
+                        <button type="button" class="pill active">Frutal</button>
+                        <button type="button" class="pill">Achocolatado</button>
+                        <button type="button" class="pill">Cítrico</button>
+                        <button type="button" class="pill">Especiado</button>
+                        <button type="button" class="pill">Floral</button>
+                        <button type="button" class="pill">Nuez / Caramelo</button>
+                    </div>
+                </div>
+
+                <!-- Sección: Origen / Terroir -->
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        ORIGEN / TERROIR
+                        <span class="icon">&#x2139;</span>
+                    </h3>
+                    <div class="checkbox-grid">
+                        <label class="filter-checkbox"><input type="checkbox" checked /> Colombia (6)</label>
+                        <label class="filter-checkbox"><input type="checkbox" checked /> Etiopía (4)</label>
+                        <label class="filter-checkbox"><input type="checkbox" /> Guatemala (3)</label>
+                        <label class="filter-checkbox"><input type="checkbox" checked /> Kenia (2)</label>
+                        <label class="filter-checkbox"><input type="checkbox" /> Costa Rica (2)</label>
+                        <label class="filter-checkbox"><input type="checkbox" /> Brasil (1)</label>
+                    </div>
+                </div>
+
+                <!-- Sección: Proceso de Beneficio -->
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        PROCESO DE BENEFICIO
+                        <span class="icon">&#x2139;</span>
+                    </h3>
+                    <label class="filter-checkbox"><input type="checkbox" checked /> Lavado Clásico (Washed)</label>
+                    <label class="filter-checkbox"><input type="checkbox" checked /> Natural Secado al Sol</label>
+                    <label class="filter-checkbox"><input type="checkbox" /> Yellow / Red Honey</label>
+                    <label class="filter-checkbox"><input type="checkbox" checked /> Fermentación Anaeróbica</label>
+                </div>
+
+                <!-- Sección: Altitud Mínima (Slider) -->
+                <div class="filter-group">
+                    <div class="range-header">
+                        <span class="filter-title">ALTITUD MÍNIMA</span>
+                        <span class="range-value">1.600 msnm</span>
+                    </div>
+                    <input type="range" min="1200" max="2200" value="1600" class="range-slider" />
+                    <div class="range-labels">
+                        <span>1.200m</span>
+                        <span>2.200m+</span>
+                    </div>
+                </div>
+
+                <!-- Sección: Puntaje SCA -->
+                <div class="filter-group">
+                    <div class="range-header">
+                        <span class="filter-title">PUNTAJE SCA</span>
+                        <span class="range-value">+86 pts</span>
+                    </div>
+                    <input type="range" min="84" max="90" value="86" class="range-slider" />
+                    <div class="range-labels">
+                        <span>SCA 84 (Muy Bueno)</span>
+                        <span>SCA 90+ (Excepcional)</span>
+                    </div>
+                </div>
+
+                <!-- Sección: Tipo de Molienda -->
+                <div class="filter-group">
+                    <h3 class="filter-title">TIPO DE MOLIENDA</h3>
+                    <div class="molienda-grid">
+                        <button type="button" class="btn-molienda">Grano Entero</button>
+                        <button type="button" class="btn-molienda">Espresso</button>
+                        <button type="button" class="btn-molienda">Filtro / V60</button>
+                        <button type="button" class="btn-molienda">Prensa / French</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ================= GRILLA DE PRODUCTOS ================= -->
+            <main class="products-section">
+                <div class="products-grid">
+
+                    <!-- Tarjeta 1: Geisha Finca El Paraíso -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge brown">Micro-Lote</span>
+                                <span class="tag-badge dark">Anaeróbico 72h</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 89.5</span>
+                            <img src="assets/images/geisha-paraiso.jpg" alt="Geisha Finca El Paraíso" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-claro"></span> Tueste Filtro
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">Huila, Colombia</span>
+                                <span class="altitude">1.850 msnm</span>
+                            </div>
+                            <h3 class="product-title">Geisha Finca El Paraíso</h3>
+                            <p class="product-excerpt">
+                                Variedad Geisha pura con fermentación termocontrolada. Claridad de taza...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Jazmín</span>
+                                <span class="note">Melocotón</span>
+                                <span class="note">Bergamota</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/19.50</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 2: Konga Heirloom Lavado -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge light">Lavado</span>
+                                <span class="tag-badge dark">Heirloom Autóctono</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 88.7</span>
+                            <img src="assets/images/konga-heirloom.jpg" alt="Konga Heirloom Lavado" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-claro"></span> Tueste Claro
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">Yirgacheffe, Etiopía</span>
+                                <span class="altitude">2.050 msnm</span>
+                            </div>
+                            <h3 class="product-title">Konga Heirloom Lavado</h3>
+                            <p class="product-excerpt">
+                                Cosechado por más de 600 pequeños agricultores. Extraordinaria acidez...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Flor de Azahar</span>
+                                <span class="note">Té Earl Grey</span>
+                                <span class="note">Lima Dulce</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/16.80</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 3: Karatina SL28 & SL34 -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge light">Doble Lavado Keniano</span>
+                                <span class="tag-badge rust">Grado AA</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 89.0</span>
+                            <img src="assets/images/karatina-kenya.jpg" alt="Karatina SL28 & SL34" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-claro"></span> Tueste Filtro
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">Nyeri Hill, Kenia</span>
+                                <span class="altitude">1.950 msnm</span>
+                            </div>
+                            <h3 class="product-title">Karatina SL28 & SL34</h3>
+                            <p class="product-excerpt">
+                                Explosión jugosa de grosella negra y ruibarbo con un cuerpo denso y acidez...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Grosella Negra</span>
+                                <span class="note">Pomelo Rosa</span>
+                                <span class="note">Ruibarbo</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/18.20</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 4: Finca Medina Bourbon -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge light">Tierra Volcánica</span>
+                                <span class="tag-badge brown">Bourbon / Caturra</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 87.0</span>
+                            <img src="assets/images/finca-medina.jpg" alt="Finca Medina Bourbon" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-medio"></span> Tueste Medio
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">Antigua, Guatemala</span>
+                                <span class="altitude">1.650 msnm</span>
+                            </div>
+                            <h3 class="product-title">Finca Medina Bourbon</h3>
+                            <p class="product-excerpt">
+                                Cuerpo cremoso y balance perfecto. Notas reconfortantes de chocolate...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Chocolate 70%</span>
+                                <span class="note">Panela Dulce</span>
+                                <span class="note">Avellana</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/14.90</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 5: La Candelilla Red Honey -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge light">Red Honey</span>
+                                <span class="tag-badge dark">Caturra / Catuaí</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 88.0</span>
+                            <img src="assets/images/candelilla.jpg" alt="La Candelilla Red Honey" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-medio"></span> Tueste Medio
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">Tarrazú, Costa Rica</span>
+                                <span class="altitude">1.750 msnm</span>
+                            </div>
+                            <h3 class="product-title">La Candelilla Red Honey</h3>
+                            <p class="product-excerpt">
+                                Secado con el 80% de su mucílago intacto en camas africanas. Textura...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Miel Silvestre</span>
+                                <span class="note">Uva Roja</span>
+                                <span class="note">Manzana Roja</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/17.40</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 6: Pink Bourbon Anaeróbico -->
+                    <article class="product-card">
+                        <div class="card-media">
+                            <div class="badges-top">
+                                <span class="tag-badge rust">Cosecha Limitada</span>
+                                <span class="tag-badge dark">Variedad Rara</span>
+                            </div>
+                            <span class="sca-badge">&#9733; SCA 90.5</span>
+                            <img src="assets/images/pink-bourbon-anaerobic.jpg" alt="Pink Bourbon Anaeróbico" />
+                            <div class="tueste-pill">
+                                <span class="dot tueste-claro"></span> Tueste Filtro
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <div class="location-header">
+                                <span class="region">San Adolfo, Huila</span>
+                                <span class="altitude">1.900 msnm</span>
+                            </div>
+                            <h3 class="product-title">Pink Bourbon Anaeróbico</h3>
+                            <p class="product-excerpt">
+                                Cerezas rosadas con maceración carbónica de 96 horas. Una copa con...
+                            </p>
+                            <div class="flavor-notes">
+                                <span class="note">Maracuyá</span>
+                                <span class="note">Papaya Rosa</span>
+                                <span class="note">Flor de Loto</span>
+                            </div>
+
+                            <div class="weights-selector">
+                                <button type="button" class="weight-btn active">250g</button>
+                                <button type="button" class="weight-btn">500g</button>
+                                <button type="button" class="weight-btn">1kg</button>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="price-container">
+                                    <span class="price-label">Precio</span>
+                                    <span class="price-value">S/22.00</span>
+                                </div>
+                                <button type="button" class="btn-add">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Bar/Pie de Paginación -->
+                <footer class="pagination-bar">
+                    <span class="results-info">Mostrando 1 &ndash; 6 de 18 variedades seleccionadas</span>
+                    <div class="pagination-controls">
+                        <button type="button" class="page-btn nav-btn" disabled>&lt;</button>
+                        <button type="button" class="page-btn active">1</button>
+                        <button type="button" class="page-btn">2</button>
+                        <button type="button" class="page-btn">3</button>
+                        <button type="button" class="page-btn nav-btn">&gt;</button>
+                    </div>
+                </footer>
+
+            </main>
+
+        </div>
+
+    </div>
+</div>
