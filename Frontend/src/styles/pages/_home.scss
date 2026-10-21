@@ -1,0 +1,654 @@
+//styles/pages/home
+
+.hero-section {
+    width: 100%;
+    background-color: #f8f6f2;
+    /* Fondo crema claro */
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: center;
+
+    .hero-container {
+        max-width: 1200px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 3rem;
+        align-items: center;
+
+        @media (max-width: 992px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* --- COLUMNA IZQUIERDA --- */
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #eae5dc;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 1.5rem;
+
+            .dot {
+                width: 7px;
+                height: 7px;
+                background-color: #c86237;
+                border-radius: 50%;
+            }
+
+            .tag-text {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #655e53;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        .hero-title {
+            font-size: 2.75rem;
+            font-family: 'serif';
+            /* O tu tipografía serif configurada */
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+
+            .highlight {
+                color: #bd5928;
+                /* Color terracota / café destacado */
+                font-style: italic;
+            }
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 520px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.85rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                cursor: pointer;
+                text-decoration: none;
+                transition: all 0.2s ease;
+
+                &-primary {
+                    background-color: #0d0d0d;
+                    color: #ffffff;
+                    border: none;
+
+                    &:hover {
+                        background-color: #2a2a2a;
+                    }
+                }
+
+                &-secondary {
+                    background-color: #ffffff;
+                    color: #1a1a1a;
+                    border: 1px solid #e0e0e0;
+
+                    &:hover {
+                        background-color: #f3f3f3;
+                    }
+                }
+            }
+        }
+
+        .stats-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+
+            .stat-item {
+                display: flex;
+                flex-direction: column;
+
+                .stat-value {
+                    font-size: 1.25rem;
+                    font-weight: 800;
+                    color: #1a1a1a;
+                }
+
+                .stat-label {
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    color: #888888;
+                    margin-top: 0.25rem;
+                }
+            }
+        }
+    }
+
+    /* --- COLUMNA DERECHA --- */
+    .hero-media {
+        position: relative;
+
+        .floating-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: #f97342;
+            /* Naranja encendido */
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-align: center;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transform: rotate(6deg);
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(249, 115, 66, 0.3);
+            line-height: 1.2;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 480px;
+            border-radius: 16px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .toast-card {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+            .toast-icon {
+                background-color: #fde8e0;
+                color: #e55322;
+                padding: 0.6rem;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .toast-info {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+
+                .toast-title {
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    color: #1a1a1a;
+                }
+
+                .toast-subtitle {
+                    font-size: 0.75rem;
+                    color: #777777;
+                }
+            }
+
+            .toast-tag {
+                background-color: #f0f0f0;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: #555555;
+                padding: 0.25rem 0.6rem;
+                border-radius: 6px;
+            }
+        }
+    }
+}
+
+.collections-section {
+    width: 100%;
+    background-color: #f8f6f2;
+    /* Mantiene la misma línea de tono crema del Home */
+    padding: 4rem 2rem;
+    display: flex;
+    justify-content: center;
+
+    .collections-container {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* --- CABECERA DE LA SECCIÓN --- */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+
+            .subtitle {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #b3592e;
+                /* Tono terracota característico */
+                letter-spacing: 0.5px;
+            }
+
+            .title {
+                font-size: 2.25rem;
+                font-family: 'serif';
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0;
+            }
+        }
+
+        .catalog-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #b3592e;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    /* --- GRILLA DE TARJETAS --- */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.25rem;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* --- TARJETA INDIVIDUAL --- */
+    .collection-card {
+        background-color: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+
+                .collection-card:hover & {
+                    transform: scale(1.03);
+                }
+            }
+        }
+
+        .card-body {
+            padding: 1rem 1.15rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .card-title {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0;
+            }
+
+            .card-desc {
+                font-size: 0.8rem;
+                color: #777777;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.featured-section {
+    width: 100%;
+    background-color: #f8f6f2;
+    padding: 4rem 2rem;
+    display: flex;
+    justify-content: center;
+
+    .featured-container {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* --- CABECERA & FILTROS --- */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+
+            .subtitle {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #b3592e;
+                letter-spacing: 0.5px;
+            }
+
+            .title {
+                font-size: 2.25rem;
+                font-family: 'serif';
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0;
+            }
+        }
+
+        .quick-filters {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            .filter-label {
+                font-size: 0.85rem;
+                color: #666666;
+            }
+
+            .filter-pills {
+                display: flex;
+                gap: 0.5rem;
+
+                .pill {
+                    background-color: #eae5dc;
+                    color: #4a4a4a;
+                    border: none;
+                    padding: 0.4rem 1rem;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        background-color: #dfd8cc;
+                    }
+
+                    &.active {
+                        background-color: #0d0d0d;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+
+    /* --- GRILLA DE PRODUCTOS --- */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 600px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* --- TARJETA DE PRODUCTO --- */
+    .product-card {
+        background-color: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Imagen + Badges */
+        .card-media {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .badge {
+                position: absolute;
+                font-size: 0.65rem;
+                font-weight: 700;
+                border-radius: 4px;
+                padding: 0.25rem 0.5rem;
+
+                &-tag {
+                    top: 12px;
+                    left: 12px;
+                    background-color: #c05c2d;
+                    color: #ffffff;
+
+                    &.tag-dark {
+                        background-color: #0d0d0d;
+                    }
+
+                    &.tag-olive {
+                        background-color: #3b4224;
+                    }
+
+                    &.tag-light {
+                        background-color: #e5e2db;
+                        color: #333;
+                    }
+                }
+
+                &-sca {
+                    bottom: 12px;
+                    right: 12px;
+                    background-color: #ffffff;
+                    color: #1a1a1a;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+
+        /* Contenido interno */
+        .card-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+
+            .origin-tag {
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: #b3592e;
+                margin-bottom: 0.4rem;
+            }
+
+            .product-title {
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0 0 0.85rem 0;
+                line-height: 1.3;
+            }
+
+            /* Notas olfativas/sabores */
+            .flavor-notes {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.35rem;
+                margin-bottom: 1.25rem;
+
+                .note {
+                    background-color: #f3f3f0;
+                    color: #555555;
+                    font-size: 0.7rem;
+                    font-weight: 500;
+                    padding: 0.2rem 0.55rem;
+                    border-radius: 4px;
+                }
+            }
+
+            /* Nivel de Tueste */
+            .roast-level {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 0.25rem 0.5rem;
+                align-items: center;
+                font-size: 0.7rem;
+                margin-top: auto;
+                padding-top: 0.75rem;
+                border-top: 1px dashed #eaeaea;
+
+                .roast-label {
+                    color: #888888;
+                }
+
+                .roast-value {
+                    color: #333333;
+                    font-weight: 600;
+                    text-align: right;
+                }
+
+                .roast-bar {
+                    grid-column: span 2;
+                    display: flex;
+                    gap: 4px;
+                    margin-top: 0.3rem;
+
+                    .step {
+                        flex: 1;
+                        height: 4px;
+                        background-color: #e5e5e5;
+                        border-radius: 2px;
+
+                        &.active {
+                            background-color: #a64b22;
+                        }
+                    }
+                }
+            }
+
+            /* Footer de precio y botón */
+            .card-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1.25rem;
+
+                .price-info {
+                    display: flex;
+                    flex-direction: column;
+
+                    .price {
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        color: #1a1a1a;
+                    }
+
+                    .weight {
+                        font-size: 0.7rem;
+                        color: #888888;
+                    }
+                }
+
+                .btn-add {
+                    background-color: #0d0d0d;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 0.55rem 1rem;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.4rem;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+
+                    &:hover {
+                        background-color: #2b2b2b;
+                    }
+                }
+            }
+        }
+    }
+}
