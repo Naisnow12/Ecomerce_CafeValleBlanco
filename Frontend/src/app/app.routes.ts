@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from './modules/client/pages/home/home';
 import { Login } from './modules/auth/pages/login/login';
 import { Register } from './modules/auth/pages/register/register';
+import { Catalog } from './modules/client/pages/catalog/catalog';
 
 export const routes: Routes = [
     {
@@ -24,6 +25,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: Home },
+            { path: 'catalog', component: Catalog }
         ]
     }
 ];
