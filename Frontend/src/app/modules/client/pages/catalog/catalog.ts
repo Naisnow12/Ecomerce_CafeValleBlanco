@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Product } from '../../../../core/models/product.interface';
+import { ProductService } from '../../../../core/services/product.service';
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({
@@ -7,7 +8,9 @@ import { NgOptimizedImage } from '@angular/common';
   selector: 'app-catalog',
   templateUrl: './catalog.html',
 })
-export class Catalog {
+export class Catalog implements OnInit {
+  private readonly productService = inject(ProductService);
+
   listadeproductos: Product[] = [
     {
       id: 1,
@@ -105,6 +108,19 @@ export class Catalog {
       ]
     }
   ]
+
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        if (products && products.length > 0) {
+          this.listadeproductos = products;
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudo conectar con el backend de Valle Blanco, usando datos locales:', err);
+      }
+    });
+  }
 
   // Método para formatear los precios según la cantidad de presentaciones
   formatearPrecios(precios: { precio: number }[]): string {
