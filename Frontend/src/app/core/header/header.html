@@ -16,8 +16,10 @@
     <!-- Fila Inferior: Navegación Principal -->
     <nav class="nav-row">
         <ul class="nav-list">
-            <li><a routerLink="/inicio" routerLinkActive="active">Inicio</a></li>
-            <li><a routerLink="/catalogo" routerLinkActive="active">Catálogo</a></li>
+            <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+            <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
+            <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
+            <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
             <li><a routerLink="/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
         </ul>
     </nav>
