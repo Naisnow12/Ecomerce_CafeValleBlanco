@@ -7,27 +7,48 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+    background-color: var(--white-warm);
+    border-bottom: 1px solid var(--bg-cream);
 
-    /* Fila 1: Alineación distribuida (Extremos) */
+    /* Fila 1: Marca y Perfil */
     .top-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 2rem;
+        padding: 1.2rem 2.5rem;
+        max-width: 1300px;
+        width: 100%;
+        margin: 0 auto;
 
         .brand-name {
-            font-size: 1.5rem;
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #1f2937;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--green-dark);
         }
 
         .profile-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            background: var(--green-olive);
+            color: #ffffff;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: var(--transition);
+
+            &:hover {
+                background: var(--green-dark);
+                transform: translateY(-1px);
+            }
         }
     }
 
@@ -35,26 +56,47 @@
     .nav-row {
         display: flex;
         justify-content: center;
-        padding: 0.75rem 0;
-        border-top: 1px solid #f3f4f6;
+        padding: 0.85rem 0;
+        border-top: 1px solid rgba(138, 103, 78, 0.12);
+        background: var(--bg-main);
 
         .nav-list {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
             list-style: none;
             margin: 0;
             padding: 0;
 
             a {
                 text-decoration: none;
-                color: #4b5563;
-                font-weight: 500;
-                transition: color 0.2s ease;
+                color: var(--text-body);
+                font-size: 0.82rem;
+                font-weight: 600;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                position: relative;
+                padding-bottom: 4px;
+                transition: var(--transition);
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 0;
+                    height: 2px;
+                    background: var(--brown);
+                    transition: width 0.3s ease;
+                }
+
+                &:hover::after,
+                &.active::after {
+                    width: 100%;
+                }
 
                 &:hover,
                 &.active {
-                    color: #2563eb;
-                    /* Color de acento */
+                    color: var(--green-dark);
                 }
             }
         }

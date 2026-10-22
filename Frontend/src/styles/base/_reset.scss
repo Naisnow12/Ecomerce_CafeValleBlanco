@@ -1,17 +1,44 @@
-//base/reset
-/* styles.scss */
+// Variables inspiradas en Proyecto_CafeValleBlanco
+:root {
+  --bg-main: #F3EEE4;
+  --bg-light: #FFF9F1;
+  --bg-cream: #EDE6D8;
+  --green-dark: #33463A;
+  --green-olive: #66745F;
+  --green-light: #E8EDE6;
+  --brown: #8A674E;
+  --brown-light: #B8956A;
+  --text-dark: #27231F;
+  --text-body: #4A4540;
+  --text-muted: #8C8478;
+  --white-warm: #FDFAF5;
+  --font-body: 'DM Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --shadow-sm: 0 2px 20px rgba(39, 35, 31, 0.06);
+  --shadow-md: 0 8px 40px rgba(39, 35, 31, 0.1);
+}
+
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    /* Evita que los paddings sumen ancho extra */
+  box-sizing: border-box;
 }
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    /* Corta cualquier contenido que se escape por los lados */
-    width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
 }
