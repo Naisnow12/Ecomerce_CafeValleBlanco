@@ -1,1 +1,89 @@
-<p>layout-auth works!</p>
+<div class="auth-layout">
+
+  <!-- Enlace para regresar -->
+  <a routerLink="/client/home" class="back-home">
+    <span class="back-arrow">←</span>
+    Volver a la tienda
+  </a>
+
+  <!-- Contenedor principal -->
+  <div class="auth-container" [class.register-mode]="isRegister" [class.is-transitioning]="isTransitioning()">
+
+    <!-- Panel de formularios -->
+    <div class="auth-content">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- Panel decorativo animado -->
+    <div class="auth-showcase">
+
+      <div class="showcase-decoration decoration-one"></div>
+      <div class="showcase-decoration decoration-two"></div>
+
+      <div class="showcase-content">
+
+        <div class="coffee-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M4 9h13v5a6.5 6.5 0 0 1-13 0V9Z" />
+            <path d="M17 10h2a3 3 0 0 1 0 6h-2" />
+            <path d="M2 21h19" />
+            <path d="M8 3v3" />
+            <path d="M12 3v3" />
+          </svg>
+        </div>
+
+        <span class="showcase-label">
+          CAFÉ DE ESPECIALIDAD
+        </span>
+
+        <h1 class="showcase-brand">
+          Valle Blanco
+        </h1>
+
+        @if (isRegister) {
+        <h2 class="showcase-title">
+          ¡Qué bueno tenerte de vuelta!
+        </h2>
+
+        <p class="showcase-description">
+          Inicia sesión para seguir descubriendo
+          nuestros cafés de especialidad.
+        </p>
+
+        <a routerLink="/auth/login" class="showcase-button">
+          Iniciar sesión
+          <span>→</span>
+        </a>
+        } @else {
+        <h2 class="showcase-title">
+          Una experiencia que comienza con un buen café
+        </h2>
+
+        <p class="showcase-description">
+          Únete a nuestra comunidad y disfruta
+          del auténtico sabor de Oxapampa.
+        </p>
+
+        <a routerLink="/auth/register" class="showcase-button">
+          Crear una cuenta
+          <span>→</span>
+        </a>
+        }
+
+        <div class="showcase-footer">
+          <span class="footer-line"></span>
+          <span>OXAPAMPA · PERÚ</span>
+          <span class="footer-line"></span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pie de página -->
+  <p class="auth-copyright">
+    © 2026 Valle Blanco · Café de especialidad peruano
+  </p>
+
+</div>

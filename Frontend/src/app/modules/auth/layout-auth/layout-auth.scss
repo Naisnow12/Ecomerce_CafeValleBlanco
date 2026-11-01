@@ -1,0 +1,538 @@
+/* ==========================================
+   VALLE BLANCO - AUTH LAYOUT ANIMADO
+   ========================================== */
+
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+.auth-layout {
+    min-height: 100vh;
+    padding: 32px 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(circle at 10% 20%,
+            rgba(195, 170, 121, 0.12),
+            transparent 35%),
+        #f5f1e9;
+
+    box-sizing: border-box;
+}
+
+/* VOLVER A LA TIENDA */
+
+.back-home {
+    width: 100%;
+    max-width: 1050px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 24px;
+
+    color: #526653;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+
+    transition: color 0.2s;
+
+    &:hover {
+        color: #244b38;
+    }
+}
+
+.back-arrow {
+    font-size: 21px;
+    line-height: 1;
+}
+
+/* CONTENEDOR PRINCIPAL */
+
+.auth-container {
+    position: relative;
+
+    width: 100%;
+    max-width: 1050px;
+    min-height: 650px;
+
+    display: flex;
+
+    background: #fffdf9;
+
+    border: 1px solid #e9e2d7;
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 70px rgba(33, 49, 35, 0.09),
+        0 5px 20px rgba(33, 49, 35, 0.04);
+}
+
+/* ==========================================
+   FORMULARIO
+   ========================================== */
+
+.auth-content {
+    position: relative;
+    z-index: 1;
+
+    width: 50%;
+    min-height: 650px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 35px 32px;
+
+    box-sizing: border-box;
+
+    transform: translateX(0);
+
+    transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* El componente Angular se adapta al ancho disponible */
+    > :not(router-outlet) {
+        width: 100%;
+    }
+}
+
+/* Evita que la tarjeta parezca otra ventana */
+
+:host ::ng-deep .auth-content .auth-card {
+    width: 100%;
+    max-width: 430px;
+
+    margin: 0 auto;
+    padding: 16px 8px;
+
+    border: none;
+    border-radius: 0;
+
+    background: transparent;
+    box-shadow: none;
+}
+
+/* ==========================================
+   PANEL VERDE
+   ========================================== */
+
+.auth-showcase {
+    position: absolute;
+
+    z-index: 2;
+
+    top: 0;
+    right: 0;
+
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 45px;
+
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(145deg,
+            #345f46 0%,
+            #244b38 55%,
+            #193a2b 100%);
+
+    color: #ffffff;
+
+    overflow: hidden;
+
+    transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* DECORACIONES */
+
+.showcase-decoration {
+    position: absolute;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.decoration-one {
+    width: 480px;
+    height: 480px;
+
+    top: -200px;
+    right: -220px;
+}
+
+.decoration-two {
+    width: 350px;
+    height: 350px;
+
+    bottom: -200px;
+    left: -180px;
+}
+
+/* CONTENIDO DEL PANEL */
+
+.showcase-content {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 350px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+.coffee-icon {
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #e2c99c;
+}
+
+.showcase-label {
+    margin-bottom: 10px;
+
+    color: #e2c99c;
+
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+}
+
+.showcase-brand {
+    margin: 0 0 45px;
+
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: 1px;
+
+    color: #ffffff;
+}
+
+.showcase-title {
+    margin: 0 0 18px;
+
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.3;
+
+    color: #ffffff;
+}
+
+.showcase-description {
+    max-width: 310px;
+
+    margin: 0 0 35px;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* BOTÓN TRANSPARENTE */
+
+.showcase-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    min-width: 190px;
+    padding: 14px 24px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 30px;
+
+    background: transparent;
+
+    transition:
+        background 0.25s,
+        color 0.25s,
+        transform 0.25s;
+
+    &:hover {
+        background: #ffffff;
+        color: #244b38;
+        transform: translateY(-2px);
+    }
+
+    span {
+        font-size: 18px;
+    }
+}
+
+/* PIE DEL PANEL */
+
+.showcase-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    width: 100%;
+    margin-top: 65px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.footer-line {
+    width: 30px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   MODO REGISTRO - ANIMACIÓN
+   ========================================== */
+
+/* El formulario se mueve a la izquierda */
+
+.auth-container.register-mode {
+    .auth-content {
+        transform: translateX(100%);
+    }
+
+    .auth-showcase {
+        transform: translateX(-100%);
+    }
+}
+
+/* COPYRIGHT */
+
+.auth-copyright {
+    margin: 25px 0 0;
+
+    color: #9a9185;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ==========================================
+   TABLETS
+   ========================================== */
+
+@media (max-width: 850px) {
+    .auth-container {
+        min-height: 600px;
+    }
+
+    .auth-content {
+        padding: 28px 20px;
+    }
+
+    .auth-showcase {
+        padding: 30px;
+    }
+
+    .showcase-brand {
+        font-size: 32px;
+    }
+
+    .showcase-title {
+        font-size: 23px;
+    }
+
+    .showcase-description {
+        font-size: 13px;
+    }
+}
+
+/* ==========================================
+   CELULARES
+   ========================================== */
+
+@media (max-width: 650px) {
+    .auth-layout {
+        padding: 20px 15px;
+    }
+
+    .back-home {
+        margin-bottom: 18px;
+    }
+
+    .auth-container {
+        display: flex;
+        flex-direction: column;
+
+        min-height: auto;
+
+        border-radius: 18px;
+    }
+
+    .auth-content {
+        width: 100%;
+        min-height: auto;
+
+        padding: 30px 22px;
+
+        transform: none !important;
+        transition: none;
+    }
+
+    .auth-showcase {
+        position: relative;
+
+        top: auto;
+        right: auto;
+
+        width: 100%;
+        height: auto;
+
+        min-height: 260px;
+        padding: 30px 22px;
+
+        transform: none !important;
+        transition: none;
+
+        order: -1;
+    }
+
+    .showcase-content {
+        max-width: 100%;
+    }
+
+    .coffee-icon {
+        width: 55px;
+        height: 55px;
+
+        margin-bottom: 12px;
+
+        svg {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .showcase-brand {
+        margin-bottom: 10px;
+        font-size: 29px;
+    }
+
+    .showcase-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .showcase-description {
+        margin-bottom: 18px;
+
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .showcase-button {
+        min-width: auto;
+        padding: 10px 20px;
+    }
+
+    .showcase-footer {
+        display: none;
+    }
+
+    :host ::ng-deep .auth-content .auth-card {
+        padding: 0;
+    }
+
+    .auth-copyright {
+        margin-top: 18px;
+        font-size: 11px;
+    }
+}
+
+/* ACCESIBILIDAD */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .auth-content,
+    .auth-showcase {
+        transition: none;
+    }
+}
+
+/* ==========================================
+   ANIMACIÓN SUAVE ENTRE LOGIN Y REGISTRO
+   ========================================== */
+
+/* Animación de entrada del formulario */
+
+@keyframes authFormAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* El formulario espera un momento antes de aparecer */
+
+:host ::ng-deep .auth-content .auth-card {
+    animation: authFormAppear 0.5s ease-out 0.35s both;
+}
+
+/* Movimiento del panel verde */
+
+.auth-content,
+.auth-showcase {
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Respetar preferencias de accesibilidad */
+
+@media (prefers-reduced-motion: reduce) {
+    :host ::ng-deep .auth-content .auth-card {
+        animation: none;
+    }
+
+    .auth-content,
+    .auth-showcase {
+        transition: none;
+    }
+}

@@ -1,1 +1,72 @@
-<p>login works!</p>
+<div class="auth-card">
+  <div class="auth-card-header">
+    <h1 class="auth-title">Bienvenido de vuelta</h1>
+    <p class="auth-subtitle">Ingresa a tu cuenta para continuar</p>
+  </div>
+
+  @if (errorMessage()) {
+  <div class="auth-error">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+    <!-- Email -->
+    <div class="form-group" [class.has-error]="f['email'].invalid && (f['email'].touched || f['email'].dirty)">
+      <label for="email" class="form-label">Correo electrónico</label>
+      <input id="email" type="email" class="form-control" formControlName="email" placeholder="tu@correo.com"
+        autocomplete="email" />
+      @if (f['email'].invalid && (f['email'].touched || f['email'].dirty)) {
+      <span class="form-error">
+        @if (f['email'].errors?.['required']) { El correo es requerido. }
+        @else if (f['email'].errors?.['email']) { Ingresa un correo válido. }
+      </span>
+      }
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-group" [class.has-error]="f['password'].invalid && (f['password'].touched || f['password'].dirty)">
+      <label for="password" class="form-label">Contraseña</label>
+      <div class="input-password-wrapper">
+        <input id="password" [type]="showPassword() ? 'text' : 'password'" class="form-control"
+          formControlName="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
+        <button type="button" class="toggle-password" (click)="togglePassword()"
+          aria-label="Mostrar/ocultar contraseña">
+          @if (showPassword()) {
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path
+              d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+            <line x1="1" y1="1" x2="23" y2="23" />
+          </svg>
+          } @else {
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          }
+        </button>
+      </div>
+      @if (f['password'].invalid && (f['password'].touched || f['password'].dirty)) {
+      <span class="form-error">
+        @if (f['password'].errors?.['required']) { La contraseña es requerida. }
+        @else if (f['password'].errors?.['minlength']) { Mínimo 6 caracteres. }
+      </span>
+      }
+    </div>
+
+    <button type="submit" class="btn-auth" [disabled]="isLoading()">
+      @if (isLoading()) {
+      <span class="spinner-inline"></span>
+      Ingresando...
+      } @else {
+      Ingresar
+      }
+    </button>
+  </form>
+
+</div>

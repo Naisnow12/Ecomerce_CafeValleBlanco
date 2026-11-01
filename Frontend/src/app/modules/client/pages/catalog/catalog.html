@@ -7,7 +7,8 @@
                 <span class="catalog-tag">VILLA RICA &middot; OXAPAMPA &middot; PERÚ</span>
                 <h1 class="page-title">Nuestras Variedades de Café</h1>
                 <p class="page-description">
-                    Cafés de especialidad producidos en los valles de Oxapampa a más de 1.400 m.s.n.m. Tostados artesanalmente en lotes pequeños y calibrados por molienda para cada ritual de preparación.
+                    Cafés de especialidad producidos en los valles de Oxapampa a más de 1.400 m.s.n.m. Tostados
+                    artesanalmente en lotes pequeños y calibrados por molienda para cada ritual de preparación.
                 </p>
             </div>
 
@@ -143,15 +144,24 @@
                 <div class="filter-group">
                     <h3 class="filter-title">NOTAS DE SABOR</h3>
                     <div class="flavor-pills">
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'todos'" (click)="filtroNota = 'todos'">Todos</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Chocolate'" (click)="filtroNota = 'Chocolate'">Chocolate</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Durazno'" (click)="filtroNota = 'Durazno'">Durazno</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Caramelo'" (click)="filtroNota = 'Caramelo'">Caramelo</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Floral'" (click)="filtroNota = 'Floral'">Floral</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Cítrico'" (click)="filtroNota = 'Cítrico'">Cítrico</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Miel'" (click)="filtroNota = 'Miel'">Miel</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Cacao'" (click)="filtroNota = 'Cacao'">Cacao</button>
-                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Panela'" (click)="filtroNota = 'Panela'">Panela</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'todos'"
+                            (click)="filtroNota = 'todos'">Todos</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Chocolate'"
+                            (click)="filtroNota = 'Chocolate'">Chocolate</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Durazno'"
+                            (click)="filtroNota = 'Durazno'">Durazno</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Caramelo'"
+                            (click)="filtroNota = 'Caramelo'">Caramelo</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Floral'"
+                            (click)="filtroNota = 'Floral'">Floral</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Cítrico'"
+                            (click)="filtroNota = 'Cítrico'">Cítrico</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Miel'"
+                            (click)="filtroNota = 'Miel'">Miel</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Cacao'"
+                            (click)="filtroNota = 'Cacao'">Cacao</button>
+                        <button type="button" class="flavor-pill" [class.active]="filtroNota === 'Panela'"
+                            (click)="filtroNota = 'Panela'">Panela</button>
                     </div>
                 </div>
 
@@ -161,13 +171,14 @@
             <main class="products-container">
 
                 <div class="catalog-summary">
-                    Mostrando <strong>{{ productosFiltrados.length }}</strong> presentaciones de café de Villa Rica, Oxapampa
+                    Mostrando <strong>{{ productosFiltrados.length }}</strong> presentaciones de café de Villa Rica,
+                    Oxapampa
                 </div>
 
                 <div class="products-grid">
                     @for (producto of productosFiltrados; track producto.id) {
                     <article class="coffee-card" [class.dark-theme]="producto.esOscuro">
-                        
+
                         <!-- Badge flotante (ej: MAS POPULAR) -->
                         @if (producto.badgeText) {
                         <span class="card-badge">{{ producto.badgeText }}</span>
@@ -175,7 +186,8 @@
 
                         <!-- Imagen de la presentación -->
                         <div class="card-image-box">
-                            <img [src]="producto.imagenUrl" [alt]="producto.nombre + ' ' + (producto.nombreSecundario || '')" />
+                            <img [src]="producto.imagenUrl"
+                                [alt]="producto.nombre + ' ' + (producto.nombreSecundario || '')" />
                         </div>
 
                         <!-- Información detallada del café -->
@@ -224,8 +236,19 @@
                             </div>
 
                             <!-- Botón de consulta / compra -->
-                            <button type="button" class="btn-consultar" (click)="consultarPedido(producto)">
-                                CONSULTAR PEDIDO &middot; S/ {{ getPrecioMinimo(producto).toFixed(2) }}
+                            <a class="btn-consultar" [routerLink]="['/client/product', producto.slug]"
+                                style="display: block; text-align: center; text-decoration: none;">
+
+                                VER DETALLES · S/ {{ getPrecioMinimo(producto).toFixed(2) }}
+
+                            </a>
+
+                            <!-- Conservar consulta mediante WhatsApp -->
+                            <button type="button" class="btn-consultar" style="margin-top: 10px;"
+                                (click)="consultarPedido(producto)">
+
+                                CONSULTAR POR WHATSAPP
+
                             </button>
 
                         </div>
@@ -234,12 +257,30 @@
                     }
                 </div>
 
-                @if (productosFiltrados.length === 0) {
+                @if (cargandoProductos) {
+
+                <div class="empty-state">
+                    <h3>Cargando nuestros cafés...</h3>
+                    <p>
+                        Estamos preparando el catálogo de Valle Blanco.
+                    </p>
+                </div>
+
+                } @else if (productosFiltrados.length === 0) {
+
                 <div class="empty-state">
                     <h3>No se encontraron cafés con los filtros seleccionados</h3>
-                    <p>Prueba limpiando los filtros para ver todas las presentaciones disponibles de Oxapampa.</p>
-                    <button type="button" class="btn-clear-empty" (click)="limpiarFiltros()">Restablecer filtros</button>
+
+                    <p>
+                        Prueba limpiando los filtros para ver todas
+                        las presentaciones disponibles de Oxapampa.
+                    </p>
+
+                    <button type="button" class="btn-clear-empty" (click)="limpiarFiltros()">
+                        Restablecer filtros
+                    </button>
                 </div>
+
                 }
 
             </main>

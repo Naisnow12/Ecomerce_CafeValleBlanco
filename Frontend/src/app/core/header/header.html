@@ -1,26 +1,117 @@
-<header class="main-header">
-    <!-- Fila Superior: Marca y Perfil -->
-    <div class="top-row">
-        <div class="brand">
-            <span class="brand-name">Valle Blanco</span>
-        </div>
-
-        <div class="user-profile">
-            <!-- Aquí tu avatar o menú de usuario -->
-            <button type="button" class="profile-btn">
-                <span>Mi Perfil</span>
-            </button>
-        </div>
+<header class="main-header" [class.sticky]="isStickyActive()">
+  <!-- Fila Superior: Marca y Acciones -->
+  <div class="top-row">
+    <div class="brand">
+      <a routerLink="/client/home" class="brand-link">
+        <span class="brand-name">Valle Blanco</span>
+        <span class="brand-sub">Café de Especialidad</span>
+      </a>
     </div>
 
-    <!-- Fila Inferior: Navegación Principal -->
-    <nav class="nav-row">
-        <ul class="nav-list">
-            <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-            <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
-            <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
-            <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
-            <li><a routerLink="/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
-        </ul>
-    </nav>
+    <div class="header-actions">
+      <!-- Carrito -->
+      <a routerLink="/client/carrito" class="action-btn cart-btn" aria-label="Carrito de compras">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        @if (cartCount() > 0) {
+        <span class="cart-badge">{{ cartCount() }}</span>
+        }
+      </a>
+
+      <!-- Usuario -->
+      @if (isLoggedIn()) {
+      <div class="user-menu-wrapper">
+        <button type="button" class="action-btn user-btn" (click)="toggleUserDropdown()" aria-label="Menú de usuario">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span class="user-name">{{ currentUser()?.nombres }}</span>
+        </button>
+        @if (isUserDropdownOpen()) {
+        <div class="user-dropdown" (mouseleave)="closeDropdown()">
+          <a routerLink="/client/perfil" class="dropdown-item" (click)="closeDropdown()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Mi Perfil
+          </a>
+          <a routerLink="/client/mis-pedidos" class="dropdown-item" (click)="closeDropdown()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            Mis Pedidos
+          </a>
+          @if (isAdmin()) {
+          <a routerLink="/admin/dashboard" class="dropdown-item dropdown-item--admin" (click)="closeDropdown()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Panel Admin
+          </a>
+          }
+          <div class="dropdown-divider"></div>
+          <button type="button" class="dropdown-item dropdown-item--logout" (click)="logout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+        }
+      </div>
+      } @else {
+      <a routerLink="/auth/login" class="btn-login">Ingresar</a>
+      }
+
+      <!-- Hamburger móvil -->
+      <button type="button" class="hamburger" (click)="toggleMenu()" aria-label="Menú móvil">
+        <span [class.open]="isMenuOpen()"></span>
+        <span [class.open]="isMenuOpen()"></span>
+        <span [class.open]="isMenuOpen()"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Fila Inferior: Navegación Principal -->
+  <nav class="nav-row">
+    <ul class="nav-list">
+      <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+      </li>
+      <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
+      <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
+      <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
+      <li><a routerLink="/client/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
+    </ul>
+  </nav>
+
+  <!-- Menú Móvil -->
+  @if (isMenuOpen()) {
+  <div class="mobile-nav">
+    <ul class="mobile-nav-list">
+      <li><a routerLink="/client/home" (click)="toggleMenu()">Inicio</a></li>
+      <li><a routerLink="/client/catalog" (click)="toggleMenu()">Catálogo</a></li>
+      <li><a routerLink="/client/sobre-nosotros" (click)="toggleMenu()">Sobre Nosotros</a></li>
+      <li><a routerLink="/client/carrito" (click)="toggleMenu()">Carrito</a></li>
+      @if (isLoggedIn()) {
+      <li><a routerLink="/client/perfil" (click)="toggleMenu()">Mi Perfil</a></li>
+      <li><a routerLink="/client/mis-pedidos" (click)="toggleMenu()">Mis Pedidos</a></li>
+      <li><button type="button" (click)="logout()">Cerrar sesión</button></li>
+      } @else {
+      <li><a routerLink="/auth/login" (click)="toggleMenu()">Ingresar</a></li>
+      <li><a routerLink="/auth/register" (click)="toggleMenu()">Registrarse</a></li>
+      }
+    </ul>
+  </div>
+  }
 </header>

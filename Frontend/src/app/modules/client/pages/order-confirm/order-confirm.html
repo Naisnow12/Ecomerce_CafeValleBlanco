@@ -1,0 +1,248 @@
+<div class="order-confirm-page">
+    <div class="order-confirm-container">
+
+        <!-- ESTADO DE CARGA -->
+        @if (cargando()) {
+
+        <div class="order-loading">
+            <div class="spinner"></div>
+            <p>Cargando información de tu pedido...</p>
+        </div>
+
+        } @else if (error()) {
+
+        <!-- ERROR -->
+        <div class="order-error">
+            <div class="error-icon">!</div>
+
+            <h1>No pudimos mostrar tu pedido</h1>
+
+            <p>{{ error() }}</p>
+
+            <div class="error-actions">
+                <button type="button" class="btn-primary" (click)="reintentar()">
+                    Reintentar
+                </button>
+
+                <a routerLink="/client/mis-pedidos" class="btn-secondary">
+                    Ver mis pedidos
+                </a>
+            </div>
+        </div>
+
+        } @else if (pedido(); as pedidoActual) {
+
+        <!-- CONFIRMACIÓN -->
+        <div class="confirmation-header">
+
+            <div class="success-icon">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg>
+            </div>
+
+            <span class="confirmation-label">
+                VALLE BLANCO · PEDIDO REGISTRADO
+            </span>
+
+            <h1>¡Gracias por tu pedido!</h1>
+
+            <p class="confirmation-description">
+                Hemos registrado tu solicitud de compra correctamente.
+                Pronto podrás consultar las novedades desde tu cuenta.
+            </p>
+
+            <div class="order-number">
+                <span>Número de pedido</span>
+                <strong>{{ pedidoActual.numeroPedido }}</strong>
+            </div>
+
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="confirmation-grid">
+
+            <!-- DETALLE -->
+            <div class="confirmation-main">
+
+                <section class="confirmation-card">
+
+                    <div class="card-header">
+                        <h2>Detalles del pedido</h2>
+
+                        <span class="status-badge" [class.status-pending]="pedidoActual.estado === 'PENDIENTE'"
+                            [class.status-confirmed]="pedidoActual.estado === 'CONFIRMADO'"
+                            [class.status-cancelled]="pedidoActual.estado === 'CANCELADO'">
+                            {{ obtenerEstadoTexto(pedidoActual.estado) }}
+                        </span>
+                    </div>
+
+                    <div class="order-information">
+
+                        <div class="info-group">
+                            <span class="info-label">Fecha del pedido</span>
+
+                            <strong>
+                                {{ pedidoActual.creadoEn | date:'dd/MM/yyyy, HH:mm' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-group">
+                            <span class="info-label">Método de pago</span>
+
+                            <strong>
+                                {{ obtenerMetodoPagoTexto(pedidoActual.metodoPago) }}
+                            </strong>
+                        </div>
+
+                        <div class="info-group">
+                            <span class="info-label">Estado actual</span>
+
+                            <strong>
+                                {{ obtenerEstadoTexto(pedidoActual.estado) }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- PRODUCTOS -->
+                <section class="confirmation-card">
+
+                    <h2>Productos de tu pedido</h2>
+
+                    <div class="order-products">
+
+                        @for (item of pedidoActual.items; track $index) {
+
+                        <div class="order-product">
+
+                            <div class="product-symbol">
+                                ☕
+                            </div>
+
+                            <div class="product-details">
+
+                                <h3>{{ item.nombreProducto }}</h3>
+
+                                @if (item.nombreSecundario) {
+                                <p>{{ item.nombreSecundario }}</p>
+                                }
+
+                                <span>
+                                    {{ item.peso }} g · Cantidad: {{ item.cantidad }}
+                                </span>
+
+                            </div>
+
+                            <div class="product-price">
+                                S/ {{ item.subtotal | number:'1.2-2' }}
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </section>
+
+                <!-- DIRECCIÓN -->
+                <section class="confirmation-card">
+
+                    <h2>Dirección de entrega</h2>
+
+                    <div class="delivery-details">
+
+                        @if (pedidoActual.dirDestinatario) {
+                        <strong>{{ pedidoActual.dirDestinatario }}</strong>
+                        }
+
+                        @if (pedidoActual.dirLinea1) {
+                        <p>{{ pedidoActual.dirLinea1 }}</p>
+                        }
+
+                        <p>
+                            {{ pedidoActual.dirDistrito }},
+                            {{ pedidoActual.dirProvincia }},
+                            {{ pedidoActual.dirDepartamento }}
+                        </p>
+
+                    </div>
+
+                </section>
+
+                <!-- INFORMACIÓN DE PAGO -->
+                <div class="payment-information">
+
+                    <div class="payment-icon">i</div>
+
+                    <div>
+                        <h3>Información importante</h3>
+
+                        <p>
+                            Tu pedido ha sido registrado, pero esto no significa
+                            que el pago esté confirmado.
+                            Valle Blanco deberá verificar el pago antes de continuar
+                            con la preparación y entrega.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RESUMEN -->
+            <aside class="confirmation-summary">
+
+                <h2>Resumen de compra</h2>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+
+                    <span>
+                        S/ {{ pedidoActual.subtotal | number:'1.2-2' }}
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Envío</span>
+
+                    <span>
+                        S/ {{ pedidoActual.costoEnvio | number:'1.2-2' }}
+                    </span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-row summary-total">
+                    <strong>Total registrado</strong>
+
+                    <strong>
+                        S/ {{ pedidoActual.total | number:'1.2-2' }}
+                    </strong>
+                </div>
+
+                <a routerLink="/client/mis-pedidos" class="btn-primary btn-block">
+                    Ver mis pedidos
+                </a>
+
+                <a routerLink="/client/catalog" class="btn-secondary btn-block">
+                    Seguir comprando
+                </a>
+
+                <div class="summary-footer">
+                    Gracias por elegir el café de especialidad
+                    de Valle Blanco.
+                </div>
+
+            </aside>
+
+        </div>
+
+        }
+
+    </div>
+</div>

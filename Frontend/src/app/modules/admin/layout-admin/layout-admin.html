@@ -1,0 +1,228 @@
+<div class="admin-layout">
+
+    <!-- FONDO DEL MENÚ MÓVIL -->
+    @if (sidebarOpen()) {
+    <div class="sidebar-overlay" (click)="closeSidebar()"></div>
+    }
+
+    <!-- MENÚ LATERAL -->
+    <aside class="admin-sidebar" [class.sidebar-open]="sidebarOpen()">
+
+        <!-- LOGO -->
+        <div class="sidebar-brand">
+            <a routerLink="/admin/dashboard" class="admin-brand-link" (click)="closeSidebar()">
+                <span class="brand-name">VALLE BLANCO</span>
+                <span class="brand-subtitle">
+                    PANEL DE ADMINISTRACIÓN
+                </span>
+            </a>
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <nav class="sidebar-navigation">
+
+            <span class="nav-section-title">
+                GENERAL
+            </span>
+
+            <!-- DASHBOARD -->
+            <a routerLink="/admin/dashboard" routerLinkActive="active" class="sidebar-link" (click)="closeSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                </svg>
+
+                <span>Dashboard</span>
+            </a>
+
+            <span class="nav-section-title">
+                GESTIÓN DE TIENDA
+            </span>
+
+            <!-- PRODUCTOS -->
+            <a routerLink="/admin/productos" routerLinkActive="active" class="sidebar-link" (click)="closeSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                    <path d="M3.3 7L12 12l8.7-5" />
+                    <path d="M12 22V12" />
+                </svg>
+
+                <span>Productos</span>
+            </a>
+
+            <!-- PEDIDOS -->
+            <a routerLink="/admin/pedidos" routerLinkActive="active" class="sidebar-link" (click)="closeSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 2h8l4 4v16H4V6z" />
+                    <path d="M8 2v6h8V2" />
+                    <path d="M8 13h8" />
+                    <path d="M8 17h6" />
+                </svg>
+
+                <span>Pedidos</span>
+            </a>
+
+            <!-- CLIENTES -->
+            <a routerLink="/admin/clientes" routerLinkActive="active" class="sidebar-link" (click)="closeSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                    <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+
+                <span>Clientes</span>
+            </a>
+
+            <span class="nav-section-title">
+                SISTEMA
+            </span>
+
+            <!-- CONFIGURACIÓN -->
+            <a routerLink="/admin/configuracion" routerLinkActive="active" class="sidebar-link"
+                (click)="closeSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06-2.12 2.12-.06-.06A1.7 1.7 0 0015.74 18a1.7 1.7 0 00-1 .58 1.7 1.7 0 00-.4 1.1V20h-3v-.32a1.7 1.7 0 00-1.1-1.6 1.7 1.7 0 00-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 006 14.42a1.7 1.7 0 00-1.6-1.1H4v-3h.32A1.7 1.7 0 005.92 9.2a1.7 1.7 0 00-.34-1.88l-.06-.06 2.12-2.12.06.06A1.7 1.7 0 009.58 5a1.7 1.7 0 001.1-1.6V3h3v.32A1.7 1.7 0 0014.78 5a1.7 1.7 0 001.88-.34l.06-.06 2.12 2.12-.06.06A1.7 1.7 0 0018 8.66a1.7 1.7 0 001.6 1.1H20v3h-.32A1.7 1.7 0 0018 13.86a1.7 1.7 0 001.4 1.14z" />
+                </svg>
+
+                <span>Configuración</span>
+            </a>
+
+        </nav>
+
+        <!-- PARTE INFERIOR -->
+        <div class="sidebar-footer">
+
+            <button type="button" class="sidebar-store-btn" (click)="volverTienda()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+
+                Volver a la tienda
+            </button>
+
+            <div class="sidebar-version">
+                Valle Blanco · Administración
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="admin-main">
+
+        <!-- HEADER -->
+        <header class="admin-header">
+
+            <div class="header-left">
+
+                <!-- BOTÓN MÓVIL -->
+                <button type="button" class="menu-toggle" (click)="toggleSidebar()" aria-label="Abrir menú">
+                    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+
+                <div class="header-title">
+                    <span class="header-label">
+                        PANEL ADMINISTRATIVO
+                    </span>
+
+                    <span class="header-description">
+                        Gestión de Valle Blanco
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                <!-- INDICADOR ADMIN -->
+                <span class="admin-role-badge">
+                    Administrador
+                </span>
+
+                <!-- USUARIO -->
+                <div class="admin-user-menu">
+
+                    <button type="button" class="admin-user-btn" (click)="toggleUserMenu()"
+                        aria-label="Menú de usuario">
+
+                        <span class="user-avatar">
+                            {{ currentUser()?.nombres?.charAt(0) || 'A' }}
+                        </span>
+
+                        <span class="user-information">
+                            <strong>
+                                {{ currentUser()?.nombres || 'Administrador' }}
+                            </strong>
+
+                            <small>Mi cuenta</small>
+                        </span>
+
+                        <span class="dropdown-arrow">⌄</span>
+
+                    </button>
+
+                    @if (userMenuOpen()) {
+
+                    <div class="admin-user-dropdown">
+
+                        <a routerLink="/client/perfil" (click)="closeUserMenu()">
+                            Mi perfil
+                        </a>
+
+                        <button type="button" (click)="volverTienda(); closeUserMenu()">
+                            Ver tienda
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" class="logout-item" (click)="logout()">
+                            Cerrar sesión
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- VISTA DEL MÓDULO ACTUAL -->
+        <main class="admin-content">
+            <router-outlet></router-outlet>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="admin-footer">
+            <span>
+                © 2026 Valle Blanco. Panel de administración.
+            </span>
+
+            <span>
+                Café de especialidad · Oxapampa, Perú
+            </span>
+        </footer>
+
+    </div>
+
+</div>

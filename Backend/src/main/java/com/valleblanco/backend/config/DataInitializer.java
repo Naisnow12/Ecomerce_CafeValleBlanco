@@ -24,8 +24,10 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
-            // Re-poblamos con las 10 presentaciones oficiales de Oxapampa
-            productRepository.deleteAll();
+            // Cargar productos iniciales solo si la base de datos está vacía
+            if (productRepository.count() > 0) {
+                return;
+            } 
 
             NotaCata nChocolate = getOrCreateNota("Chocolate");
             NotaCata nDurazno = getOrCreateNota("Durazno");

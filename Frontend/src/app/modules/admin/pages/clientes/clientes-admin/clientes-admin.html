@@ -1,0 +1,419 @@
+<div class="clientes-admin-page">
+
+    <!-- ENCABEZADO -->
+    <div class="clientes-header">
+        <div>
+            <span class="section-label">
+                VALLE BLANCO · ADMINISTRACIÓN
+            </span>
+
+            <h1>Gestión de clientes</h1>
+
+            <p>
+                Consulta la información de los clientes registrados en la tienda.
+            </p>
+        </div>
+    </div>
+
+    <!-- AVISO DE CONEXIÓN -->
+    @if (!datosDisponibles()) {
+
+    <div class="admin-notice">
+        <span class="notice-icon">i</span>
+
+        <div>
+            <strong>Consulta de clientes pendiente de conexión</strong>
+
+            <p>
+                La interfaz administrativa está preparada.
+                Los clientes registrados aparecerán cuando implementemos
+                el endpoint correspondiente en Spring Boot.
+            </p>
+        </div>
+    </div>
+
+    }
+
+    <!-- ESTADÍSTICAS -->
+    <div class="clientes-stats">
+
+        <div class="stat-card">
+            <span class="stat-label">Total de clientes</span>
+
+            <strong>
+                {{ datosDisponibles() ? totalClientes() : '—' }}
+            </strong>
+
+            <span class="stat-description">
+                Usuarios registrados
+            </span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Clientes activos</span>
+
+            <strong class="stat-green">
+                {{ datosDisponibles() ? clientesActivos() : '—' }}
+            </strong>
+
+            <span class="stat-description">
+                Cuentas habilitadas
+            </span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Clientes inactivos</span>
+
+            <strong class="stat-red">
+                {{ datosDisponibles() ? clientesInactivos() : '—' }}
+            </strong>
+
+            <span class="stat-description">
+                Cuentas deshabilitadas
+            </span>
+        </div>
+
+    </div>
+
+    <!-- LISTADO DE CLIENTES -->
+    <section class="clientes-card">
+
+        <div class="card-heading">
+            <div>
+                <h2>Clientes registrados</h2>
+
+                <p>
+                    @if (datosDisponibles()) {
+                    {{ clientesFiltrados().length }} clientes encontrados
+                    } @else {
+                    Datos pendientes de conexión
+                    }
+                </p>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="clientes-toolbar">
+
+            <div class="search-box">
+
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+
+                <input type="search" placeholder="Buscar por nombre, correo o teléfono..." [ngModel]="busqueda()"
+                    (ngModelChange)="cambiarBusqueda($event)" />
+
+            </div>
+
+            <select class="estado-filter" [ngModel]="filtroEstado()" (ngModelChange)="cambiarFiltroEstado($event)"
+                aria-label="Filtrar clientes por estado">
+                <option value="TODOS">Todos los clientes</option>
+                <option value="ACTIVOS">Activos</option>
+                <option value="INACTIVOS">Inactivos</option>
+            </select>
+
+            <button type="button" class="btn-clear" (click)="limpiarFiltros()">
+                Limpiar filtros
+            </button>
+
+        </div>
+
+        <!-- ESTADO DE CARGA -->
+        @if (cargando()) {
+
+        <div class="clientes-loading">
+            <div class="spinner"></div>
+            <p>Cargando clientes...</p>
+        </div>
+
+        } @else if (error()) {
+
+        <!-- ERROR -->
+        <div class="clientes-empty">
+            <h3>No pudimos cargar los clientes</h3>
+            <p>{{ error() }}</p>
+        </div>
+
+        } @else if (!datosDisponibles()) {
+
+        <!-- BACKEND PENDIENTE -->
+        <div class="clientes-empty">
+
+            <div class="empty-icon">
+                <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                    <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+            </div>
+
+            <h3>Esperando conexión con el backend</h3>
+
+            <p>
+                Aquí aparecerán los usuarios registrados
+                en Valle Blanco cuando conectemos el módulo administrativo.
+            </p>
+
+        </div>
+
+        } @else if (clientesFiltrados().length === 0) {
+
+        <!-- SIN RESULTADOS -->
+        <div class="clientes-empty">
+
+            <h3>No encontramos clientes</h3>
+
+            <p>
+                Prueba cambiando el texto de búsqueda
+                o los filtros seleccionados.
+            </p>
+
+            <button type="button" class="btn-primary" (click)="limpiarFiltros()">
+                Mostrar todos
+            </button>
+
+        </div>
+
+        } @else {
+
+        <!-- TABLA -->
+        <div class="clientes-table-wrapper">
+
+            <table class="clientes-table">
+
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Correo electrónico</th>
+                        <th>Teléfono</th>
+                        <th>Fecha de registro</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @for (cliente of clientesFiltrados(); track cliente.id) {
+
+                    <tr>
+
+                        <!-- CLIENTE -->
+                        <td>
+                            <div class="table-client">
+
+                                <span class="client-avatar">
+                                    {{ obtenerIniciales(cliente) }}
+                                </span>
+
+                                <div class="client-info">
+                                    <strong>
+                                        {{ obtenerNombreCompleto(cliente) }}
+                                    </strong>
+
+                                    <small>
+                                        ID: {{ cliente.id }}
+                                    </small>
+                                </div>
+
+                            </div>
+                        </td>
+
+                        <!-- CORREO -->
+                        <td class="email-cell">
+                            {{ cliente.email }}
+                        </td>
+
+                        <!-- TELÉFONO -->
+                        <td>
+                            {{ cliente.telefono || 'No registrado' }}
+                        </td>
+
+                        <!-- FECHA -->
+                        <td>
+                            {{ cliente.creadoEn | date:'dd/MM/yyyy' }}
+                        </td>
+
+                        <!-- ESTADO -->
+                        <td>
+                            <span class="estado-badge" [class.estado-activo]="cliente.activo"
+                                [class.estado-inactivo]="!cliente.activo">
+                                {{ obtenerEstadoTexto(cliente.activo) }}
+                            </span>
+                        </td>
+
+                        <!-- ACCIONES -->
+                        <td>
+                            <button type="button" class="btn-details" (click)="verDetalle(cliente)">
+                                Ver detalles
+                            </button>
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        }
+
+    </section>
+
+    <!-- MODAL DE DETALLE -->
+    @if (mostrarDetalle() && clienteSeleccionado(); as cliente) {
+
+    <div class="cliente-modal-overlay">
+
+        <section class="cliente-modal" role="dialog" aria-modal="true" aria-labelledby="cliente-modal-title">
+
+            <!-- ENCABEZADO -->
+            <div class="modal-header">
+
+                <div>
+                    <span class="section-label">
+                        INFORMACIÓN DEL CLIENTE
+                    </span>
+
+                    <h2 id="cliente-modal-title">
+                        Detalles del cliente
+                    </h2>
+                </div>
+
+                <button type="button" class="modal-close" (click)="cerrarDetalle()" aria-label="Cerrar detalles">
+                    ×
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- PERFIL -->
+                <div class="client-profile">
+
+                    <span class="profile-avatar">
+                        {{ obtenerIniciales(cliente) }}
+                    </span>
+
+                    <div class="profile-info">
+
+                        <h3>
+                            {{ obtenerNombreCompleto(cliente) }}
+                        </h3>
+
+                        <p>{{ cliente.email }}</p>
+
+                        <span class="estado-badge" [class.estado-activo]="cliente.activo"
+                            [class.estado-inactivo]="!cliente.activo">
+                            {{ obtenerEstadoTexto(cliente.activo) }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- DATOS -->
+                <div class="detail-section">
+
+                    <h3>Información personal</h3>
+
+                    <div class="detail-grid">
+
+                        <div class="detail-item">
+                            <span>ID del cliente</span>
+                            <strong>{{ cliente.id }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Nombres</span>
+                            <strong>{{ cliente.nombres }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Apellidos</span>
+                            <strong>{{ cliente.apellidos }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Correo electrónico</span>
+                            <strong>{{ cliente.email }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Teléfono</span>
+                            <strong>
+                                {{ cliente.telefono || 'No registrado' }}
+                            </strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Fecha de registro</span>
+                            <strong>
+                                {{ cliente.creadoEn | date:'dd/MM/yyyy, HH:mm' }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIVIDAD -->
+                <div class="detail-section">
+
+                    <h3>Actividad de compras</h3>
+
+                    <div class="activity-grid">
+
+                        <div class="activity-card">
+                            <span>Total de pedidos</span>
+
+                            <strong>
+                                {{ cliente.totalPedidos ?? '—' }}
+                            </strong>
+                        </div>
+
+                        <div class="activity-card">
+                            <span>Total de compras</span>
+
+                            <strong>
+                                @if (cliente.totalGastado != null) {
+                                S/ {{ cliente.totalGastado }}
+                                } @else {
+                                —
+                                }
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <p class="activity-note">
+                        Las estadísticas de compras estarán disponibles
+                        cuando se conecte el backend administrativo.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- PIE -->
+            <div class="modal-footer">
+
+                <button type="button" class="btn-close" (click)="cerrarDetalle()">
+                    Cerrar
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    }
+
+</div>

@@ -1,0 +1,295 @@
+<div class="mis-pedidos-page">
+    <div class="mis-pedidos-container">
+
+        <!-- NAVEGACIÓN -->
+        <nav class="pedidos-breadcrumb">
+            <a routerLink="/client/home">Inicio</a>
+            <span>›</span>
+            <a routerLink="/client/perfil">Mi cuenta</a>
+            <span>›</span>
+            <span class="current">Mis pedidos</span>
+        </nav>
+
+        <!-- ENCABEZADO -->
+        <div class="pedidos-header">
+            <div>
+                <span class="section-label">
+                    VALLE BLANCO · MI CUENTA
+                </span>
+
+                <h1>Mis pedidos</h1>
+
+                <p>
+                    Consulta el historial y el estado de tus compras.
+                </p>
+            </div>
+
+            <a routerLink="/client/catalog" class="btn-catalog">
+                Explorar catálogo
+            </a>
+        </div>
+
+        <!-- CARGANDO -->
+        @if (cargando()) {
+
+        <div class="pedidos-loading">
+            <div class="spinner"></div>
+            <p>Cargando tus pedidos...</p>
+        </div>
+
+        } @else if (error()) {
+
+        <!-- ERROR -->
+        <div class="pedidos-error">
+            <div class="error-icon">!</div>
+
+            <h2>No pudimos cargar tus pedidos</h2>
+
+            <p>{{ error() }}</p>
+
+            <button type="button" class="btn-primary" (click)="cargarPedidos()">
+                Reintentar
+            </button>
+        </div>
+
+        } @else if (pedidos().length === 0) {
+
+        <!-- SIN PEDIDOS -->
+        <div class="pedidos-empty">
+
+            <div class="empty-icon">
+                <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="8" y1="13" x2="16" y2="13" />
+                    <line x1="8" y1="17" x2="16" y2="17" />
+                </svg>
+            </div>
+
+            <h2>Todavía no tienes pedidos</h2>
+
+            <p>
+                Descubre nuestros cafés de especialidad
+                y realiza tu primera compra en Valle Blanco.
+            </p>
+
+            <a routerLink="/client/catalog" class="btn-primary">
+                Descubrir nuestros cafés
+            </a>
+
+        </div>
+
+        } @else {
+
+        <!-- ESTADÍSTICAS -->
+        <div class="pedidos-stats">
+
+            <div class="stat-card">
+                <span class="stat-label">Total de pedidos</span>
+                <strong class="stat-number">{{ totalPedidos() }}</strong>
+                <span class="stat-description">Compras registradas</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">Pendientes</span>
+                <strong class="stat-number stat-pending">
+                    {{ pedidosPendientes() }}
+                </strong>
+                <span class="stat-description">Por confirmar</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">Entregados</span>
+                <strong class="stat-number stat-delivered">
+                    {{ pedidosEntregados() }}
+                </strong>
+                <span class="stat-description">Compras completadas</span>
+            </div>
+
+        </div>
+
+        <!-- FILTROS -->
+        <div class="pedidos-toolbar">
+
+            <div class="filters-heading">
+                <h2>Historial de compras</h2>
+                <p>{{ pedidosFiltrados().length }} pedidos encontrados</p>
+            </div>
+
+            <div class="pedidos-filters">
+
+                <button type="button" [class.active]="filtroActual() === 'TODOS'" (click)="cambiarFiltro('TODOS')">
+                    Todos
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'PENDIENTE'"
+                    (click)="cambiarFiltro('PENDIENTE')">
+                    Pendientes
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'CONFIRMADO'"
+                    (click)="cambiarFiltro('CONFIRMADO')">
+                    Confirmados
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'EN_PREPARACION'"
+                    (click)="cambiarFiltro('EN_PREPARACION')">
+                    En preparación
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'ENVIADO'" (click)="cambiarFiltro('ENVIADO')">
+                    Enviados
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'ENTREGADO'"
+                    (click)="cambiarFiltro('ENTREGADO')">
+                    Entregados
+                </button>
+
+                <button type="button" [class.active]="filtroActual() === 'CANCELADO'"
+                    (click)="cambiarFiltro('CANCELADO')">
+                    Cancelados
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- LISTA DE PEDIDOS -->
+        @if (pedidosFiltrados().length > 0) {
+
+        <div class="pedidos-list">
+
+            @for (pedido of pedidosFiltrados(); track pedido.id) {
+
+            <article class="pedido-card">
+
+                <!-- CABECERA -->
+                <div class="pedido-card-header">
+
+                    <div class="pedido-number-group">
+
+                        <span class="pedido-small-label">
+                            NÚMERO DE PEDIDO
+                        </span>
+
+                        <h3>{{ pedido.numeroPedido }}</h3>
+
+                        <span class="pedido-date">
+                            {{ pedido.creadoEn | date:'dd/MM/yyyy, HH:mm' }}
+                        </span>
+
+                    </div>
+
+                    <span class="pedido-status" [class.status-pending]="pedido.estado === 'PENDIENTE'"
+                        [class.status-confirmed]="pedido.estado === 'CONFIRMADO'"
+                        [class.status-preparing]="pedido.estado === 'EN_PREPARACION'"
+                        [class.status-sent]="pedido.estado === 'ENVIADO'"
+                        [class.status-delivered]="pedido.estado === 'ENTREGADO'"
+                        [class.status-cancelled]="pedido.estado === 'CANCELADO'">
+                        {{ obtenerEstadoTexto(pedido.estado) }}
+                    </span>
+
+                </div>
+
+                <!-- INFORMACIÓN -->
+                <div class="pedido-card-body">
+
+                    <div class="pedido-info-item">
+                        <span class="info-label">Productos</span>
+
+                        <strong>
+                            {{ obtenerCantidadProductos(pedido) }}
+                            unidades
+                        </strong>
+                    </div>
+
+                    <div class="pedido-info-item">
+                        <span class="info-label">Método de pago</span>
+
+                        <strong>
+                            {{ obtenerMetodoPagoTexto(pedido.metodoPago) }}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-info-item">
+                        <span class="info-label">Total del pedido</span>
+
+                        <strong class="pedido-total">
+                            S/ {{ pedido.total | number:'1.2-2' }}
+                        </strong>
+                    </div>
+
+                </div>
+
+                <!-- PRODUCTOS -->
+                @if (pedido.items && pedido.items.length > 0) {
+
+                <div class="pedido-products">
+
+                    <span class="products-label">
+                        Productos incluidos
+                    </span>
+
+                    <div class="products-chips">
+
+                        @for (item of pedido.items; track $index) {
+
+                        <span class="product-chip">
+                            {{ item.nombreProducto }}
+                            · {{ item.peso }} g
+                            × {{ item.cantidad }}
+                        </span>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- ACCIONES -->
+                <div class="pedido-card-footer">
+
+                    <span class="pedido-footer-text">
+                        Pedido realizado en Valle Blanco
+                    </span>
+
+                    <a [routerLink]="['/client/order-confirm', pedido.id]" class="btn-details">
+                        Ver detalles
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </article>
+
+            }
+
+        </div>
+
+        } @else {
+
+        <!-- SIN RESULTADOS DEL FILTRO -->
+        <div class="filter-empty">
+
+            <h3>No hay pedidos con este estado</h3>
+
+            <p>
+                Prueba seleccionando otro filtro
+                para consultar tus compras.
+            </p>
+
+            <button type="button" class="btn-clear-filter" (click)="cambiarFiltro('TODOS')">
+                Mostrar todos los pedidos
+            </button>
+
+        </div>
+
+        }
+
+        }
+
+    </div>
+</div>
