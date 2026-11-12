@@ -40,7 +40,7 @@
           Valle Blanco
         </h1>
 
-        @if (isRegister) {
+        @if (!isRegister) {
         <h2 class="showcase-title">
           ¡Qué bueno tenerte de vuelta!
         </h2>
@@ -50,8 +50,8 @@
           nuestros cafés de especialidad.
         </p>
 
-        <a routerLink="/auth/login" class="showcase-button">
-          Iniciar sesión
+        <a routerLink="/auth/register" class="showcase-button">
+          Crear una cuenta
           <span>→</span>
         </a>
         } @else {
@@ -64,9 +64,9 @@
           del auténtico sabor de Oxapampa.
         </p>
 
-        <a routerLink="/auth/register" class="showcase-button">
-          Crear una cuenta
-          <span>→</span>
+        <a routerLink="/auth/login" class="showcase-button">
+          Iniciar sesion
+          <span>←</span>
         </a>
         }
 

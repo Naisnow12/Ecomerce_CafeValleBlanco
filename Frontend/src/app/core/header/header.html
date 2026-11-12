@@ -4,9 +4,21 @@
     <div class="brand">
       <a routerLink="/client/home" class="brand-link">
         <span class="brand-name">Valle Blanco</span>
-        <span class="brand-sub">Café de Especialidad</span>
       </a>
     </div>
+
+    <!-- Navegación Principal -->
+
+    <nav class="nav-row">
+      <ul class="nav-list">
+        <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        </li>
+        <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
+        <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
+        <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
+        <li><a routerLink="/client/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
+      </ul>
+    </nav>
 
     <div class="header-actions">
       <!-- Carrito -->
@@ -83,17 +95,6 @@
     </div>
   </div>
 
-  <!-- Fila Inferior: Navegación Principal -->
-  <nav class="nav-row">
-    <ul class="nav-list">
-      <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
-      </li>
-      <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
-      <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
-      <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
-      <li><a routerLink="/client/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
-    </ul>
-  </nav>
 
   <!-- Menú Móvil -->
   @if (isMenuOpen()) {

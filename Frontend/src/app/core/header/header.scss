@@ -33,7 +33,6 @@
     min-height: 90px;
     margin: 0 auto;
     padding: 15px 30px;
-    transition: min-height 0.3s ease;
 }
 
 // MARCA
@@ -206,8 +205,9 @@
 // NAVEGACIÓN
 .nav-row {
     width: 100%;
-    background: #f0ebe1;
-    border-top: 1px solid #e7dfd2;
+    background: #faf8f3;
+    padding: 0px;
+    border-top: 0px;
 }
 
 .nav-list {
@@ -218,7 +218,7 @@
     gap: 35px;
     min-height: 43px;
     margin: 0;
-    padding: 9px 20px;
+    padding: 9px 0px;
     list-style: none;
 
     li {
