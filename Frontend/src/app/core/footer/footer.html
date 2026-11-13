@@ -1,1 +1,70 @@
-<p>footer works!</p>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <!-- Columna 1: Marca -->
+    <div class="footer-col footer-brand">
+      <span class="footer-logo">Valle Blanco</span>
+      <p class="footer-tagline">Café de especialidad de altura,<br>cultivado en Oxapampa, Perú.</p>
+      <div class="footer-social">
+        <!-- Instagram -->
+        <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+          </svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+          </svg>
+        </a>
+        <!-- WhatsApp -->
+        <a href="#" class="social-link" aria-label="WhatsApp" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Columna 2: Navegación -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Explorar</h4>
+      <ul class="footer-nav">
+        <li><a routerLink="/client/home">Inicio</a></li>
+        <li><a routerLink="/client/catalog">Catálogo</a></li>
+        <li><a routerLink="/client/sobre-nosotros">Sobre Nosotros</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Mi Cuenta -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Mi Cuenta</h4>
+      <ul class="footer-nav">
+        <li><a routerLink="/auth/login">Ingresar</a></li>
+        <li><a routerLink="/auth/register">Registrarse</a></li>
+        <li><a routerLink="/client/mis-pedidos">Mis Pedidos</a></li>
+        <li><a routerLink="/client/perfil">Mi Perfil</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 4: Origen -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Origen</h4>
+      <p class="footer-text">
+        Cultivado en las montañas de<br>
+        <strong>Oxapampa y Villa Rica</strong>,<br>
+        Pasco, Perú.
+      </p>
+      <p class="footer-text footer-altitude">
+        Entre 1,200 y 1,800 m.s.n.m.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ currentYear }} Valle Blanco · Todos los derechos reservados.</p>
+    <p class="footer-made">Café de especialidad peruano</p>
+  </div>
+</footer>

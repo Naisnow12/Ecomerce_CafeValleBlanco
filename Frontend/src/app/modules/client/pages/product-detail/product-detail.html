@@ -1,0 +1,170 @@
+<div class="product-detail-page">
+
+  @if (isLoading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando producto...</p>
+  </div>
+  }
+
+  @if (!isLoading() && product()) {
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a routerLink="/client/home">Inicio</a>
+    <span class="breadcrumb-sep">›</span>
+    <a routerLink="/client/catalog">Catálogo</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">{{ product()!.nombre }}</span>
+  </nav>
+
+  <div class="product-detail-grid">
+    <!-- Imagen -->
+    <div class="product-image-col">
+      <div class="product-image-wrapper">
+        @if (product()!.badgeText) {
+        <span class="product-badge">{{ product()!.badgeText }}</span>
+        }
+        <img [src]="product()!.imagenUrl" [alt]="product()!.nombre" class="product-main-image" />
+      </div>
+    </div>
+
+    <!-- Detalles -->
+    <div class="product-info-col">
+      <div class="product-header">
+        <h1 class="product-title">{{ product()!.nombre }}</h1>
+        @if (product()!.nombreSecundario) {
+        <p class="product-subtitle">{{ product()!.nombreSecundario }}</p>
+        }
+      </div>
+
+      <!-- Atributos -->
+      <div class="product-attributes">
+        @if (product()!.tipoCafe) {
+        <span class="attr-chip">
+          <span class="attr-label">Tipo</span>
+          <span class="attr-value">{{ product()!.tipoCafe }}</span>
+        </span>
+        }
+        @if (product()!.molienda) {
+        <span class="attr-chip">
+          <span class="attr-label">Molienda</span>
+          <span class="attr-value">{{ product()!.molienda }}</span>
+        </span>
+        }
+        @if (product()!.tueste) {
+        <span class="attr-chip">
+          <span class="attr-label">Tueste</span>
+          <span class="attr-value">{{ product()!.tueste }}</span>
+        </span>
+        }
+        @if (product()!.variedad) {
+        <span class="attr-chip">
+          <span class="attr-label">Variedad</span>
+          <span class="attr-value">{{ product()!.variedad }}</span>
+        </span>
+        }
+        @if (product()!.altitud) {
+        <span class="attr-chip">
+          <span class="attr-label">Altitud</span>
+          <span class="attr-value">{{ product()!.altitud }}</span>
+        </span>
+        }
+      </div>
+
+      <!-- Notas de cata -->
+      @if (product()!.notasCata?.length > 0) {
+      <div class="notas-cata">
+        <p class="notas-label">Notas de cata</p>
+        <div class="notas-chips">
+          @for (nota of product()!.notasCata; track nota.id) {
+          <span class="nota-chip">{{ nota.nombre }}</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Descripción -->
+      @if (product()!.descripcion) {
+      <p class="product-description">{{ product()!.descripcion }}</p>
+      }
+
+      <!-- Presentaciones -->
+      @if (product()!.precios?.length > 0) {
+      <div class="presentaciones">
+        <p class="presentaciones-label">Presentación</p>
+        <div class="presentaciones-btns">
+          @for (precio of product()!.precios; track precio.id) {
+          <button type="button" class="presentacion-btn" [class.selected]="selectedPrecio()?.id === precio.id"
+            (click)="selectPrecio(precio)">
+            {{ precio.peso }}g
+          </button>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Precio -->
+      @if (selectedPrecio()) {
+      <div class="product-price">
+        <span class="price-label">Precio</span>
+        <span class="price-amount">S/ {{ selectedPrecio()!.precio | number:'1.2-2' }}</span>
+      </div>
+      }
+
+      <!-- Stock -->
+      <p class="stock-info" [class.low-stock]="product()!.stock < 5">
+        @if (product()!.stock > 0) {
+        @if (product()!.stock < 5) { ⚠ Solo quedan {{ product()!.stock }} unidades } @else { ✓ Disponible ({{
+          product()!.stock }} unidades) } } @else { ✗ Sin stock disponible } </p>
+
+          <!-- Cantidad -->
+          @if (product()!.stock > 0) {
+          <div class="cantidad-selector">
+            <p class="cantidad-label">Cantidad</p>
+            <div class="cantidad-controls">
+              <button type="button" class="qty-btn" (click)="decrement()" [disabled]="cantidad() <= 1">−</button>
+              <span class="qty-value">{{ cantidad() }}</span>
+              <button type="button" class="qty-btn" (click)="increment()"
+                [disabled]="cantidad() >= product()!.stock">+</button>
+            </div>
+          </div>
+          }
+
+          <!-- Mensajes carrito -->
+          @if (cartMessage()) {
+          <div class="cart-feedback cart-feedback--success">✓ {{ cartMessage() }}</div>
+          }
+          @if (cartError()) {
+          <div class="cart-feedback cart-feedback--error">{{ cartError() }}</div>
+          }
+
+          <!-- Acciones -->
+          <div class="product-actions">
+            @if (isLoggedIn()) {
+            <button type="button" class="btn-add-cart"
+              [disabled]="!selectedPrecio() || product()!.stock === 0 || isAddingToCart()" (click)="agregarAlCarrito()">
+              @if (isAddingToCart()) {
+              <span class="spinner-inline"></span>
+              Agregando...
+              } @else {
+              Agregar al carrito
+              }
+            </button>
+            } @else {
+            <a routerLink="/auth/login" class="btn-login-to-buy">
+              Inicia sesión para comprar
+            </a>
+            }
+
+            <button type="button" class="btn-whatsapp" (click)="consultarWhatsApp()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+              </svg>
+              Consultar por WhatsApp
+            </button>
+          </div>
+    </div>
+  </div>
+  }
+</div>

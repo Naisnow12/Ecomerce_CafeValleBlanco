@@ -1,0 +1,533 @@
+<div class="productos-admin-page">
+
+    <!-- ENCABEZADO -->
+    <div class="productos-header">
+
+        <div>
+            <span class="section-label">
+                VALLE BLANCO · ADMINISTRACIÓN
+            </span>
+
+            <h1>Gestión de productos</h1>
+
+            <p>
+                Administra el catálogo de cafés de especialidad.
+            </p>
+        </div>
+
+        <button type="button" class="btn-new-product" (click)="abrirNuevoProducto()">
+            <span>+</span>
+            Nuevo producto
+        </button>
+
+    </div>
+
+    <!-- AVISO DE FUNCIONES PENDIENTES -->
+    @if (!escrituraDisponible()) {
+
+    <div class="admin-notice">
+        <span class="notice-icon">i</span>
+
+        <div>
+            <strong>Administración de productos en preparación</strong>
+
+            <p>
+                Puedes consultar y filtrar los productos del catálogo.
+                Los formularios de registro y edición están preparados,
+                pero el guardado se habilitará cuando conectemos
+                los endpoints administrativos del backend.
+            </p>
+        </div>
+    </div>
+
+    }
+
+    <!-- ESTADÍSTICAS -->
+    <div class="productos-stats">
+
+        <div class="stat-card">
+            <span class="stat-label">Productos cargados</span>
+
+            <strong>{{ totalProductos() }}</strong>
+
+            <span class="stat-description">
+                Productos visibles en la consulta
+            </span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Con stock disponible</span>
+
+            <strong class="stat-green">
+                {{ productosDisponibles() }}
+            </strong>
+
+            <span class="stat-description">
+                Productos con unidades disponibles
+            </span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Stock bajo</span>
+
+            <strong class="stat-gold">
+                {{ productosStockBajo() }}
+            </strong>
+
+            <span class="stat-description">
+                Menos de cinco unidades
+            </span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Agotados</span>
+
+            <strong class="stat-red">
+                {{ productosAgotados() }}
+            </strong>
+
+            <span class="stat-description">
+                Productos sin existencias
+            </span>
+        </div>
+
+    </div>
+
+    <!-- LISTADO -->
+    <section class="productos-card">
+
+        <div class="card-heading">
+
+            <div>
+                <h2>Catálogo de productos</h2>
+
+                <p>
+                    {{ productosFiltrados().length }}
+                    productos encontrados
+                </p>
+            </div>
+
+            <button type="button" class="btn-refresh" (click)="cargarProductos()">
+                Actualizar lista
+            </button>
+
+        </div>
+
+        <!-- FILTROS -->
+        <div class="productos-toolbar">
+
+            <div class="search-box">
+
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+
+                <input type="search" placeholder="Buscar café por nombre..." [ngModel]="busqueda()"
+                    (ngModelChange)="cambiarBusqueda($event)" />
+
+            </div>
+
+            <select class="stock-filter" [ngModel]="filtroStock()" (ngModelChange)="cambiarFiltroStock($event)"
+                aria-label="Filtrar por stock">
+                <option value="TODOS">Todos los productos</option>
+                <option value="DISPONIBLE">Disponibles</option>
+                <option value="BAJO">Stock bajo</option>
+                <option value="AGOTADO">Agotados</option>
+            </select>
+
+            <button type="button" class="btn-clear" (click)="limpiarFiltros()">
+                Limpiar filtros
+            </button>
+
+        </div>
+
+        <!-- CARGANDO -->
+        @if (cargando()) {
+
+        <div class="productos-loading">
+            <div class="spinner"></div>
+            <p>Cargando productos...</p>
+        </div>
+
+        } @else if (error()) {
+
+        <!-- ERROR -->
+        <div class="productos-empty">
+            <h3>No pudimos cargar el catálogo</h3>
+
+            <p>{{ error() }}</p>
+
+            <button type="button" class="btn-primary" (click)="cargarProductos()">
+                Reintentar
+            </button>
+        </div>
+
+        } @else if (productosFiltrados().length === 0) {
+
+        <!-- SIN RESULTADOS -->
+        <div class="productos-empty">
+            <h3>No encontramos productos</h3>
+
+            <p>
+                Prueba modificando los filtros
+                o el texto de búsqueda.
+            </p>
+
+            <button type="button" class="btn-primary" (click)="limpiarFiltros()">
+                Mostrar todos
+            </button>
+        </div>
+
+        } @else {
+
+        <!-- TABLA -->
+        <div class="productos-table-wrapper">
+
+            <table class="productos-table">
+
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Tipo de café</th>
+                        <th>Presentaciones</th>
+                        <th>Precio desde</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @for (producto of productosFiltrados(); track producto.id) {
+
+                    <tr>
+
+                        <!-- PRODUCTO -->
+                        <td>
+                            <div class="table-product">
+
+                                <img [src]="producto.imagenUrl" [alt]="producto.nombre" class="table-product-image" />
+
+                                <div class="table-product-info">
+
+                                    <strong>
+                                        {{ producto.nombre }}
+                                    </strong>
+
+                                    @if (producto.nombreSecundario) {
+                                    <span>
+                                        {{ producto.nombreSecundario }}
+                                    </span>
+                                    }
+
+                                    <small>
+                                        {{ producto.slug }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+                        </td>
+
+                        <!-- TIPO -->
+                        <td>
+                            {{ producto.tipoCafe || 'No especificado' }}
+                        </td>
+
+                        <!-- PRESENTACIONES -->
+                        <td>
+                            <div class="presentation-list">
+
+                                @for (precio of producto.precios; track precio.id) {
+
+                                <span class="presentation-chip">
+                                    {{ precio.peso }} g
+                                </span>
+
+                                } @empty {
+
+                                <span class="text-muted">
+                                    Sin presentaciones
+                                </span>
+
+                                }
+
+                            </div>
+                        </td>
+
+                        <!-- PRECIO -->
+                        <td class="price-cell">
+
+                            @if (obtenerPrecioMinimo(producto); as precioMinimo) {
+
+                            S/ {{ precioMinimo | number:'1.2-2' }}
+
+                            } @else {
+
+                            <span class="text-muted">Sin precio</span>
+
+                            }
+
+                        </td>
+
+                        <!-- STOCK -->
+                        <td>
+                            <strong class="stock-number">
+                                {{ producto.stock }}
+                            </strong>
+                        </td>
+
+                        <!-- ESTADO -->
+                        <td>
+                            <span class="stock-badge" [class.stock-available]="producto.stock >= 5"
+                                [class.stock-low]="producto.stock > 0 && producto.stock < 5"
+                                [class.stock-out]="producto.stock === 0">
+                                {{ obtenerEstadoStock(producto.stock) }}
+                            </span>
+                        </td>
+
+                        <!-- ACCIONES -->
+                        <td>
+                            <div class="table-actions">
+
+                                <button type="button" class="btn-edit" (click)="editarProducto(producto)"
+                                    title="Ver formulario de edición">
+                                    Editar
+                                </button>
+
+                                @if (producto.slug) {
+
+                                <a [routerLink]="['/client/product', producto.slug]" class="btn-view"
+                                    title="Ver producto en la tienda">
+                                    Ver
+                                </a>
+
+                                }
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        }
+
+    </section>
+
+    <!-- FORMULARIO MODAL -->
+    @if (mostrarFormulario() && productoSeleccionado(); as producto) {
+
+    <div class="product-modal-overlay">
+
+        <section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+
+            <div class="modal-header">
+
+                <div>
+                    <span class="section-label">
+                        GESTIÓN DEL CATÁLOGO
+                    </span>
+
+                    <h2 id="product-modal-title">
+                        @if (modoEdicion()) {
+                        Editar producto
+                        } @else {
+                        Nuevo producto
+                        }
+                    </h2>
+                </div>
+
+                <button type="button" class="modal-close" (click)="cerrarFormulario()" aria-label="Cerrar formulario">
+                    ×
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-notice">
+                    Este formulario permite preparar los datos del producto.
+                    El guardado estará disponible cuando conectemos
+                    la API administrativa.
+                </div>
+
+                <div class="product-form-grid">
+
+                    <div class="form-group">
+                        <label for="product-name">
+                            Nombre del producto
+                        </label>
+
+                        <input id="product-name" type="text" [(ngModel)]="producto.nombre"
+                            placeholder="Ej. Valle Blanco Clásico" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-slug">
+                            Slug
+                        </label>
+
+                        <input id="product-slug" type="text" [(ngModel)]="producto.slug"
+                            placeholder="valle-blanco-clasico" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-secondary">
+                            Nombre secundario
+                        </label>
+
+                        <input id="product-secondary" type="text" [(ngModel)]="producto.nombreSecundario" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">
+                            URL de imagen
+                        </label>
+
+                        <input id="product-image" type="text" [(ngModel)]="producto.imagenUrl"
+                            placeholder="assets/imagenes/producto.jpg" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-type">
+                            Tipo de café
+                        </label>
+
+                        <input id="product-type" type="text" [(ngModel)]="producto.tipoCafe" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-grind">
+                            Molienda
+                        </label>
+
+                        <input id="product-grind" type="text" [(ngModel)]="producto.molienda" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-roast">
+                            Tueste
+                        </label>
+
+                        <input id="product-roast" type="text" [(ngModel)]="producto.tueste" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-variety">
+                            Variedad
+                        </label>
+
+                        <input id="product-variety" type="text" [(ngModel)]="producto.variedad" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-altitude">
+                            Altitud
+                        </label>
+
+                        <input id="product-altitude" type="text" [(ngModel)]="producto.altitud" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-stock">
+                            Stock
+                        </label>
+
+                        <input id="product-stock" type="number" min="0" [(ngModel)]="producto.stock" />
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="product-description">
+                            Descripción
+                        </label>
+
+                        <textarea id="product-description" rows="4" [(ngModel)]="producto.descripcion"
+                            placeholder="Descripción del café..."></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-checkboxes">
+
+                    <label>
+                        <input type="checkbox" [(ngModel)]="producto.esDestacado" />
+                        Producto destacado
+                    </label>
+
+                    <label>
+                        <input type="checkbox" [(ngModel)]="producto.esOscuro" />
+                        Presentación oscura
+                    </label>
+
+                </div>
+
+                <!-- PRECIOS -->
+                <div class="form-section">
+
+                    <h3>Presentaciones y precios</h3>
+
+                    @if (producto.precios.length > 0) {
+
+                    <div class="form-presentations">
+
+                        @for (precio of producto.precios; track precio.id) {
+
+                        <div class="presentation-row">
+                            <span>{{ precio.peso }} g</span>
+
+                            <strong>
+                                S/ {{ precio.precio | number:'1.2-2' }}
+                            </strong>
+                        </div>
+
+                        }
+
+                    </div>
+
+                    } @else {
+
+                    <p class="form-placeholder">
+                        Todavía no hay presentaciones registradas.
+                    </p>
+
+                    }
+
+                    <p class="form-help">
+                        La edición de presentaciones y precios se habilitará
+                        con los endpoints administrativos.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- BOTONES -->
+            <div class="modal-footer">
+
+                <button type="button" class="btn-cancel" (click)="cancelarEdicion()">
+                    Cancelar
+                </button>
+
+                <button type="button" class="btn-save" [disabled]="!escrituraDisponible()"
+                    title="Pendiente de conexión con el backend">
+                    Guardar producto
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    }
+
+</div>

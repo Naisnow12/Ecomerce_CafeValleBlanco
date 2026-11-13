@@ -1,0 +1,334 @@
+<section class="perfil-page">
+
+    <div class="perfil-container">
+
+        <!-- ENCABEZADO -->
+        <header class="perfil-header">
+
+            <div>
+                <span class="perfil-etiqueta">
+                    VALLE BLANCO · MI CUENTA
+                </span>
+
+                <h1>Mi perfil</h1>
+
+                <p>
+                    Administra tu información personal y consulta
+                    tus compras en Valle Blanco.
+                </p>
+            </div>
+
+        </header>
+
+        <!-- ESTADO DE CARGA -->
+        @if (cargando()) {
+
+        <div class="perfil-loading">
+            <div class="perfil-spinner"></div>
+            <p>Cargando tu información...</p>
+        </div>
+
+        } @else {
+
+        <!-- MENSAJES -->
+        @if (mensajeExito()) {
+        <div class="perfil-alert perfil-alert--success" role="status">
+            {{ mensajeExito() }}
+        </div>
+        }
+
+        @if (mensajeError()) {
+        <div class="perfil-alert perfil-alert--error" role="alert">
+            {{ mensajeError() }}
+        </div>
+        }
+
+        @if (usuario()) {
+
+        <!-- TARJETA PRINCIPAL -->
+        <div class="perfil-card">
+
+            <div class="perfil-user-header">
+
+                <div class="perfil-avatar">
+                    {{ obtenerIniciales() }}
+                </div>
+
+                <div class="perfil-user-info">
+
+                    <h2>
+                        {{ usuario()!.nombres }}
+                        {{ usuario()!.apellidos }}
+                    </h2>
+
+                    <p>
+                        {{ usuario()!.email }}
+                    </p>
+
+                    <span class="perfil-badge">
+                        Cliente Valle Blanco
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="perfil-divider"></div>
+
+            <!-- VISTA DE INFORMACIÓN -->
+            @if (!editando()) {
+
+            <div class="perfil-info-grid">
+
+                <div class="perfil-info-item">
+                    <span class="perfil-info-label">
+                        Nombres
+                    </span>
+
+                    <strong>
+                        {{ usuario()!.nombres }}
+                    </strong>
+                </div>
+
+                <div class="perfil-info-item">
+                    <span class="perfil-info-label">
+                        Apellidos
+                    </span>
+
+                    <strong>
+                        {{ usuario()!.apellidos }}
+                    </strong>
+                </div>
+
+                <div class="perfil-info-item">
+                    <span class="perfil-info-label">
+                        Correo electrónico
+                    </span>
+
+                    <strong>
+                        {{ usuario()!.email }}
+                    </strong>
+                </div>
+
+                <div class="perfil-info-item">
+                    <span class="perfil-info-label">
+                        Teléfono
+                    </span>
+
+                    <strong>
+                        {{ usuario()!.telefono || 'No registrado' }}
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="perfil-actions">
+
+                <button type="button" class="perfil-btn perfil-btn--primary" (click)="activarEdicion()">
+
+                    Editar información
+
+                </button>
+
+            </div>
+
+            } @else {
+
+            <!-- FORMULARIO DE EDICIÓN -->
+            <form class="perfil-form" [formGroup]="form" (ngSubmit)="guardarCambios()">
+
+                <div class="perfil-form-grid">
+
+                    <!-- NOMBRES -->
+                    <div class="perfil-form-group">
+
+                        <label for="perfil-nombres">
+                            Nombres *
+                        </label>
+
+                        <input id="perfil-nombres" type="text" formControlName="nombres" autocomplete="given-name"
+                            placeholder="Tus nombres">
+
+                        @if (
+                        form.controls.nombres.invalid &&
+                        form.controls.nombres.touched
+                        ) {
+                        <span class="perfil-error">
+                            Ingresa al menos 2 caracteres.
+                        </span>
+                        }
+
+                    </div>
+
+                    <!-- APELLIDOS -->
+                    <div class="perfil-form-group">
+
+                        <label for="perfil-apellidos">
+                            Apellidos *
+                        </label>
+
+                        <input id="perfil-apellidos" type="text" formControlName="apellidos" autocomplete="family-name"
+                            placeholder="Tus apellidos">
+
+                        @if (
+                        form.controls.apellidos.invalid &&
+                        form.controls.apellidos.touched
+                        ) {
+                        <span class="perfil-error">
+                            Ingresa al menos 2 caracteres.
+                        </span>
+                        }
+
+                    </div>
+
+                    <!-- TELÉFONO -->
+                    <div class="perfil-form-group">
+
+                        <label for="perfil-telefono">
+                            Teléfono
+                        </label>
+
+                        <input id="perfil-telefono" type="tel" formControlName="telefono" autocomplete="tel"
+                            placeholder="+51 999 999 999">
+
+                    </div>
+
+                    <!-- CORREO -->
+                    <div class="perfil-form-group">
+
+                        <label for="perfil-email">
+                            Correo electrónico
+                        </label>
+
+                        <input id="perfil-email" type="email" [value]="usuario()!.email" disabled>
+
+                        <small>
+                            El correo no puede modificarse desde aquí.
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="perfil-actions">
+
+                    <button type="button" class="perfil-btn perfil-btn--secondary" (click)="cancelarEdicion()"
+                        [disabled]="guardando()">
+
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit" class="perfil-btn perfil-btn--primary" [disabled]="guardando()">
+
+                        @if (guardando()) {
+                        Guardando...
+                        } @else {
+                        Guardar cambios
+                        }
+
+                    </button>
+
+                </div>
+
+            </form>
+
+            }
+
+        </div>
+
+        <!-- ACCESOS RÁPIDOS -->
+        <div class="perfil-section-title">
+            <h2>Mi cuenta</h2>
+            <p>Accede rápidamente a tus opciones.</p>
+        </div>
+
+        <div class="perfil-options">
+
+            <!-- MIS PEDIDOS -->
+            <a routerLink="/client/mis-pedidos" class="perfil-option-card">
+
+                <div class="perfil-option-icon">
+                    <span aria-hidden="true">📦</span>
+                </div>
+
+                <div class="perfil-option-content">
+
+                    <h3>Mis pedidos</h3>
+
+                    <p>
+                        Consulta tus compras y revisa
+                        el estado de tus pedidos.
+                    </p>
+
+                </div>
+
+                <span class="perfil-option-arrow" aria-hidden="true">
+                    →
+                </span>
+
+            </a>
+
+            <!-- DIRECCIONES -->
+            <div class="perfil-option-card perfil-option-card--disabled">
+
+                <div class="perfil-option-icon">
+                    <span aria-hidden="true">📍</span>
+                </div>
+
+                <div class="perfil-option-content">
+
+                    <h3>Mis direcciones</h3>
+
+                    <p>
+                        Gestiona tus direcciones
+                        de entrega.
+                    </p>
+
+                    <span class="perfil-coming-soon">
+                        Próximamente
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CERRAR SESIÓN -->
+        <div class="perfil-logout">
+
+            <button type="button" class="perfil-logout-btn" (click)="cerrarSesion()">
+
+                Cerrar sesión
+
+            </button>
+
+        </div>
+
+        } @else {
+
+        <!-- ERROR AL CONSULTAR PERFIL -->
+        <div class="perfil-empty">
+
+            <h2>No pudimos mostrar tu perfil</h2>
+
+            <p>
+                Comprueba tu conexión e intenta nuevamente.
+            </p>
+
+            <button type="button" class="perfil-btn perfil-btn--primary" (click)="cargarPerfil()">
+
+                Reintentar
+
+            </button>
+
+        </div>
+
+        }
+
+        }
+
+    </div>
+
+</section>

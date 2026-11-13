@@ -1,0 +1,408 @@
+<div class="dashboard-page">
+
+    <!-- ENCABEZADO -->
+    <div class="dashboard-header">
+
+        <div class="dashboard-heading">
+            <span class="section-label">
+                VALLE BLANCO · ADMINISTRACIÓN
+            </span>
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Bienvenido al panel de control de Valle Blanco.
+                Consulta el resumen general de tu tienda.
+            </p>
+        </div>
+
+        <div class="dashboard-date">
+            <span>Fecha actual</span>
+            <strong>{{ fechaActual | date:'dd/MM/yyyy' }}</strong>
+        </div>
+
+    </div>
+
+    <!-- AVISO DE DATOS PENDIENTES -->
+    @if (!datosDisponibles()) {
+
+    <div class="dashboard-notice">
+
+        <div class="notice-icon">
+            i
+        </div>
+
+        <div class="notice-content">
+            <strong>Estadísticas pendientes de conexión</strong>
+
+            <p>
+                El diseño del Dashboard está preparado.
+                Los indicadores se mostrarán cuando se implementen
+                los endpoints administrativos del backend.
+            </p>
+        </div>
+
+    </div>
+
+    }
+
+    <!-- TARJETAS DE ESTADÍSTICAS -->
+    <div class="dashboard-stats">
+
+        <!-- PRODUCTOS -->
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+                <span class="stat-label">Productos registrados</span>
+
+                <div class="stat-icon stat-icon--green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <path
+                            d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                        <path d="M3.3 7L12 12l8.7-5" />
+                        <path d="M12 22V12" />
+                    </svg>
+                </div>
+            </div>
+
+            <strong class="stat-value">
+                {{ estadisticas().totalProductos ?? '—' }}
+            </strong>
+
+            <span class="stat-footer">
+                Productos en el catálogo
+            </span>
+
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+                <span class="stat-label">Total de pedidos</span>
+
+                <div class="stat-icon stat-icon--gold">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <path d="M8 2h8l4 4v16H4V6z" />
+                        <path d="M8 2v6h8V2" />
+                        <path d="M8 13h8" />
+                        <path d="M8 17h6" />
+                    </svg>
+                </div>
+            </div>
+
+            <strong class="stat-value">
+                {{ estadisticas().totalPedidos ?? '—' }}
+            </strong>
+
+            <span class="stat-footer">
+                Pedidos realizados
+            </span>
+
+        </div>
+
+        <!-- CLIENTES -->
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+                <span class="stat-label">Clientes registrados</span>
+
+                <div class="stat-icon stat-icon--blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                        <path d="M16 3.13a4 4 0 010 7.75" />
+                    </svg>
+                </div>
+            </div>
+
+            <strong class="stat-value">
+                {{ estadisticas().totalClientes ?? '—' }}
+            </strong>
+
+            <span class="stat-footer">
+                Usuarios de la tienda
+            </span>
+
+        </div>
+
+        <!-- VENTAS -->
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+                <span class="stat-label">Ventas acumuladas</span>
+
+                <div class="stat-icon stat-icon--purple">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <circle cx="12" cy="12" r="9" />
+                        <path
+                            d="M15 8.5c-.7-1-1.7-1.5-3-1.5-2 0-3 1-3 2.5 0 3.5 6 1.5 6 5 0 1.5-1.5 2.5-3.5 2.5-1.4 0-2.6-.6-3.5-1.5" />
+                        <path d="M12 5v14" />
+                    </svg>
+                </div>
+            </div>
+
+            <strong class="stat-value">
+                @if (estadisticas().ventasTotales !== null) {
+                S/ {{ estadisticas().ventasTotales | number:'1.2-2' }}
+                } @else {
+                —
+                }
+            </strong>
+
+            <span class="stat-footer">
+                Importe de ventas registradas
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- INDICADORES SECUNDARIOS -->
+    <div class="dashboard-secondary-stats">
+
+        <div class="secondary-stat">
+
+            <div class="secondary-stat-icon">
+                <span>!</span>
+            </div>
+
+            <div>
+                <span>Pedidos pendientes</span>
+
+                <strong>
+                    {{ estadisticas().pedidosPendientes ?? '—' }}
+                </strong>
+            </div>
+
+            <a routerLink="/admin/pedidos">
+                Ver pedidos →
+            </a>
+
+        </div>
+
+        <div class="secondary-stat">
+
+            <div class="secondary-stat-icon secondary-stat-icon--stock">
+                <span>!</span>
+            </div>
+
+            <div>
+                <span>Productos con stock bajo</span>
+
+                <strong>
+                    {{ estadisticas().productosStockBajo ?? '—' }}
+                </strong>
+            </div>
+
+            <a routerLink="/admin/productos">
+                Ver productos →
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENIDO INFERIOR -->
+    <div class="dashboard-grid">
+
+        <!-- ÚLTIMOS PEDIDOS -->
+        <section class="dashboard-card">
+
+            <div class="card-heading">
+                <div>
+                    <h2>Últimos pedidos</h2>
+                    <p>Actividad reciente de la tienda</p>
+                </div>
+
+                <a routerLink="/admin/pedidos" class="card-link">
+                    Ver todos →
+                </a>
+            </div>
+
+            @if (pedidosRecientes().length > 0) {
+
+            <div class="table-wrapper">
+                <table class="dashboard-table">
+
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (pedido of pedidosRecientes(); track pedido.id) {
+                        <tr>
+
+                            <td class="order-number">
+                                {{ pedido.numeroPedido }}
+                            </td>
+
+                            <td>{{ pedido.cliente }}</td>
+
+                            <td>
+                                {{ pedido.fecha | date:'dd/MM/yyyy' }}
+                            </td>
+
+                            <td>
+                                <span class="table-status" [class.status-pending]="pedido.estado === 'PENDIENTE'"
+                                    [class.status-confirmed]="pedido.estado === 'CONFIRMADO'"
+                                    [class.status-delivered]="pedido.estado === 'ENTREGADO'"
+                                    [class.status-cancelled]="pedido.estado === 'CANCELADO'">
+                                    {{ obtenerEstadoTexto(pedido.estado) }}
+                                </span>
+                            </td>
+
+                            <td class="table-total">
+                                S/ {{ pedido.total | number:'1.2-2' }}
+                            </td>
+
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+            } @else {
+
+            <div class="dashboard-empty">
+
+                <div class="empty-symbol">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M8 2h8l4 4v16H4V6z" />
+                        <path d="M8 13h8" />
+                        <path d="M8 17h6" />
+                    </svg>
+                </div>
+
+                <h3>Sin datos de pedidos</h3>
+
+                <p>
+                    Los pedidos recientes aparecerán cuando
+                    se conecte el módulo administrativo.
+                </p>
+
+            </div>
+
+            }
+
+        </section>
+
+        <!-- STOCK BAJO -->
+        <section class="dashboard-card stock-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <h2>Alertas de inventario</h2>
+                    <p>Productos con pocas unidades</p>
+                </div>
+
+            </div>
+
+            @if (productosStockBajo().length > 0) {
+
+            <div class="stock-list">
+
+                @for (producto of productosStockBajo(); track producto.id) {
+
+                <div class="stock-item">
+
+                    <div class="stock-item-info">
+                        <strong>{{ producto.nombre }}</strong>
+                        <span>Stock disponible</span>
+                    </div>
+
+                    <span class="stock-quantity">
+                        {{ producto.stock }} unidades
+                    </span>
+
+                </div>
+
+                }
+
+            </div>
+
+            } @else {
+
+            <div class="dashboard-empty">
+
+                <div class="empty-symbol">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path
+                            d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                        <path d="M12 22V12" />
+                    </svg>
+                </div>
+
+                <h3>Sin datos de inventario</h3>
+
+                <p>
+                    Las alertas de stock aparecerán cuando
+                    se conecte el backend administrativo.
+                </p>
+
+            </div>
+
+            }
+
+            <a routerLink="/admin/productos" class="stock-footer-link">
+                Ir a gestión de productos →
+            </a>
+
+        </section>
+
+    </div>
+
+    <!-- ACCESOS RÁPIDOS -->
+    <section class="quick-access">
+
+        <div class="quick-access-header">
+            <h2>Accesos rápidos</h2>
+            <p>Gestiona las principales áreas de tu tienda</p>
+        </div>
+
+        <div class="quick-access-grid">
+
+            <a routerLink="/admin/productos" class="quick-access-item">
+                <span class="quick-icon">☕</span>
+                <strong>Productos</strong>
+                <span>Gestionar catálogo</span>
+            </a>
+
+            <a routerLink="/admin/pedidos" class="quick-access-item">
+                <span class="quick-icon">📦</span>
+                <strong>Pedidos</strong>
+                <span>Revisar compras</span>
+            </a>
+
+            <a routerLink="/admin/clientes" class="quick-access-item">
+                <span class="quick-icon">👥</span>
+                <strong>Clientes</strong>
+                <span>Consultar usuarios</span>
+            </a>
+
+            <a routerLink="/admin/configuracion" class="quick-access-item">
+                <span class="quick-icon">⚙</span>
+                <strong>Configuración</strong>
+                <span>Ajustes generales</span>
+            </a>
+
+        </div>
+
+    </section>
+
+</div>

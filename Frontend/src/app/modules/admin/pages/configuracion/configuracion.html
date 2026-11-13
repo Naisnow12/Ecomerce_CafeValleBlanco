@@ -1,0 +1,504 @@
+<div class="configuracion-page">
+
+    <!-- ENCABEZADO -->
+    <div class="config-header">
+        <span class="section-label">
+            VALLE BLANCO · ADMINISTRACIÓN
+        </span>
+
+        <h1>Configuración</h1>
+
+        <p>
+            Administra la información general y las preferencias de tu tienda.
+        </p>
+    </div>
+
+    <!-- AVISO -->
+    @if (!guardadoDisponible()) {
+    <div class="config-notice">
+        <span class="notice-icon">i</span>
+
+        <div>
+            <strong>Configuración pendiente de conexión</strong>
+
+            <p>
+                Puedes revisar los formularios y preparar los datos.
+                Los cambios todavía no se guardan ni modifican
+                el funcionamiento de la tienda.
+            </p>
+        </div>
+    </div>
+    }
+
+    <!-- CONTENIDO -->
+    <div class="config-layout">
+
+        <!-- MENÚ DE CONFIGURACIÓN -->
+        <aside class="config-sidebar">
+
+            <h2>Preferencias</h2>
+
+            <nav class="config-nav">
+
+                <button type="button" [class.active]="seccionActiva() === 'TIENDA'" (click)="cambiarSeccion('TIENDA')">
+                    <span class="nav-icon">🏪</span>
+                    Información de la tienda
+                </button>
+
+                <button type="button" [class.active]="seccionActiva() === 'PAGOS'" (click)="cambiarSeccion('PAGOS')">
+                    <span class="nav-icon">💳</span>
+                    Métodos de pago
+                </button>
+
+                <button type="button" [class.active]="seccionActiva() === 'ENVIOS'" (click)="cambiarSeccion('ENVIOS')">
+                    <span class="nav-icon">🚚</span>
+                    Envíos y entregas
+                </button>
+
+                <button type="button" [class.active]="seccionActiva() === 'SEGURIDAD'"
+                    (click)="cambiarSeccion('SEGURIDAD')">
+                    <span class="nav-icon">🔒</span>
+                    Seguridad
+                </button>
+
+            </nav>
+
+        </aside>
+
+        <!-- PANEL PRINCIPAL -->
+        <div class="config-main">
+
+            <!-- MENSAJES -->
+            @if (error()) {
+            <div class="config-alert config-alert--error">
+                {{ error() }}
+            </div>
+            }
+
+            @if (mensaje()) {
+            <div class="config-alert config-alert--success">
+                {{ mensaje() }}
+            </div>
+            }
+
+            <!-- INFORMACIÓN DE LA TIENDA -->
+            @if (seccionActiva() === 'TIENDA') {
+
+            <section class="config-card">
+
+                <div class="card-heading">
+                    <h2>Información de la tienda</h2>
+
+                    <p>
+                        Datos generales que identifican a Valle Blanco.
+                    </p>
+                </div>
+
+                <div class="config-form">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="tienda-nombre">Nombre comercial</label>
+
+                            <input id="tienda-nombre" type="text" [(ngModel)]="tienda.nombre"
+                                placeholder="Nombre de la tienda" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-subtitulo">Subtítulo</label>
+
+                            <input id="tienda-subtitulo" type="text" [(ngModel)]="tienda.subtitulo"
+                                placeholder="Ej. Café de Especialidad" />
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="tienda-descripcion">
+                                Descripción de la tienda
+                            </label>
+
+                            <textarea id="tienda-descripcion" rows="4" [(ngModel)]="tienda.descripcion"
+                                placeholder="Describe brevemente tu negocio..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <h3 class="form-section-title">Información de contacto</h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="tienda-email">Correo electrónico</label>
+
+                            <input id="tienda-email" type="email" [(ngModel)]="tienda.email"
+                                placeholder="correo@ejemplo.com" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-telefono">Teléfono</label>
+
+                            <input id="tienda-telefono" type="tel" [(ngModel)]="tienda.telefono"
+                                placeholder="Número de contacto" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-whatsapp">WhatsApp comercial</label>
+
+                            <input id="tienda-whatsapp" type="tel" [(ngModel)]="tienda.whatsapp"
+                                placeholder="Número con código de país" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-direccion">Dirección comercial</label>
+
+                            <input id="tienda-direccion" type="text" [(ngModel)]="tienda.direccion"
+                                placeholder="Dirección del negocio" />
+                        </div>
+
+                    </div>
+
+                    <h3 class="form-section-title">Ubicación</h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="tienda-distrito">Distrito</label>
+
+                            <input id="tienda-distrito" type="text" [(ngModel)]="tienda.distrito" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-provincia">Provincia</label>
+
+                            <input id="tienda-provincia" type="text" [(ngModel)]="tienda.provincia" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tienda-departamento">Departamento</label>
+
+                            <input id="tienda-departamento" type="text" [(ngModel)]="tienda.departamento" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="config-card-footer">
+                    <span>Los cambios aún no se pueden guardar.</span>
+
+                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
+                        Guardar cambios
+                    </button>
+                </div>
+
+            </section>
+
+            }
+
+            <!-- MÉTODOS DE PAGO -->
+            @if (seccionActiva() === 'PAGOS') {
+
+            <section class="config-card">
+
+                <div class="card-heading">
+                    <h2>Métodos de pago</h2>
+
+                    <p>
+                        Prepara los medios de pago que ofrecerá la tienda.
+                    </p>
+                </div>
+
+                <div class="config-form">
+
+                    <div class="config-info">
+                        Los siguientes valores son un borrador.
+                        No modifican los métodos disponibles en el checkout.
+                    </div>
+
+                    <!-- YAPE -->
+                    <div class="payment-config-item">
+
+                        <div class="payment-config-header">
+                            <div>
+                                <h3>Yape</h3>
+                                <p>Billetera digital</p>
+                            </div>
+
+                            <label class="switch-control">
+                                <input type="checkbox" [(ngModel)]="pagos.yape"
+                                    aria-label="Habilitar Yape en el borrador" />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pago-yape">Número de Yape</label>
+
+                            <input id="pago-yape" type="tel" [(ngModel)]="pagos.numeroYape"
+                                placeholder="Número asociado a Yape" />
+                        </div>
+
+                    </div>
+
+                    <!-- PLIN -->
+                    <div class="payment-config-item">
+
+                        <div class="payment-config-header">
+                            <div>
+                                <h3>Plin</h3>
+                                <p>Billetera digital</p>
+                            </div>
+
+                            <label class="switch-control">
+                                <input type="checkbox" [(ngModel)]="pagos.plin"
+                                    aria-label="Habilitar Plin en el borrador" />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pago-plin">Número de Plin</label>
+
+                            <input id="pago-plin" type="tel" [(ngModel)]="pagos.numeroPlin"
+                                placeholder="Número asociado a Plin" />
+                        </div>
+
+                    </div>
+
+                    <!-- TRANSFERENCIA -->
+                    <div class="payment-config-item">
+
+                        <div class="payment-config-header">
+                            <div>
+                                <h3>Transferencia bancaria</h3>
+                                <p>Pago mediante cuenta bancaria</p>
+                            </div>
+
+                            <label class="switch-control">
+                                <input type="checkbox" [(ngModel)]="pagos.transferencia"
+                                    aria-label="Habilitar transferencia en el borrador" />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="pago-banco">Banco</label>
+
+                                <input id="pago-banco" type="text" [(ngModel)]="pagos.banco"
+                                    placeholder="Nombre del banco" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pago-cuenta">Número de cuenta</label>
+
+                                <input id="pago-cuenta" type="text" [(ngModel)]="pagos.numeroCuenta"
+                                    placeholder="Número de cuenta" />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="pago-cci">Código CCI</label>
+
+                                <input id="pago-cci" type="text" [(ngModel)]="pagos.cci"
+                                    placeholder="Código de cuenta interbancario" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="config-card-footer">
+                    <span>La configuración de pagos aún no se guarda.</span>
+
+                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
+                        Guardar métodos de pago
+                    </button>
+                </div>
+
+            </section>
+
+            }
+
+            <!-- ENVÍOS -->
+            @if (seccionActiva() === 'ENVIOS') {
+
+            <section class="config-card">
+
+                <div class="card-heading">
+                    <h2>Envíos y entregas</h2>
+
+                    <p>
+                        Prepara las condiciones de entrega de tus productos.
+                    </p>
+                </div>
+
+                <div class="config-form">
+
+                    <div class="config-info">
+                        Las tarifas mostradas son valores iniciales del formulario.
+                        No representan precios oficiales de envío.
+                    </div>
+
+                    <div class="setting-row">
+
+                        <div>
+                            <h3>Habilitar envíos</h3>
+
+                            <p>
+                                Permitir entregas a las direcciones de los clientes.
+                            </p>
+                        </div>
+
+                        <label class="switch-control">
+                            <input type="checkbox" [(ngModel)]="envios.habilitarEnvios"
+                                aria-label="Habilitar envíos en el borrador" />
+                            <span class="switch-slider"></span>
+                        </label>
+
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="envio-costo">Costo base de envío (S/)</label>
+
+                            <input id="envio-costo" type="number" min="0" step="0.01" [(ngModel)]="envios.costoBase" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="envio-gratis">
+                                Envío gratis desde (S/)
+                            </label>
+
+                            <input id="envio-gratis" type="number" min="0" step="0.01"
+                                [(ngModel)]="envios.envioGratisDesde" />
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="envio-tiempo">
+                                Tiempo estimado de entrega
+                            </label>
+
+                            <input id="envio-tiempo" type="text" [(ngModel)]="envios.tiempoEstimado"
+                                placeholder="Ej. Según destino y disponibilidad" />
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="envio-instrucciones">
+                                Instrucciones de entrega
+                            </label>
+
+                            <textarea id="envio-instrucciones" rows="4" [(ngModel)]="envios.instrucciones"
+                                placeholder="Condiciones o indicaciones de entrega..."></textarea>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="config-card-footer">
+                    <span>Los cambios aún no se pueden guardar.</span>
+
+                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
+                        Guardar configuración
+                    </button>
+                </div>
+
+            </section>
+
+            }
+
+            <!-- SEGURIDAD -->
+            @if (seccionActiva() === 'SEGURIDAD') {
+
+            <section class="config-card">
+
+                <div class="card-heading">
+                    <h2>Seguridad y acceso</h2>
+
+                    <p>
+                        Información sobre la protección del panel administrativo.
+                    </p>
+                </div>
+
+                <div class="config-form">
+
+                    <div class="security-item">
+
+                        <div class="security-icon">🔐</div>
+
+                        <div>
+                            <h3>Autenticación de usuarios</h3>
+
+                            <p>
+                                Valle Blanco utiliza autenticación mediante
+                                credenciales y tokens para identificar a los usuarios.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div class="security-icon">👤</div>
+
+                        <div>
+                            <h3>Permisos administrativos</h3>
+
+                            <p>
+                                El acceso al panel debe restringirse a usuarios
+                                con el rol ROLE_ADMIN. Esta protección será
+                                revisada durante la integración de seguridad.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div class="security-icon">🛡️</div>
+
+                        <div>
+                            <h3>Protección de información</h3>
+
+                            <p>
+                                Las contraseñas, tokens y otros datos sensibles
+                                no deben mostrarse en las respuestas administrativas.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div class="security-icon">🔑</div>
+
+                        <div>
+                            <h3>Contraseña de la cuenta</h3>
+
+                            <p>
+                                Puedes gestionar la contraseña de tu cuenta
+                                desde las opciones de perfil.
+                            </p>
+
+                            <a routerLink="/client/perfil" class="security-link">
+                                Ir a mi perfil →
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

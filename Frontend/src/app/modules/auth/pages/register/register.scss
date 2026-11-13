@@ -1,0 +1,100 @@
+/* ==========================================
+   VALLE BLANCO - REGISTRO
+   ========================================== */
+
+/* Reutilizamos todos los estilos del login */
+
+@use '../login/login.scss';
+
+/* DISTRIBUCIÓN DE CAMPOS */
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.form-row .form-group {
+    min-width: 0;
+}
+
+/* AJUSTES DEL FORMULARIO */
+
+.auth-card--register {
+    width: 100%;
+    max-width: 450px;
+}
+
+.auth-card--register .auth-card-header {
+    margin-bottom: 24px;
+}
+
+.auth-card--register .auth-title {
+    font-size: 29px;
+}
+
+.auth-card--register .auth-form {
+    gap: 15px;
+}
+
+.auth-card--register .form-group {
+    gap: 6px;
+}
+
+.auth-card--register .form-label {
+    font-size: 12px;
+}
+
+.auth-card--register .form-control {
+    height: 43px;
+    padding: 0 12px;
+    font-size: 13px;
+}
+
+.auth-card--register .input-password-wrapper .form-control {
+    padding-right: 48px;
+}
+
+.auth-card--register .btn-auth {
+    margin-top: 10px;
+    min-height: 46px;
+}
+
+.auth-card--register .auth-link-text {
+    margin-top: 22px;
+}
+
+/* TEXTO OPCIONAL */
+
+.optional {
+    color: #968d80;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .auth-card--register .auth-title {
+        font-size: 27px;
+    }
+}
+
+@media (max-width: 650px) {
+    .auth-card--register {
+        max-width: 100%;
+    }
+
+    .auth-card--register .auth-form {
+        gap: 17px;
+    }
+
+    .auth-card--register .form-control {
+        height: 46px;
+    }
+}

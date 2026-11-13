@@ -1,0 +1,261 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.site-footer {
+    width: 100%;
+    margin-top: auto;
+    background: #223d2d;
+    color: #e6e9e1;
+}
+
+// CONTENEDOR PRINCIPAL
+.footer-inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 55px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 75px 35px 65px;
+}
+
+.footer-col {
+    min-width: 0;
+}
+
+// MARCA
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #fffdf6;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.footer-tagline {
+    max-width: 280px;
+    margin: 0 0 25px;
+    color: #bdcbbd;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+// REDES SOCIALES
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.social-link {
+    display: grid;
+    place-items: center;
+    width: 41px;
+    height: 41px;
+    border: 1px solid rgba(229, 214, 190, 0.3);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    color: #e8d8bd;
+    text-decoration: none;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+    &:hover {
+        border-color: #d5af78;
+        background: #d5af78;
+        color: #223d2d;
+        transform: translateY(-3px);
+    }
+
+    svg {
+        display: block;
+        width: 19px;
+        height: 19px;
+    }
+}
+
+// TÍTULOS
+.footer-heading {
+    position: relative;
+    margin: 4px 0 27px;
+    padding-bottom: 16px;
+    color: #f5eee2;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    &::after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 33px;
+        height: 2px;
+        background: #cba56d;
+        content: "";
+    }
+}
+
+// NAVEGACIÓN
+.footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    a {
+        display: inline-block;
+        color: #bdcbbd;
+        font-size: 13px;
+        line-height: 1.5;
+        text-decoration: none;
+        transition:
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            color: #e5c18f;
+            transform: translateX(4px);
+        }
+    }
+}
+
+// ORIGEN
+.footer-text {
+    margin: 0 0 18px;
+    color: #bdcbbd;
+    font-size: 13px;
+    line-height: 1.9;
+
+    strong {
+        color: #f1e4cf;
+        font-weight: 700;
+    }
+}
+
+.footer-altitude {
+    color: #d3b184;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+// PARTE INFERIOR
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 25px 35px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+    p {
+        margin: 0;
+        color: #a7b9a8;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .footer-made {
+        color: #c5a778;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+    }
+}
+
+// TABLETS
+@media (max-width: 1000px) {
+    .footer-inner {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 45px;
+        padding: 60px 30px 50px;
+    }
+
+    .footer-bottom {
+        padding: 25px 30px;
+    }
+}
+
+// CELULARES
+@media (max-width: 600px) {
+    .footer-inner {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 35px 20px;
+        padding: 50px 22px 40px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+
+    .footer-logo {
+        margin-bottom: 15px;
+        font-size: 23px;
+    }
+
+    .footer-tagline {
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .footer-heading {
+        margin-bottom: 22px;
+        font-size: 17px;
+    }
+
+    .footer-nav {
+        gap: 13px;
+
+        a {
+            font-size: 12px;
+        }
+    }
+
+    .footer-text {
+        font-size: 12px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 22px;
+    }
+}
+
+@media (max-width: 380px) {
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        grid-column: auto;
+    }
+
+    .footer-heading {
+        margin-bottom: 18px;
+    }
+}
