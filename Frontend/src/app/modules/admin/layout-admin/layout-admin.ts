@@ -1,13 +1,6 @@
-
 import { Component, inject, signal } from '@angular/core';
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet
-} from '@angular/router';
-
-import { AuthService } from '../../../core/services/auth.service';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-layout-admin',

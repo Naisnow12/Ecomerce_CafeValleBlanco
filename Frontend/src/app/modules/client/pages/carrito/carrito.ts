@@ -9,7 +9,7 @@ import { DecimalPipe } from '@angular/common';
   templateUrl: './carrito.html',
   styleUrl: './carrito.scss',
 })
-export class CarritoPage implements OnInit {
+export class Carrito implements OnInit {
   private readonly carritoService = inject(CarritoService);
   private readonly router = inject(Router);
 

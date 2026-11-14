@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { UsuarioService } from '../../../../core/services/usuario.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth-service';
 import { UsuarioProfile } from '../../../../core/models/usuario.interface';
 
 @Component({

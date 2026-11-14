@@ -1,0 +1,425 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+$bg-main: #F3EEE4;
+$bg-light: #FFF9F1;
+$bg-cream: #EDE6D8;
+$green-dark: #33463A;
+$green-olive: #66745F;
+$green-light: #E8EDE6;
+$brown: #8A674E;
+$brown-light: #B8956A;
+$text-dark: #27231F;
+$text-body: #4A4540;
+$text-muted: #8C8478;
+$white-warm: #FDFAF5;
+$overlay: rgba(39, 35, 31, 0.45);
+$font-body: 'DM Sans', sans-serif;
+$font-serif: 'Playfair Display', serif;
+$transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$shadow-sm: 0 2px 20px rgba(39, 35, 31, 0.06);
+$shadow-md: 0 8px 40px rgba(39, 35, 31, 0.1);
+
+.serif {
+    font-family: $font-serif;
+    font-style: italic;
+}
+
+.container {
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.section-label {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: $text-muted;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.reveal {
+    opacity: 1;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.proceso {
+    padding: 7rem 0;
+    background: $bg-main;
+    position: relative;
+    overflow: hidden;
+}
+
+.proceso-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.proceso-header h2 {
+    font-family: $font-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: $text-dark;
+    font-weight: 400;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+}
+
+.proceso-header h2 .serif {
+    font-family: $font-serif;
+    font-style: italic;
+    color: $brown;
+}
+
+.proceso-header p {
+    color: $text-muted;
+    font-size: 0.95rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* $- Momentos $- */
+.momento {
+    position: relative;
+    padding: 3rem 2rem;
+    margin-bottom: 4rem;
+    border-radius: 14px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.momento::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-momento);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    z-index: -1;
+    transition: opacity 0.6s ease;
+}
+
+.momento:hover::before {
+    opacity: 0.12;
+}
+
+.momento-title {
+    font-family: $font-serif;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 400;
+    color: $green-dark;
+    letter-spacing: 0.5px;
+    margin-bottom: 2rem;
+    padding-left: 3rem;
+    position: relative;
+}
+
+.momento-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2rem;
+    height: 1px;
+    background: $brown-light;
+}
+
+/* $- Grid de etapas $- */
+.etapas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    position: relative;
+}
+
+/* $- Tarjeta de etapa (base) $- */
+.etapa {
+    position: relative;
+    background: rgba(255, 249, 241, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 103, 78, 0.08);
+    border-radius: 10px;
+    padding: 2.2rem 1.8rem;
+    transition: $transition;
+    cursor: default;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Línea superior que se expande al hover */
+.etapa::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, $green-olive, $brown-light);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+    z-index: 2;
+}
+
+.etapa:hover::before {
+    transform: scaleX(1);
+}
+
+.etapa:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 249, 241, 1);
+    border-color: rgba(138, 103, 78, 0.2);
+    box-shadow: 0 12px 40px rgba(138, 103, 78, 0.12);
+}
+
+/* Número de etapa */
+.etapa-number {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    font-family: $font-serif;
+    font-size: 2.8rem;
+    font-weight: 400;
+    line-height: 1;
+    color: $brown-light;
+    opacity: 0.25;
+    transition: $transition;
+    pointer-events: none;
+}
+
+.etapa:hover .etapa-number {
+    opacity: 0.6;
+    transform: translateY(-4px);
+}
+
+/* Icono SVG */
+.etapa-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    color: $green-olive;
+    transition: $transition;
+}
+
+.etapa-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.etapa:hover .etapa-icon {
+    color: $brown;
+    transform: scale(1.1) rotate(-4deg);
+}
+
+.etapa h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.3px;
+}
+
+.etapa p {
+    font-size: 0.82rem;
+    color: $text-muted;
+    line-height: 1.65;
+}
+
+/* $- Badges (tiempo / temperatura) $- */
+.etapa-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+}
+
+.etapa-badge {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    background: $green-light;
+    color: $green-dark;
+    font-weight: 500;
+    border: 1px solid rgba(102, 116, 95, 0.15);
+}
+
+/* $- Acordeón: info extra que aparece al hover $- */
+.etapa-extra {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.4s ease;
+    margin-top: 0;
+}
+
+.etapa:hover .etapa-extra {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(138, 103, 78, 0.2);
+}
+
+.etapa-extra p {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: $brown;
+    line-height: 1.5;
+}
+
+/* $- Tarjeta destacada (Tostado) $- */
+.etapa--destacada {
+    grid-column: span 2;
+    background: linear-gradient(135deg, $green-dark, #2a3a30);
+    border-color: transparent;
+    color: #fff;
+}
+
+.etapa--destacada::before {
+    background: linear-gradient(90deg, $brown-light, $brown);
+}
+
+.etapa--destacada .etapa-number {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.etapa--destacada:hover .etapa-number {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.etapa--destacada .etapa-icon {
+    color: $brown-light;
+}
+
+.etapa--destacada:hover .etapa-icon {
+    color: #fff;
+}
+
+.etapa--destacada h4 {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.etapa--destacada p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.85rem;
+}
+
+.etapa--destacada .etapa-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.etapa--destacada .etapa-extra {
+    border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.etapa--destacada .etapa-extra p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* $- Fix: hover de tarjeta destacada mantiene fondo oscuro $- */
+.etapa--destacada:hover {
+    background: linear-gradient(135deg, #2a3a30, $green-dark);
+    border-color: transparent;
+    box-shadow: 0 16px 50px rgba(42, 58, 48, 0.35);
+}
+
+.etapa--destacada:hover h4 {
+    color: #fff;
+}
+
+.etapa--destacada:hover p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.etapa--destacada:hover .etapa-badge {
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* $- Dato curioso $- */
+.proceso-dato {
+    margin: 3rem auto;
+    max-width: 720px;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, $green-light, $bg-cream);
+    border-radius: 12px;
+    border-left: 3px solid $brown;
+    position: relative;
+}
+
+.proceso-dato-label {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: $brown;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.proceso-dato-text {
+    font-family: $font-serif;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: $text-dark;
+}
+
+.proceso-dato-text strong {
+    color: $green-dark;
+    font-weight: 600;
+}
+
+/* $- Responsive de Proceso $- */
+@media (max-width: 992px) {
+    .etapas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .etapa--destacada {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .etapas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .etapa--destacada {
+        grid-column: span 1;
+    }
+
+    .momento {
+        padding: 2rem 1rem;
+    }
+
+    .etapa-number {
+        font-size: 2.2rem;
+    }
+
+    .etapa-extra {
+        max-height: none;
+        opacity: 1;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px dashed rgba(138, 103, 78, 0.2);
+    }
+}

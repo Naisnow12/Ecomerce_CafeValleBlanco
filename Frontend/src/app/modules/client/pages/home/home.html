@@ -20,7 +20,7 @@
 <!-- =============================================
      SECCIÓN 01 — ESENCIA
      ============================================= -->
-<section class="vb-esencia" id="esencia">
+<section class="vb-esencia">
     <div class="vb-container">
         <p class="vb-section-label">01 &mdash; Nuestra Esencia</p>
         <p class="vb-esencia-text">
@@ -45,7 +45,9 @@
         </h2>
         <div class="vb-origen-glass">
             <p>
-                Villa Rica ofrece un entorno privilegiado en la selva central peruana. El microclima subtropical de montaña, el suelo volcánico y la altitud superior a los 1.600 m.s.n.m. forjan notas florales y achocolatadas incomparables.
+                Villa Rica ofrece un entorno privilegiado en la selva central peruana. El microclima subtropical de
+                montaña, el suelo volcánico y la altitud superior a los 1.600 m.s.n.m. forjan notas florales y
+                achocolatadas incomparables.
             </p>
         </div>
         <div class="vb-origen-info">
@@ -78,50 +80,60 @@
             <p class="vb-section-label">03 &mdash; Calidad de Origen</p>
             <h2>Un estándar de <span class="serif">pureza y dedicación</span></h2>
             <p class="vb-header-desc">
-                Cada grano refleja el equilibrio entre la naturaleza andino-amazónica y el rigor técnico de la catación SCA.
+                Cada grano refleja el equilibrio entre la naturaleza andino-amazónica y el rigor técnico de la catación
+                SCA.
             </p>
         </div>
 
         <div class="vb-pilares-grid">
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M12 6v6l4 2" />
                     </svg>
                 </div>
                 <h3>Tueste Semanal</h3>
-                <p>Micro-lotes tostados bajo demanda para asegurar que los granos conserven sus aceites y aromas intactos.</p>
+                <p>Micro-lotes tostados bajo demanda para asegurar que los granos conserven sus aceites y aromas
+                    intactos.</p>
             </div>
 
             <div class="vb-pilar-card dark">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                 </div>
                 <h3>Puntaje SCA +86</h3>
-                <p>Selección selectiva de cerezas maduras con perfiles de taza limpios, acidez brillante y dulzor natural.</p>
+                <p>Selección selectiva de cerezas maduras con perfiles de taza limpios, acidez brillante y dulzor
+                    natural.</p>
             </div>
 
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                 </div>
                 <h3>Trazabilidad Directa</h3>
-                <p>Comercio directo y justo que dignifica el trabajo de las familias productoras de nuestras tierras.</p>
+                <p>Comercio directo y justo que dignifica el trabajo de las familias productoras de nuestras tierras.
+                </p>
             </div>
 
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                 </div>
                 <h3>Empaque Hermético</h3>
-                <p>Bolsas con válvula de desgasificación unidireccional y triple capa protectora contra luz y humedad.</p>
+                <p>Bolsas con válvula de desgasificación unidireccional y triple capa protectora contra luz y humedad.
+                </p>
             </div>
         </div>
     </div>
@@ -140,13 +152,16 @@
 
             <!-- Filtros Sensoriales Interactivos -->
             <div class="vb-filter-pills">
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'all'"
+                    (click)="setFilter('all')">
                     Todas las Variedades
                 </button>
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'afrutados'" (click)="setFilter('afrutados')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'afrutados'"
+                    (click)="setFilter('afrutados')">
                     Afrutados & Florales
                 </button>
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'chocolatosos'" (click)="setFilter('chocolatosos')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'chocolatosos'"
+                    (click)="setFilter('chocolatosos')">
                     Cacao & Dulces
                 </button>
             </div>
@@ -156,7 +171,7 @@
         <div class="vb-products-grid">
             <article *ngFor="let item of filteredProducts" class="vb-card">
                 <span class="vb-card-badge">SCA +86</span>
-                
+
                 <div class="vb-card-img-wrap">
                     <img [src]="item.imagenUrl" [alt]="item.nombre" />
                 </div>
@@ -207,13 +222,14 @@
 <!-- =============================================
      SECCIÓN 05 — HUB VISUAL DE LA MARCA (PROCESO)
      ============================================= -->
-<section class="vb-hub" id="proceso">
+<section class="vb-hub">
     <div class="vb-container">
         <div class="vb-header-center">
             <p class="vb-section-label">05 &mdash; Explora Valle Blanco</p>
             <h2>Sumérgete en nuestro <span class="serif">universo cafetalero</span></h2>
             <p class="vb-header-desc">
-                Descubre cada faceta de nuestra historia, nuestras variedades, el proceso artesanal y los paisajes de nuestra tierra en Oxapampa.
+                Descubre cada faceta de nuestra historia, nuestras variedades, el proceso artesanal y los paisajes de
+                nuestra tierra en Oxapampa.
             </p>
         </div>
 
@@ -249,7 +265,8 @@
                 <div class="vb-hub-body">
                     <span class="vb-hub-tag">03 &middot; Secado Solar</span>
                     <h3>Beneficio y Secado Natural</h3>
-                    <p>Camas africanas bajo sombra controlada para un secado pausado que fija la complejidad aromática.</p>
+                    <p>Camas africanas bajo sombra controlada para un secado pausado que fija la complejidad aromática.
+                    </p>
                     <a routerLink="/client/catalog" class="vb-hub-link">Ver proceso &rarr;</a>
                 </div>
             </article>
