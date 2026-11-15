@@ -304,6 +304,21 @@
 
                     <div class="payment-methods">
 
+                        <!-- PASARELA SANDBOX MERCADO PAGO / TARJETA -->
+                        <button type="button" class="payment-option" [class.selected]="metodoPago() === 'MERCADO_PAGO'"
+                            (click)="seleccionarMetodoPago('MERCADO_PAGO')">
+                            <span class="radio-indicator"></span>
+
+                            <span class="payment-details">
+                                <span class="payment-name">Tarjeta / Mercado Pago (Sandbox)</span>
+                                <span class="payment-description">
+                                    Pago seguro con tarjeta de crédito/débito o saldo
+                                </span>
+                            </span>
+
+                            <span class="payment-tag">PASARELA</span>
+                        </button>
+
                         <!-- YAPE -->
                         <button type="button" class="payment-option" [class.selected]="metodoPago() === 'YAPE'"
                             (click)="seleccionarMetodoPago('YAPE')">

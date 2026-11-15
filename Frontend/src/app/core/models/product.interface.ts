@@ -14,6 +14,7 @@ export interface Product {
     altitud?: string;
     descripcion?: string;
     stock: number;
+    nivelMinimoStock?: number;
     esDestacado?: boolean;
     esOscuro?: boolean;
     badgeText?: string;

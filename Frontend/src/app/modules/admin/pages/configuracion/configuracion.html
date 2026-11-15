@@ -184,10 +184,10 @@
                 </div>
 
                 <div class="config-card-footer">
-                    <span>Los cambios aún no se pueden guardar.</span>
+                    <span>Guarda los cambios de la tienda.</span>
 
-                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
-                        Guardar cambios
+                    <button type="button" class="btn-save" [disabled]="guardando()" (click)="guardarCambios()">
+                        {{ guardando() ? 'Guardando...' : 'Guardar cambios' }}
                     </button>
                 </div>
 
@@ -311,10 +311,10 @@
                 </div>
 
                 <div class="config-card-footer">
-                    <span>La configuración de pagos aún no se guarda.</span>
+                    <span>Guarda los métodos de pago.</span>
 
-                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
-                        Guardar métodos de pago
+                    <button type="button" class="btn-save" [disabled]="guardando()" (click)="guardarCambios()">
+                        {{ guardando() ? 'Guardando...' : 'Guardar métodos de pago' }}
                     </button>
                 </div>
 
@@ -400,10 +400,10 @@
                 </div>
 
                 <div class="config-card-footer">
-                    <span>Los cambios aún no se pueden guardar.</span>
+                    <span>Guarda las tarifas y tiempos de envío.</span>
 
-                    <button type="button" class="btn-save" [disabled]="!guardadoDisponible() || guardando()">
-                        Guardar configuración
+                    <button type="button" class="btn-save" [disabled]="guardando()" (click)="guardarCambios()">
+                        {{ guardando() ? 'Guardando...' : 'Guardar configuración' }}
                     </button>
                 </div>
 
@@ -459,15 +459,43 @@
 
                     <div class="security-item">
 
-                        <div class="security-icon">🛡️</div>
+                        <div class="security-icon">📋</div>
 
-                        <div>
-                            <h3>Protección de información</h3>
+                        <div style="width: 100%;">
+                            <h3>Auditoría de Actividad del Sistema</h3>
 
                             <p>
-                                Las contraseñas, tokens y otros datos sensibles
-                                no deben mostrarse en las respuestas administrativas.
+                                Registro histórico de eventos de seguridad y modificaciones administrativas:
                             </p>
+
+                            @if (auditorias().length > 0) {
+                            <div style="margin-top: 1rem; max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                                    <thead>
+                                        <tr style="background: #f9f9f9; text-align: left; border-bottom: 1px solid #eee;">
+                                            <th style="padding: 0.5rem;">Fecha</th>
+                                            <th style="padding: 0.5rem;">Usuario</th>
+                                            <th style="padding: 0.5rem;">Módulo</th>
+                                            <th style="padding: 0.5rem;">Acción</th>
+                                            <th style="padding: 0.5rem;">Detalles</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (a of auditorias(); track a.id) {
+                                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                                            <td style="padding: 0.5rem;">{{ a.creadoEn | date:'short' }}</td>
+                                            <td style="padding: 0.5rem; font-weight: 600;">{{ a.emailUsuario }}</td>
+                                            <td style="padding: 0.5rem;">{{ a.modulo }}</td>
+                                            <td style="padding: 0.5rem;"><span style="background: #eef2f0; padding: 2px 6px; border-radius: 4px; font-weight: 600;">{{ a.accion }}</span></td>
+                                            <td style="padding: 0.5rem; color: #666;">{{ a.detalles }}</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            } @else {
+                            <p style="color: #888; margin-top: 0.5rem;">No hay registros de auditoría aún.</p>
+                            }
                         </div>
 
                     </div>

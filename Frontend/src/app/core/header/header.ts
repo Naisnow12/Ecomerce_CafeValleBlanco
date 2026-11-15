@@ -19,6 +19,7 @@ export class Header {
 
   isLoggedIn = this.authService.isLoggedIn;
   isAdmin = this.authService.isAdmin;
+  isStockManager = this.authService.isStockManager;
   currentUser = this.authService.currentUser;
   cartCount = this.carritoService.itemCount;
 

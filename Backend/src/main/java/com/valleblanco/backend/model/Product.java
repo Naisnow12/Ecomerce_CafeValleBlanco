@@ -52,6 +52,10 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    @Column(name = "nivel_minimo_stock", nullable = false)
+    @Builder.Default
+    private Integer nivelMinimoStock = 10;
+
     @Column(name = "es_destacado")
     @Builder.Default
     private Boolean esDestacado = false;

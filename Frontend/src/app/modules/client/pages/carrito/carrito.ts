@@ -1,4 +1,4 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CarritoService } from '../../../../core/services/carrito.service';
 import { DecimalPipe } from '@angular/common';
@@ -14,10 +14,13 @@ export class Carrito implements OnInit {
   private readonly router = inject(Router);
 
   carrito = this.carritoService.carrito;
-  isLoading = computed(() => this.carrito() === null);
+  cargando = signal(true);
 
   ngOnInit(): void {
-    this.carritoService.cargarCarrito().subscribe();
+    this.carritoService.cargarCarrito().subscribe({
+      next: () => this.cargando.set(false),
+      error: () => this.cargando.set(false)
+    });
   }
 
   actualizarCantidad(itemId: number, cantidad: number): void {

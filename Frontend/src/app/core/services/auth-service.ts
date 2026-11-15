@@ -1,21 +1,24 @@
-import { Service, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.interface';
+import { APP_CONFIG } from '../constants/app-config';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
     private readonly http = inject(HttpClient);
     private readonly router = inject(Router);
 
-    private readonly apiUrl = 'http://localhost:8080/api/auth';
+    private readonly apiUrl = `${APP_CONFIG.apiUrl}/auth`;
     private readonly tokenKey = 'vb_token';
     private readonly userKey = 'vb_user';
 
     currentUser = signal<AuthResponse | null>(this.loadUser());
     isLoggedIn = computed(() => !!this.currentUser());
     isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
+    isStockManager = computed(() => this.currentUser()?.roles.includes('ROLE_ENCARGADO_STOCK') ?? false);
+    isCliente = computed(() => this.currentUser()?.roles.includes('ROLE_CLIENTE') ?? false);
 
     register(req: RegisterRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/register`, req).pipe(

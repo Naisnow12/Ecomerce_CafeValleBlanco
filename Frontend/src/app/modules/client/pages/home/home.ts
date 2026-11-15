@@ -1,7 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../../core/services/product.service';
+import { CarritoService } from '../../../../core/services/carrito.service';
+import { AuthService } from '../../../../core/services/auth-service';
 import { Product } from '../../../../core/models/product.interface';
 
 @Component({
@@ -12,9 +14,14 @@ import { Product } from '../../../../core/models/product.interface';
 })
 export class Home implements OnInit {
   private readonly productService = inject(ProductService);
+  private readonly carritoService = inject(CarritoService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   featuredProducts: Product[] = [];
   selectedFilter: string = 'all';
+  agregandoId: number | null | undefined = null;
+  mensajeAgregadoId: number | null | undefined = null;
 
   // Fallback de variedades destacadas si el backend está apagado
   fallbackProducts: Product[] = [
@@ -125,5 +132,32 @@ export class Home implements OnInit {
   getPrimaryWeight(product: Product): number {
     if (!product.precios || product.precios.length === 0) return 250;
     return product.precios[0].peso;
+  }
+
+  agregarAlCarrito(product: Product): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], {
+        queryParams: { returnUrl: '/client/home' }
+      });
+      return;
+    }
+
+    if (!product.precios?.length || (product.stock ?? 0) <= 0) return;
+    const precioId = product.precios[0].id;
+    if (!precioId) return;
+
+    this.agregandoId = product.id;
+    this.carritoService.agregarItem({ precioId, cantidad: 1 }).subscribe({
+      next: () => {
+        this.agregandoId = null;
+        this.mensajeAgregadoId = product.id;
+        setTimeout(() => {
+          this.mensajeAgregadoId = null;
+        }, 2500);
+      },
+      error: () => {
+        this.agregandoId = null;
+      }
+    });
   }
 }

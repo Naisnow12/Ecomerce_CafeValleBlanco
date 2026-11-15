@@ -235,22 +235,27 @@
                                 </div>
                             </div>
 
-                            <!-- Botón de consulta / compra -->
-                            <a class="btn-consultar" [routerLink]="['/client/product', producto.slug]"
-                                style="display: block; text-align: center; text-decoration: none;">
+                            <!-- Botones de acción: Detalles y Agregar al carrito -->
+                            <div class="card-action-buttons">
+                                <a class="btn-consultar" [routerLink]="['/client/product', producto.slug]"
+                                    style="display: block; text-align: center; text-decoration: none;">
+                                    VER DETALLES · S/ {{ getPrecioMinimo(producto).toFixed(2) }}
+                                </a>
 
-                                VER DETALLES · S/ {{ getPrecioMinimo(producto).toFixed(2) }}
-
-                            </a>
-
-                            <!-- Conservar consulta mediante WhatsApp -->
-                            <button type="button" class="btn-consultar" style="margin-top: 10px;"
-                                (click)="consultarPedido(producto)">
-
-                                CONSULTAR POR WHATSAPP
-
-                            </button>
-
+                                <button type="button" class="btn-add-cart-card"
+                                    [disabled]="(producto.stock ?? 0) <= 0 || agregandoId === producto.id"
+                                    (click)="agregarAlCarrito(producto)">
+                                    @if (agregandoId === producto.id) {
+                                    Agregando...
+                                    } @else if (mensajeAgregadoId === producto.id) {
+                                    ✓ ¡Agregado!
+                                    } @else if ((producto.stock ?? 0) <= 0) {
+                                    Sin stock
+                                    } @else {
+                                    + Agregar al carrito
+                                    }
+                                </button>
+                            </div>
                         </div>
 
                     </article>

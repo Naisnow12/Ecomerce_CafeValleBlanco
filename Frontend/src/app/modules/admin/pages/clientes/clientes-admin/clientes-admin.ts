@@ -2,11 +2,14 @@
 import {
   Component,
   signal,
-  computed
+  computed,
+  inject,
+  OnInit
 } from '@angular/core';
 
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AdminService } from '../../../../../core/services/admin.service';
 
 interface ClienteAdmin {
   id: number;
@@ -16,12 +19,14 @@ interface ClienteAdmin {
   telefono?: string;
   activo: boolean;
   creadoEn: string;
+  roles?: string[];
   totalPedidos?: number;
   totalGastado?: number;
 }
 
 @Component({
   selector: 'app-clientes-admin',
+  standalone: true,
   imports: [
     FormsModule,
     DatePipe
@@ -29,13 +34,11 @@ interface ClienteAdmin {
   templateUrl: './clientes-admin.html',
   styleUrl: './clientes-admin.scss',
 })
-export class ClientesAdmin {
+export class ClientesAdmin implements OnInit {
+  private readonly adminService = inject(AdminService);
 
-  // Clientes registrados.
-  // Se cargarán desde el backend administrativo.
+  // Clientes / Usuarios registrados desde backend
   clientes = signal<ClienteAdmin[]>([]);
-
-  // Conexión pendiente
   datosDisponibles = signal(false);
 
   // Estados
@@ -51,17 +54,52 @@ export class ClientesAdmin {
   mostrarDetalle = signal(false);
 
   // Estadísticas
-  totalClientes = computed(
-    () => this.clientes().length
-  );
+  totalClientes = computed(() => this.clientes().length);
+  clientesActivos = computed(() => this.clientes().filter(c => c.activo).length);
+  clientesInactivos = computed(() => this.clientes().filter(c => !c.activo).length);
 
-  clientesActivos = computed(
-    () => this.clientes().filter(c => c.activo).length
-  );
+  ngOnInit(): void {
+    this.cargarClientes();
+  }
 
-  clientesInactivos = computed(
-    () => this.clientes().filter(c => !c.activo).length
-  );
+  cargarClientes(): void {
+    this.cargando.set(true);
+    this.error.set('');
+    this.adminService.getUsuarios().subscribe({
+      next: (usuarios: any[]) => {
+        this.clientes.set(usuarios.map(u => ({
+          id: u.id,
+          nombres: u.nombres,
+          apellidos: u.apellidos,
+          email: u.email,
+          telefono: u.telefono,
+          activo: u.activo,
+          creadoEn: u.creadoEn,
+          roles: u.roles,
+          totalPedidos: 0,
+          totalGastado: 0
+        })));
+        this.datosDisponibles.set(true);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        this.error.set('No se pudo cargar la lista de usuarios desde el servidor.');
+        this.cargando.set(false);
+      }
+    });
+  }
+
+  toggleEstado(cliente: ClienteAdmin): void {
+    const nuevoEstado = !cliente.activo;
+    this.adminService.cambiarEstadoUsuario(cliente.id, nuevoEstado).subscribe({
+      next: () => {
+        this.cargarClientes();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Error al cambiar estado del usuario');
+      }
+    });
+  }
 
   // Listado filtrado
   clientesFiltrados = computed(() => {

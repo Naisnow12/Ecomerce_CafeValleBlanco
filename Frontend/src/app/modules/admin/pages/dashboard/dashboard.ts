@@ -1,7 +1,8 @@
 
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AdminService } from '../../../../core/services/admin.service';
 
 type EstadoPedido =
   | 'PENDIENTE'
@@ -37,14 +38,14 @@ interface ProductoStockBajo {
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
   imports: [RouterLink, DecimalPipe, DatePipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
+  private readonly adminService = inject(AdminService);
 
-  // Se conectará con los endpoints administrativos.
-  // null significa que todavía no tenemos datos disponibles.
   estadisticas = signal<DashboardStats>({
     totalProductos: null,
     totalPedidos: null,
@@ -55,23 +56,56 @@ export class Dashboard {
   });
 
   pedidosRecientes = signal<PedidoReciente[]>([]);
-
   productosStockBajo = signal<ProductoStockBajo[]>([]);
+  topProductos = signal<any[]>([]);
 
-  cargando = signal(false);
-
-  // Indica que el backend administrativo está pendiente.
+  cargando = signal(true);
   datosDisponibles = signal(false);
-
   fechaActual = new Date();
 
-  totalPedidosRecientes = computed(
-    () => this.pedidosRecientes().length
-  );
+  totalPedidosRecientes = computed(() => this.pedidosRecientes().length);
+  totalProductosStockBajo = computed(() => this.productosStockBajo().length);
 
-  totalProductosStockBajo = computed(
-    () => this.productosStockBajo().length
-  );
+  ngOnInit(): void {
+    this.cargarDatos();
+  }
+
+  cargarDatos(): void {
+    this.cargando.set(true);
+    this.adminService.getDashboardStats().subscribe({
+      next: (data) => {
+        this.estadisticas.set({
+          totalProductos: data.totalProductos,
+          totalPedidos: data.totalPedidos,
+          totalClientes: data.totalUsuarios,
+          ventasTotales: data.ingresosTotales,
+          pedidosPendientes: data.pedidosPendientes,
+          productosStockBajo: data.stockBajo
+        });
+
+        if (data.ultimosPedidos) {
+          this.pedidosRecientes.set(data.ultimosPedidos.map((p: any) => ({
+            id: p.id,
+            numeroPedido: p.numeroPedido,
+            cliente: p.dirDestinatario || 'Cliente',
+            fecha: p.creadoEn,
+            total: p.total,
+            estado: p.estado as EstadoPedido
+          })));
+        }
+
+        if (data.topProductos) {
+          this.topProductos.set(data.topProductos);
+        }
+
+        this.datosDisponibles.set(true);
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.cargando.set(false);
+      }
+    });
+  }
 
   obtenerEstadoTexto(estado: EstadoPedido): string {
     const estados: Record<EstadoPedido, string> = {
@@ -83,6 +117,6 @@ export class Dashboard {
       CANCELADO: 'Cancelado'
     };
 
-    return estados[estado];
+    return estados[estado] || estado;
   }
 }

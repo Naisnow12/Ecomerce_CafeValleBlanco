@@ -12,6 +12,11 @@ import { RouterLink } from '@angular/router';
 
 import { Product } from '../../../../core/models/product.interface';
 import { ProductService } from '../../../../core/services/product.service';
+import { CarritoService } from '../../../../core/services/carrito.service';
+import { AuthService } from '../../../../core/services/auth-service';
+import { Router } from '@angular/router';
+
+import { APP_CONFIG } from '../../../../core/constants/app-config';
 
 @Component({
   standalone: true,
@@ -22,7 +27,13 @@ import { ProductService } from '../../../../core/services/product.service';
 export class Catalog implements OnInit {
 
   private readonly productService = inject(ProductService);
+  private readonly carritoService = inject(CarritoService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  agregandoId: number | null | undefined = null;
+  mensajeAgregadoId: number | null | undefined = null;
 
   // PRODUCTOS
   listadeproductos: Product[] = [];
@@ -395,6 +406,40 @@ export class Catalog implements OnInit {
       });
   }
 
+  // AGREGAR AL CARRITO DIRECTO
+  agregarAlCarrito(producto: Product): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], {
+        queryParams: { returnUrl: '/client/catalog' }
+      });
+      return;
+    }
+
+    if (!producto.precios?.length || (producto.stock ?? 0) <= 0) {
+      return;
+    }
+
+    const precioId = producto.precios[0].id;
+    if (!precioId) return;
+
+    this.agregandoId = producto.id;
+    this.carritoService.agregarItem({ precioId, cantidad: 1 }).subscribe({
+      next: () => {
+        this.agregandoId = null;
+        this.mensajeAgregadoId = producto.id;
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          this.mensajeAgregadoId = null;
+          this.cdr.markForCheck();
+        }, 2500);
+      },
+      error: () => {
+        this.agregandoId = null;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
   // RESTABLECER FILTROS
   limpiarFiltros(): void {
     this.filtroMolienda = 'todos';
@@ -434,7 +479,7 @@ export class Catalog implements OnInit {
       `(${producto.molienda || 'Sin especificar'}).`;
 
     const url =
-      `https://wa.me/51999999999?text=${encodeURIComponent(texto)}`;
+      `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${encodeURIComponent(texto)}`;
 
     window.open(url, '_blank', 'noopener,noreferrer');
   }
