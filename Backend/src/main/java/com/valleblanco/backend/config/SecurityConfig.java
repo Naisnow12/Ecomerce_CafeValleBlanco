@@ -5,6 +5,8 @@ import com.valleblanco.backend.security.UsuarioDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -39,11 +42,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/products/**",
                                 "/api/public/**",
                                 "/api/categories/**",
                                 "/error")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/inventario/**").hasAnyRole("ADMIN", "ENCARGADO_STOCK")
+                        .requestMatchers("/api/pedidos/**").hasAnyRole("CLIENTE", "ADMIN")
+                        .requestMatchers("/api/carrito/**").hasAnyRole("CLIENTE", "ADMIN")
+                        .requestMatchers("/api/pagos/**").hasAnyRole("CLIENTE", "ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

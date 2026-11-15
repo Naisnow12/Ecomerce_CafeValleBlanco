@@ -1,33 +1,102 @@
 package com.valleblanco.backend.config;
 
-import com.valleblanco.backend.model.NotaCata;
-import com.valleblanco.backend.model.Precio;
-import com.valleblanco.backend.model.Product;
-import com.valleblanco.backend.repository.NotaCataRepository;
-import com.valleblanco.backend.repository.ProductRepository;
+import com.valleblanco.backend.model.*;
+import com.valleblanco.backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class DataInitializer {
 
     private final ProductRepository productRepository;
     private final NotaCataRepository notaCataRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final PedidoRepository pedidoRepository;
+    private final MovimientoStockRepository movimientoStockRepository;
 
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
-            // Cargar productos iniciales solo si la base de datos está vacía
+            // 1. Inicializar roles si no existen
+            Role rolAdmin = getOrCreateRol("ROLE_ADMIN");
+            Role rolStock = getOrCreateRol("ROLE_ENCARGADO_STOCK");
+            Role rolCliente = getOrCreateRol("ROLE_CLIENTE");
+
+            // 2. Inicializar usuarios por defecto si no existen
+            crearUsuarioSiNoExiste(
+                    "admin@valleblanco.pe",
+                    "Administrador",
+                    "Sistema",
+                    "admin123",
+                    "999888777",
+                    List.of(rolAdmin)
+            );
+
+            crearUsuarioSiNoExiste(
+                    "stock@valleblanco.pe",
+                    "Encargado",
+                    "Almacén",
+                    "stock123",
+                    "999888776",
+                    List.of(rolStock)
+            );
+
+            crearUsuarioSiNoExiste(
+                    "cliente@valleblanco.pe",
+                    "Carlos",
+                    "Mendoza",
+                    "cliente123",
+                    "999888775",
+                    List.of(rolCliente)
+            );
+
+            // 3. Sincronizar movimientos pasados si hubo pedidos creados antes de activar el registro de movimientos
+            try {
+                if (movimientoStockRepository.count() == 0 && pedidoRepository.count() > 0) {
+                    log.info("Sincronizando movimientos de inventario históricos para pedidos previos...");
+                    List<Pedido> pedidosPrevios = pedidoRepository.findAll();
+                    for (Pedido p : pedidosPrevios) {
+                        for (PedidoItem item : p.getItems()) {
+                            Product prod = productRepository.findById(item.getProductoId()).orElse(null);
+                            if (prod != null) {
+                                int stockActual = prod.getStock() != null ? prod.getStock() : 0;
+                                MovimientoStock mov = MovimientoStock.builder()
+                                        .producto(prod)
+                                        .tipo("SALIDA")
+                                        .cantidad(item.getCantidad())
+                                        .stockAnterior(stockActual + item.getCantidad())
+                                        .stockNuevo(stockActual)
+                                        .motivo("Venta en pedido #" + p.getNumeroPedido())
+                                        .emailUsuario(p.getUsuario() != null ? p.getUsuario().getEmail() : "cliente@valleblanco.pe")
+                                        .creadoEn(p.getCreadoEn())
+                                        .build();
+                                movimientoStockRepository.save(mov);
+                            }
+                        }
+                    }
+                    log.info("Sincronización de pedidos históricos a inventario completada.");
+                }
+            } catch (Exception e) {
+                log.warn("No se pudo sincronizar pedidos previos: {}", e.getMessage());
+            }
+
+            // 4. Cargar productos iniciales solo si la base de datos está vacía
             if (productRepository.count() > 0) {
                 return;
-            } 
+            }
 
             NotaCata nChocolate = getOrCreateNota("Chocolate");
             NotaCata nDurazno = getOrCreateNota("Durazno");
@@ -270,6 +339,28 @@ public class DataInitializer {
 
             productRepository.saveAll(productos);
         };
+    }
+
+    private Role getOrCreateRol(String nombre) {
+        return rolRepository.findByNombre(nombre)
+                .orElseGet(() -> rolRepository.save(Role.builder().nombre(nombre).build()));
+    }
+
+    private void crearUsuarioSiNoExiste(String email, String nombres, String apellidos, String rawPassword, String telefono, List<Role> roles) {
+        if (!usuarioRepository.existsByEmail(email)) {
+            Usuario u = Usuario.builder()
+                    .email(email)
+                    .nombres(nombres)
+                    .apellidos(apellidos)
+                    .telefono(telefono)
+                    .passwordHash(passwordEncoder.encode(rawPassword))
+                    .activo(true)
+                    .creadoEn(LocalDateTime.now())
+                    .actualizadoEn(LocalDateTime.now())
+                    .roles(new ArrayList<>(roles))
+                    .build();
+            usuarioRepository.save(u);
+        }
     }
 
     private NotaCata getOrCreateNota(String nombre) {

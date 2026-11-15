@@ -28,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AuditoriaService auditoriaService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -56,6 +57,16 @@ public class AuthService {
 
         usuarioRepository.save(usuario);
 
+        auditoriaService.registrar(
+                usuario.getEmail(),
+                "ROLE_CLIENTE",
+                "REGISTRO_CLIENTE",
+                "AUTH",
+                usuario.getId() != null ? usuario.getId().toString() : "N/A",
+                "Registro público automático con rol CLIENTE",
+                "EXITO"
+        );
+
         String token = jwtService.generateToken(usuario);
 
         return AuthResponse.builder()
@@ -75,7 +86,21 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
+        if (!Boolean.TRUE.equals(usuario.getActivo())) {
+            throw new IllegalArgumentException("La cuenta está desactivada. Comuníquese con el administrador.");
+        }
+
         String token = jwtService.generateToken(usuario);
+
+        auditoriaService.registrar(
+                usuario.getEmail(),
+                usuario.getRoles().isEmpty() ? "UNKNOWN" : usuario.getRoles().get(0).getNombre(),
+                "INICIO_SESION",
+                "AUTH",
+                usuario.getId().toString(),
+                "Inicio de sesión exitoso",
+                "EXITO"
+        );
 
         return AuthResponse.builder()
                 .token(token)

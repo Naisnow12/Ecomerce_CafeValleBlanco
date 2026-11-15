@@ -20,7 +20,7 @@
 <!-- =============================================
      SECCIÓN 01 — ESENCIA
      ============================================= -->
-<section class="vb-esencia" id="esencia">
+<section class="vb-esencia">
     <div class="vb-container">
         <p class="vb-section-label">01 &mdash; Nuestra Esencia</p>
         <p class="vb-esencia-text">
@@ -45,7 +45,9 @@
         </h2>
         <div class="vb-origen-glass">
             <p>
-                Villa Rica ofrece un entorno privilegiado en la selva central peruana. El microclima subtropical de montaña, el suelo volcánico y la altitud superior a los 1.600 m.s.n.m. forjan notas florales y achocolatadas incomparables.
+                Villa Rica ofrece un entorno privilegiado en la selva central peruana. El microclima subtropical de
+                montaña, el suelo volcánico y la altitud superior a los 1.600 m.s.n.m. forjan notas florales y
+                achocolatadas incomparables.
             </p>
         </div>
         <div class="vb-origen-info">
@@ -78,50 +80,60 @@
             <p class="vb-section-label">03 &mdash; Calidad de Origen</p>
             <h2>Un estándar de <span class="serif">pureza y dedicación</span></h2>
             <p class="vb-header-desc">
-                Cada grano refleja el equilibrio entre la naturaleza andino-amazónica y el rigor técnico de la catación SCA.
+                Cada grano refleja el equilibrio entre la naturaleza andino-amazónica y el rigor técnico de la catación
+                SCA.
             </p>
         </div>
 
         <div class="vb-pilares-grid">
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M12 6v6l4 2" />
                     </svg>
                 </div>
                 <h3>Tueste Semanal</h3>
-                <p>Micro-lotes tostados bajo demanda para asegurar que los granos conserven sus aceites y aromas intactos.</p>
+                <p>Micro-lotes tostados bajo demanda para asegurar que los granos conserven sus aceites y aromas
+                    intactos.</p>
             </div>
 
             <div class="vb-pilar-card dark">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                 </div>
                 <h3>Puntaje SCA +86</h3>
-                <p>Selección selectiva de cerezas maduras con perfiles de taza limpios, acidez brillante y dulzor natural.</p>
+                <p>Selección selectiva de cerezas maduras con perfiles de taza limpios, acidez brillante y dulzor
+                    natural.</p>
             </div>
 
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                 </div>
                 <h3>Trazabilidad Directa</h3>
-                <p>Comercio directo y justo que dignifica el trabajo de las familias productoras de nuestras tierras.</p>
+                <p>Comercio directo y justo que dignifica el trabajo de las familias productoras de nuestras tierras.
+                </p>
             </div>
 
             <div class="vb-pilar-card">
                 <div class="vb-pilar-icon">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
                         <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                 </div>
                 <h3>Empaque Hermético</h3>
-                <p>Bolsas con válvula de desgasificación unidireccional y triple capa protectora contra luz y humedad.</p>
+                <p>Bolsas con válvula de desgasificación unidireccional y triple capa protectora contra luz y humedad.
+                </p>
             </div>
         </div>
     </div>
@@ -140,13 +152,16 @@
 
             <!-- Filtros Sensoriales Interactivos -->
             <div class="vb-filter-pills">
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'all'"
+                    (click)="setFilter('all')">
                     Todas las Variedades
                 </button>
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'afrutados'" (click)="setFilter('afrutados')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'afrutados'"
+                    (click)="setFilter('afrutados')">
                     Afrutados & Florales
                 </button>
-                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'chocolatosos'" (click)="setFilter('chocolatosos')">
+                <button type="button" class="vb-pill" [class.active]="selectedFilter === 'chocolatosos'"
+                    (click)="setFilter('chocolatosos')">
                     Cacao & Dulces
                 </button>
             </div>
@@ -156,7 +171,7 @@
         <div class="vb-products-grid">
             <article *ngFor="let item of filteredProducts" class="vb-card">
                 <span class="vb-card-badge">SCA +86</span>
-                
+
                 <div class="vb-card-img-wrap">
                     <img [src]="item.imagenUrl" [alt]="item.nombre" />
                 </div>
@@ -188,9 +203,22 @@
                             <span class="currency">S/</span>
                             <span class="amount">{{ getPrimaryPrice(item).toFixed(2) }}</span>
                         </div>
-                        <a routerLink="/client/catalog" class="vb-card-btn">
-                            Ver en Tienda
-                        </a>
+                        <div class="vb-card-actions-row">
+                            <a [routerLink]="['/client/product', item.slug]" class="vb-card-btn">
+                                Ver detalles
+                            </a>
+                            <button type="button" class="vb-card-cart-btn"
+                                [disabled]="(item.stock ?? 0) <= 0 || agregandoId === item.id"
+                                (click)="agregarAlCarrito(item)">
+                                @if (agregandoId === item.id) {
+                                ...
+                                } @else if (mensajeAgregadoId === item.id) {
+                                ✓
+                                } @else {
+                                + Carrito
+                                }
+                            </button>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -205,15 +233,76 @@
 </section>
 
 <!-- =============================================
-     SECCIÓN 05 — HUB VISUAL DE LA MARCA (PROCESO)
+     SECCIÓN 05 — SOBRE NOSOTROS (HISTORIA & FILOSOFÍA)
      ============================================= -->
-<section class="vb-hub" id="proceso">
+<section class="vb-sobre-nosotros" id="esencia">
+    <div class="vb-container">
+        <div class="vb-nosotros-main-grid">
+            <div class="vb-nosotros-visual">
+                <div class="vb-nosotros-img-frame">
+                    <img src="assets/images/Valle-Rica-Oxapampa.png" alt="Cafetales de Villa Rica - Valle Blanco" />
+                    <div class="vb-img-floating-badge">
+                        <span class="number">1.600+</span>
+                        <span class="lbl">msnm en Villa Rica</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vb-nosotros-narrative">
+                <p class="vb-section-label">05 &mdash; Sobre Nosotros</p>
+                <h2 class="vb-nosotros-headline">
+                    Pasión familiar nacida en la <span class="serif">tierra viva de Oxapampa</span>.
+                </h2>
+                
+                <p class="vb-lead-paragraph">
+                    Valle Blanco es una iniciativa familiar comprometida con preservar y compartir la auténtica tradición cafetalera de Villa Rica, Perú. Cada lote es el resultado de un respeto profundo por la biodiversidad andino-amazónica y el trabajo artesanal de varias generaciones.
+                </p>
+
+                <div class="vb-valores-grid">
+                    <div class="vb-valor-item">
+                        <div class="vb-valor-bullet">01</div>
+                        <div>
+                            <h4>Selección Rigurosa</h4>
+                            <p>Cosecha manual grano por grano en el punto óptimo de madurez para garantizar perfiles limpios y dulces.</p>
+                        </div>
+                    </div>
+                    <div class="vb-valor-item">
+                        <div class="vb-valor-bullet">02</div>
+                        <div>
+                            <h4>Tueste de Especialidad</h4>
+                            <p>Curvas de tueste personalizadas por microlote, resaltando notas de cata florales, cítricas y achocolatadas.</p>
+                        </div>
+                    </div>
+                    <div class="vb-valor-item">
+                        <div class="vb-valor-bullet">03</div>
+                        <div>
+                            <h4>Comercio Justo y Sostenible</h4>
+                            <p>Prácticas agrícolas bajo sombra que cuidan los bosques de niebla y dignifican a nuestras familias productoras.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vb-nosotros-footer-action">
+                    <a routerLink="/client/sobre-nosotros" class="vb-link-with-arrow">
+                        Conocer nuestra historia completa &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     SECCIÓN 06 — HUB VISUAL DE LA MARCA (PROCESO)
+     ============================================= -->
+<section class="vb-hub">
     <div class="vb-container">
         <div class="vb-header-center">
-            <p class="vb-section-label">05 &mdash; Explora Valle Blanco</p>
+            <p class="vb-section-label">06 &mdash; Explora Valle Blanco</p>
             <h2>Sumérgete en nuestro <span class="serif">universo cafetalero</span></h2>
             <p class="vb-header-desc">
-                Descubre cada faceta de nuestra historia, nuestras variedades, el proceso artesanal y los paisajes de nuestra tierra en Oxapampa.
+                Descubre cada faceta de nuestra historia, nuestras variedades, el proceso artesanal y los paisajes de
+                nuestra tierra en Oxapampa.
             </p>
         </div>
 
@@ -226,7 +315,7 @@
                     <span class="vb-hub-tag">01 &middot; Historia & Pasión</span>
                     <h3>Nuestra Identidad Familiar</h3>
                     <p>Conoce a las personas detrás de Valle Blanco y el legado generacional de café en Villa Rica.</p>
-                    <a routerLink="/client/catalog" class="vb-hub-link">Conocer historia &rarr;</a>
+                    <a routerLink="/client/sobre-nosotros" class="vb-hub-link">Conocer historia &rarr;</a>
                 </div>
             </article>
 
@@ -238,7 +327,7 @@
                     <span class="vb-hub-tag">02 &middot; Cosecha Selecta</span>
                     <h3>Cerezas en Plena Maduración</h3>
                     <p>Recolección selectiva manual grano a grano en el punto óptimo de brix y dulzura.</p>
-                    <a routerLink="/client/catalog" class="vb-hub-link">Explorar café &rarr;</a>
+                    <a routerLink="/client/proceso" class="vb-hub-link">Explorar proceso &rarr;</a>
                 </div>
             </article>
 
@@ -249,8 +338,9 @@
                 <div class="vb-hub-body">
                     <span class="vb-hub-tag">03 &middot; Secado Solar</span>
                     <h3>Beneficio y Secado Natural</h3>
-                    <p>Camas africanas bajo sombra controlada para un secado pausado que fija la complejidad aromática.</p>
-                    <a routerLink="/client/catalog" class="vb-hub-link">Ver proceso &rarr;</a>
+                    <p>Camas africanas bajo sombra controlada para un secado pausado que fija la complejidad aromática.
+                    </p>
+                    <a routerLink="/client/proceso" class="vb-hub-link">Ver proceso &rarr;</a>
                 </div>
             </article>
 
@@ -262,7 +352,7 @@
                     <span class="vb-hub-tag">04 &middot; Nuestra Tierra</span>
                     <h3>Finca Villa Rica</h3>
                     <p>Paisajes protegidos por sombra de árboles nativos y respetuosos de la biodiversidad local.</p>
-                    <a routerLink="/client/catalog" class="vb-hub-link">Ver galería &rarr;</a>
+                    <a routerLink="/client/sobre-nosotros" class="vb-hub-link">Ver origen &rarr;</a>
                 </div>
             </article>
         </div>

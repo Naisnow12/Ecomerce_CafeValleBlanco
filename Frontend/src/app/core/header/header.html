@@ -14,8 +14,8 @@
         <li><a routerLink="/client/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
         </li>
         <li><a routerLink="/client/catalog" routerLinkActive="active">Catálogo</a></li>
-        <li><a routerLink="/client/home" fragment="nuestro-cafe">Nuestro Café</a></li>
-        <li><a routerLink="/client/home" fragment="proceso">Proceso</a></li>
+        <li><a routerLink="/client/nuestro-cafe" routerLinkActive="active">Nuestro Café</a></li>
+        <li><a routerLink="/client/proceso" routerLinkActive="active">Proceso</a></li>
         <li><a routerLink="/client/sobre-nosotros" routerLinkActive="active">Sobre Nosotros</a></li>
       </ul>
     </nav>
@@ -70,6 +70,16 @@
             Panel Admin
           </a>
           }
+          @if (isStockManager()) {
+          <a routerLink="/inventario/dashboard" class="dropdown-item dropdown-item--admin" (click)="closeDropdown()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            Panel Inventario
+          </a>
+          }
           <div class="dropdown-divider"></div>
           <button type="button" class="dropdown-item dropdown-item--logout" (click)="logout()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -102,6 +112,7 @@
     <ul class="mobile-nav-list">
       <li><a routerLink="/client/home" (click)="toggleMenu()">Inicio</a></li>
       <li><a routerLink="/client/catalog" (click)="toggleMenu()">Catálogo</a></li>
+      <li><a routerLink="/client/nuestro-cafe" (click)="toggleMenu()">Nuestro Café</a></li>
       <li><a routerLink="/client/sobre-nosotros" (click)="toggleMenu()">Sobre Nosotros</a></li>
       <li><a routerLink="/client/carrito" (click)="toggleMenu()">Carrito</a></li>
       @if (isLoggedIn()) {

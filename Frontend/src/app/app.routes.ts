@@ -1,6 +1,26 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { Proceso } from './modules/client/pages/proceso/proceso';
+import { Login } from './modules/auth/pages/login/login';
+import { Register } from './modules/auth/pages/register/register';
+import { Home } from './modules/client/pages/home/home';
+import { Catalog } from './modules/client/pages/catalog/catalog';
+import { ProductDetail } from './modules/client/pages/product-detail/product-detail';
+import { Carrito } from './modules/client/pages/carrito/carrito';
+import { Checkout } from './modules/client/pages/checkout/checkout';
+import { OrderConfirm } from './modules/client/pages/order-confirm/order-confirm';
+import { MisPedidos } from './modules/client/pages/mis-pedidos/mis-pedidos';
+import { Perfil } from './modules/client/pages/perfil/perfil';
+import { SobreNosotros } from './modules/client/pages/sobre-nosotros/sobre-nosotros';
+import { NuestroCafe } from './modules/client/pages/nuestro-cafe/nuestro-cafe';
+import { Dashboard } from './modules/admin/pages/dashboard/dashboard';
+import { ProductosAdmin } from './modules/admin/pages/productos/productos-admin/productos-admin';
+import { PedidosAdmin } from './modules/admin/pages/pedidos/pedidos-admin/pedidos-admin';
+import { ClientesAdmin } from './modules/admin/pages/clientes/clientes-admin/clientes-admin';
+import { Configuracion } from './modules/admin/pages/configuracion/configuracion';
+import { StockDashboard } from './modules/stock/pages/dashboard/stock-dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'client', pathMatch: 'full' },
@@ -10,8 +30,8 @@ export const routes: Routes = [
     canActivate: [guestGuard],
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', loadComponent: () => import('./modules/auth/pages/login/login').then(m => m.Login) },
-      { path: 'register', loadComponent: () => import('./modules/auth/pages/register/register').then(m => m.Register) }
+      { path: 'login', component: Login },
+      { path: 'register', component: Register }
     ]
   },
   {
@@ -19,45 +39,39 @@ export const routes: Routes = [
     loadComponent: () => import('./modules/client/layout-client/layout-client').then(m => m.LayoutClient),
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', loadComponent: () => import('./modules/client/pages/home/home').then(m => m.Home) },
-      { path: 'catalog', loadComponent: () => import('./modules/client/pages/catalog/catalog').then(m => m.Catalog) },
-      { path: 'product/:slug', loadComponent: () => import('./modules/client/pages/product-detail/product-detail').then(m => m.ProductDetail) },
-      { path: 'carrito', loadComponent: () => import('./modules/client/pages/carrito/carrito').then(m => m.CarritoPage), canActivate: [authGuard] },
-      { path: 'checkout', loadComponent: () => import('./modules/client/pages/checkout/checkout').then(m => m.Checkout), canActivate: [authGuard] },
-      { path: 'order-confirm/:id', loadComponent: () => import('./modules/client/pages/order-confirm/order-confirm').then(m => m.OrderConfirm), canActivate: [authGuard] },
-      { path: 'mis-pedidos', loadComponent: () => import('./modules/client/pages/mis-pedidos/mis-pedidos').then(m => m.MisPedidos), canActivate: [authGuard] },
-      { path: 'perfil', loadComponent: () => import('./modules/client/pages/perfil/perfil').then(m => m.Perfil), canActivate: [authGuard] },
-      { path: 'sobre-nosotros', loadComponent: () => import('./modules/client/pages/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotros) },
+      { path: 'home', component: Home },
+      { path: 'catalog', component: Catalog },
+      { path: 'product/:slug', component: ProductDetail },
+      { path: 'carrito', component: Carrito, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
+      { path: 'checkout', component: Checkout, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
+      { path: 'order-confirm/:id', component: OrderConfirm, canActivate: [authGuard] },
+      { path: 'mis-pedidos', component: MisPedidos, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
+      { path: 'perfil', component: Perfil, canActivate: [authGuard] },
+      { path: 'proceso', component: Proceso },
+      { path: 'nuestro-cafe', component: NuestroCafe },
+      { path: 'sobre-nosotros', component: SobreNosotros },
     ]
   },
   {
     path: 'admin',
     loadComponent: () => import('./modules/admin/layout-admin/layout-admin').then(m => m.LayoutAdmin),
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard(['ROLE_ADMIN'])],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadComponent: () => import('./modules/admin/pages/dashboard/dashboard').then(m => m.Dashboard) },
-      {
-        path: 'productos',
-        loadComponent: () =>
-          import('./modules/admin/pages/productos/productos-admin/productos-admin')
-            .then(m => m.ProductosAdmin)
-      },
-
-      {
-        path: 'pedidos',
-        loadComponent: () =>
-          import('./modules/admin/pages/pedidos/pedidos-admin/pedidos-admin')
-            .then(m => m.PedidosAdmin)
-      },
-
-      {
-        path: 'clientes',
-        loadComponent: () =>
-          import('./modules/admin/pages/clientes/clientes-admin/clientes-admin')
-            .then(m => m.ClientesAdmin)
-      },
-      { path: 'configuracion', loadComponent: () => import('./modules/admin/pages/configuracion/configuracion').then(m => m.Configuracion) },
+      { path: 'dashboard', component: Dashboard },
+      { path: 'productos', component: ProductosAdmin },
+      { path: 'pedidos', component: PedidosAdmin },
+      { path: 'clientes', component: ClientesAdmin },
+      { path: 'configuracion', component: Configuracion },
+    ]
+  },
+  {
+    path: 'inventario',
+    loadComponent: () => import('./modules/stock/layout-stock/layout-stock').then(m => m.LayoutStock),
+    canActivate: [authGuard, roleGuard(['ROLE_ADMIN', 'ROLE_ENCARGADO_STOCK'])],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: StockDashboard }
     ]
   },
   { path: '**', redirectTo: 'client' }

@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product.interface';
+import { APP_CONFIG } from '../constants/app-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/products';
+  private readonly apiUrl = `${APP_CONFIG.apiUrl}/products`;
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);

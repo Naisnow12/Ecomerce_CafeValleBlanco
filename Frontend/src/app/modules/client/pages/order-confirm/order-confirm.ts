@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { PedidoService } from '../../../../core/services/pedido.service';
+import { PagoService } from '../../../../core/services/pago.service';
 import { PedidoResponse } from '../../../../core/models/pedido.interface';
 
 @Component({
@@ -17,15 +18,26 @@ export class OrderConfirm implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
   private readonly pedidoService = inject(PedidoService);
+  private readonly pagoService = inject(PagoService);
 
   // Datos del pedido
   pedido = signal<PedidoResponse | null>(null);
+  pasarelaInfo = signal<{ pasarela: string; sandboxUrl?: string; txId?: string } | null>(null);
 
   // Estados de la pantalla
   cargando = signal(true);
   error = signal('');
 
   ngOnInit(): void {
+    const qParams = this.route.snapshot.queryParams;
+    if (qParams['pasarela']) {
+      this.pasarelaInfo.set({
+        pasarela: qParams['pasarela'],
+        sandboxUrl: qParams['sandboxUrl'],
+        txId: qParams['txId']
+      });
+    }
+
     const idParametro = this.route.snapshot.paramMap.get('id');
     const id = Number(idParametro);
 
@@ -66,6 +78,16 @@ export class OrderConfirm implements OnInit {
             'No se pudo cargar la información del pedido.'
           );
         }
+      }
+    });
+  }
+
+  abrirPasarelaSandbox(): void {
+    const current = this.pedido();
+    if (!current) return;
+    this.pagoService.actualizarEstado(current.id, 'PAGADO').subscribe({
+      next: (updated) => {
+        this.pedido.set(updated);
       }
     });
   }

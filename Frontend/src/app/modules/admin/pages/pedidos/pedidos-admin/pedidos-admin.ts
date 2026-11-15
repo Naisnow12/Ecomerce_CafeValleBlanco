@@ -2,11 +2,14 @@
 import {
   Component,
   signal,
-  computed
+  computed,
+  inject,
+  OnInit
 } from '@angular/core';
 
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AdminService } from '../../../../../core/services/admin.service';
 
 import {
   EstadoPedido,
@@ -34,6 +37,7 @@ interface PedidoAdmin {
 
 @Component({
   selector: 'app-pedidos-admin',
+  standalone: true,
   imports: [
     DecimalPipe,
     DatePipe,
@@ -42,19 +46,18 @@ interface PedidoAdmin {
   templateUrl: './pedidos-admin.html',
   styleUrl: './pedidos-admin.scss',
 })
-export class PedidosAdmin {
+export class PedidosAdmin implements OnInit {
+  private readonly adminService = inject(AdminService);
 
-  // Pedidos administrativos.
-  // Se conectarán cuando implementemos la API.
+  // Pedidos administrativos conectados con backend
   pedidos = signal<PedidoAdmin[]>([]);
 
   // Estados
   cargando = signal(false);
   error = signal('');
 
-  // Conexión pendiente
   datosDisponibles = signal(false);
-  edicionDisponible = signal(false);
+  edicionDisponible = signal(true);
 
   // Filtros
   busqueda = signal('');
@@ -65,27 +68,63 @@ export class PedidosAdmin {
   mostrarDetalle = signal(false);
 
   // Estadísticas
-  totalPedidos = computed(
-    () => this.pedidos().length
-  );
+  totalPedidos = computed(() => this.pedidos().length);
+  pendientes = computed(() => this.pedidos().filter(p => p.estado === 'PENDIENTE').length);
+  enPreparacion = computed(() => this.pedidos().filter(p => p.estado === 'EN_PREPARACION').length);
+  entregados = computed(() => this.pedidos().filter(p => p.estado === 'ENTREGADO').length);
 
-  pendientes = computed(
-    () => this.pedidos().filter(
-      p => p.estado === 'PENDIENTE'
-    ).length
-  );
+  ngOnInit(): void {
+    this.cargarPedidos();
+  }
 
-  enPreparacion = computed(
-    () => this.pedidos().filter(
-      p => p.estado === 'EN_PREPARACION'
-    ).length
-  );
+  cargarPedidos(): void {
+    this.cargando.set(true);
+    this.error.set('');
+    this.adminService.getPedidos().subscribe({
+      next: (data: any[]) => {
+        this.pedidos.set(data.map(p => ({
+          id: p.id,
+          numeroPedido: p.numeroPedido,
+          clienteNombre: p.dirDestinatario || 'Cliente',
+          clienteEmail: p.dirTelefono ? `Tel: ${p.dirTelefono}` : 'Registrado',
+          estado: p.estado as EstadoPedido,
+          items: p.items || [],
+          subtotal: p.subtotal,
+          costoEnvio: p.costoEnvio,
+          total: p.total,
+          metodoPago: p.metodoPago,
+          creadoEn: p.creadoEn,
+          dirDestinatario: p.dirDestinatario,
+          dirLinea1: p.dirLinea1,
+          dirDistrito: p.dirDistrito,
+          dirProvincia: p.dirProvincia,
+          dirDepartamento: p.dirDepartamento
+        })));
+        this.datosDisponibles.set(true);
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.error.set('No se pudo cargar la lista de pedidos desde el servidor.');
+        this.cargando.set(false);
+      }
+    });
+  }
 
-  entregados = computed(
-    () => this.pedidos().filter(
-      p => p.estado === 'ENTREGADO'
-    ).length
-  );
+  cambiarEstado(pedidoId: number, nuevoEstado: string): void {
+    this.adminService.actualizarEstadoPedido(pedidoId, nuevoEstado).subscribe({
+      next: () => {
+        this.cargarPedidos();
+        if (this.pedidoSeleccionado() && this.pedidoSeleccionado()?.id === pedidoId) {
+          const actual = this.pedidoSeleccionado()!;
+          actual.estado = nuevoEstado as EstadoPedido;
+          this.pedidoSeleccionado.set({ ...actual });
+        }
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Error al actualizar estado del pedido');
+      }
+    });
+  }
 
   // Pedidos filtrados
   pedidosFiltrados = computed(() => {

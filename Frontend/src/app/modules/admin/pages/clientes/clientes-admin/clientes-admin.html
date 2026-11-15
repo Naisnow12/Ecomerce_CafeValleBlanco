@@ -247,9 +247,23 @@
 
                         <!-- ACCIONES -->
                         <td>
-                            <button type="button" class="btn-details" (click)="verDetalle(cliente)">
-                                Ver detalles
-                            </button>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <button type="button" class="btn-details" (click)="verDetalle(cliente)">
+                                    Ver detalles
+                                </button>
+                                <button type="button" 
+                                    [style.background]="cliente.activo ? '#fce8e6' : '#e8f8f5'"
+                                    [style.color]="cliente.activo ? '#c0392b' : '#27ae60'"
+                                    [style.border]="'none'"
+                                    [style.padding]="'0.4rem 0.6rem'"
+                                    [style.borderRadius]="'4px'"
+                                    [style.cursor]="'pointer'"
+                                    [style.fontSize]="'0.8rem'"
+                                    [style.fontWeight]="'600'"
+                                    (click)="toggleEstado(cliente)">
+                                    {{ cliente.activo ? 'Desactivar' : 'Activar' }}
+                                </button>
+                            </div>
                         </td>
 
                     </tr>
@@ -349,6 +363,13 @@
                             <span>Teléfono</span>
                             <strong>
                                 {{ cliente.telefono || 'No registrado' }}
+                            </strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span>Roles Asignados</span>
+                            <strong>
+                                {{ (cliente.roles || []).join(', ') }}
                             </strong>
                         </div>
 

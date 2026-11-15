@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth-service';
 import { CarritoService } from '../services/carrito.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class Header {
 
   isLoggedIn = this.authService.isLoggedIn;
   isAdmin = this.authService.isAdmin;
+  isStockManager = this.authService.isStockManager;
   currentUser = this.authService.currentUser;
   cartCount = this.carritoService.itemCount;
 

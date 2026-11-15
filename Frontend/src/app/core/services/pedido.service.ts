@@ -2,11 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CrearPedidoRequest, PedidoResponse } from '../models/pedido.interface';
+import { APP_CONFIG } from '../constants/app-config';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/pedidos';
+  private readonly apiUrl = `${APP_CONFIG.apiUrl}/pedidos`;
 
   crearPedido(req: CrearPedidoRequest): Observable<PedidoResponse> {
     return this.http.post<PedidoResponse>(this.apiUrl, req);

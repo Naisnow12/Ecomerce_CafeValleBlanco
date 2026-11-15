@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -45,14 +45,23 @@ export class Login {
       email: this.f.email.value!,
       password: this.f.password.value!
     }).subscribe({
-      next: () => {
+      next: (res) => {
         this.isLoading.set(false);
 
-        const returnUrl =
-          this.route.snapshot.queryParamMap.get('returnUrl') ||
-          '/client/home';
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        if (returnUrl) {
+          this.router.navigateByUrl(returnUrl);
+          return;
+        }
 
-        this.router.navigateByUrl(returnUrl);
+        // Redirección inteligente según rol
+        if (res.roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (res.roles.includes('ROLE_ENCARGADO_STOCK')) {
+          this.router.navigate(['/inventario/dashboard']);
+        } else {
+          this.router.navigate(['/client/home']);
+        }
       },
 
       error: (err) => {

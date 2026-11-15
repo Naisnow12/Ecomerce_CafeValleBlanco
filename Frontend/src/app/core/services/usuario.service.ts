@@ -7,11 +7,12 @@ import {
   ChangePasswordRequest,
   Direccion
 } from '../models/usuario.interface';
+import { APP_CONFIG } from '../constants/app-config';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/usuario';
+  private readonly apiUrl = `${APP_CONFIG.apiUrl}/usuario`;
 
   getProfile(): Observable<UsuarioProfile> {
     return this.http.get<UsuarioProfile>(`${this.apiUrl}/perfil`);

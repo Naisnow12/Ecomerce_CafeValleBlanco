@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CarritoService } from '../../../../core/services/carrito.service';
 import { PedidoService } from '../../../../core/services/pedido.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
+import { PagoService } from '../../../../core/services/pago.service';
 
 import { Direccion, UsuarioProfile } from '../../../../core/models/usuario.interface';
 import { CrearPedidoRequest } from '../../../../core/models/pedido.interface';
@@ -23,6 +24,7 @@ export class Checkout implements OnInit {
   private readonly carritoService = inject(CarritoService);
   private readonly pedidoService = inject(PedidoService);
   private readonly usuarioService = inject(UsuarioService);
+  private readonly pagoService = inject(PagoService);
   private readonly router = inject(Router);
 
   // Carrito
@@ -39,7 +41,7 @@ export class Checkout implements OnInit {
   nuevaDireccion: Direccion = this.crearDireccionVacia();
 
   // Pago
-  metodoPago = signal<string>('YAPE');
+  metodoPago = signal<string>('MERCADO_PAGO');
   notas = '';
 
   // Estados
@@ -213,17 +215,31 @@ export class Checkout implements OnInit {
 
     this.pedidoService.crearPedido(request).subscribe({
       next: (pedido) => {
-        this.procesandoPedido.set(false);
+        // Actualizamos el carrito después de confirmar la compra
+        this.carritoService.cargarCarrito().subscribe({ error: () => {} });
 
-        // Actualizamos el carrito después de confirmar la compra.
-        this.carritoService.cargarCarrito().subscribe({
-          error: () => { }
-        });
-
-        this.router.navigate([
-          '/client/order-confirm',
-          pedido.id
-        ]);
+        if (this.metodoPago() === 'MERCADO_PAGO') {
+          // Si eligió pasarela, iniciamos la sesión de pago Sandbox
+          this.pagoService.iniciarPago(pedido.id).subscribe({
+            next: (pagoRes) => {
+              this.procesandoPedido.set(false);
+              this.router.navigate(['/client/order-confirm', pedido.id], {
+                queryParams: {
+                  pasarela: 'MERCADO_PAGO',
+                  sandboxUrl: pagoRes.initPointUrl,
+                  txId: pagoRes.idTransaccion
+                }
+              });
+            },
+            error: () => {
+              this.procesandoPedido.set(false);
+              this.router.navigate(['/client/order-confirm', pedido.id]);
+            }
+          });
+        } else {
+          this.procesandoPedido.set(false);
+          this.router.navigate(['/client/order-confirm', pedido.id]);
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.procesandoPedido.set(false);

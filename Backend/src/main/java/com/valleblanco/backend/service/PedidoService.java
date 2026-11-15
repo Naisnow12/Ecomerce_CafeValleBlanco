@@ -26,6 +26,8 @@ public class PedidoService {
     private final CarritoRepository carritoRepository;
     private final DireccionRepository direccionRepository;
     private final ProductRepository productRepository;
+    private final MovimientoStockRepository movimientoStockRepository;
+    private final AuditoriaService auditoriaService;
     private final EntityManager entityManager;
 
     private Usuario findUsuario(String email) {
@@ -124,15 +126,39 @@ public class PedidoService {
             item.setPedido(pedido);
         }
 
-        // Reducir stock
+        // Reducir stock y registrar movimiento de inventario (SALIDA)
         for (CarritoItem item : carrito.getItems()) {
             Product producto = item.getPrecio().getProduct();
-            producto.setStock(producto.getStock() - item.getCantidad());
+            int stockAnterior = producto.getStock() != null ? producto.getStock() : 0;
+            int stockNuevo = stockAnterior - item.getCantidad();
+            producto.setStock(stockNuevo);
             productRepository.save(producto);
+
+            MovimientoStock mov = MovimientoStock.builder()
+                    .producto(producto)
+                    .tipo("SALIDA")
+                    .cantidad(item.getCantidad())
+                    .stockAnterior(stockAnterior)
+                    .stockNuevo(stockNuevo)
+                    .motivo("Venta en pedido #" + numeroPedido)
+                    .emailUsuario(usuario.getEmail())
+                    .creadoEn(LocalDateTime.now())
+                    .build();
+            movimientoStockRepository.save(mov);
         }
 
         // Guardar pedido
         Pedido savedPedido = pedidoRepository.save(pedido);
+
+        auditoriaService.registrar(
+                usuario.getEmail(),
+                "ROLE_CLIENTE",
+                "CREAR_PEDIDO",
+                "PEDIDOS",
+                savedPedido.getId().toString(),
+                "Pedido registrado " + savedPedido.getNumeroPedido() + " por un total de S/ " + savedPedido.getTotal(),
+                "EXITO"
+        );
 
         // Vaciar carrito
         carrito.getItems().clear();

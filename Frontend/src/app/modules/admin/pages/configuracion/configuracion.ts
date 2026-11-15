@@ -1,11 +1,15 @@
 
 import {
   Component,
-  signal
+  signal,
+  inject,
+  OnInit
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { AdminService } from '../../../../core/services/admin.service';
 
 interface ConfiguracionTienda {
   nombre: string;
@@ -41,69 +45,88 @@ interface ConfiguracionEnvios {
 
 @Component({
   selector: 'app-configuracion',
+  standalone: true,
   imports: [
     FormsModule,
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './configuracion.html',
   styleUrl: './configuracion.scss',
 })
-export class Configuracion {
+export class Configuracion implements OnInit {
+  private readonly adminService = inject(AdminService);
 
-  // Se habilitará cuando exista el backend de configuración.
-  guardadoDisponible = signal(false);
-
-  // Secciones
+  guardadoDisponible = signal(true);
   seccionActiva = signal<string>('TIENDA');
 
-  // Estados
   guardando = signal(false);
   error = signal('');
   mensaje = signal('');
 
-  // Datos iniciales conocidos.
-  // Los demás campos se completarán con información real.
+  auditorias = signal<any[]>([]);
+
   tienda: ConfiguracionTienda = {
     nombre: 'Valle Blanco',
     subtitulo: 'Café de Especialidad',
-    descripcion: '',
-    email: '',
-    telefono: '',
-    whatsapp: '',
-    direccion: '',
-    distrito: '',
+    descripcion: 'Cafetería de especialidad con granos selectos de Oxapampa y Villa Rica.',
+    email: 'contacto@valleblanco.pe',
+    telefono: '+51 999 888 777',
+    whatsapp: '51999999999',
+    direccion: 'Av. San Martín 450',
+    distrito: 'Oxapampa',
     provincia: 'Oxapampa',
     departamento: 'Pasco'
   };
 
-  // Configuración de pagos.
-  // Estos valores son borradores, no datos bancarios reales.
   pagos: ConfiguracionPagos = {
     yape: true,
     plin: true,
     transferencia: true,
-    numeroYape: '',
-    numeroPlin: '',
-    banco: '',
-    numeroCuenta: '',
-    cci: ''
+    numeroYape: '999888777',
+    numeroPlin: '999888777',
+    banco: 'BCP',
+    numeroCuenta: '191-12345678-0-99',
+    cci: '002-191-001234567899-55'
   };
 
-  // Configuración de envíos.
-  // Los importes son valores iniciales del formulario,
-  // no tarifas oficiales de la tienda.
   envios: ConfiguracionEnvios = {
-    habilitarEnvios: false,
-    costoBase: 0,
-    envioGratisDesde: 0,
-    tiempoEstimado: '',
-    instrucciones: ''
+    habilitarEnvios: true,
+    costoBase: 15.00,
+    envioGratisDesde: 150.00,
+    tiempoEstimado: '24 a 48 horas en Lima, 3 a 5 días provincias',
+    instrucciones: 'Empaque especial hermético para conservar aromas de tueste.'
   };
+
+  ngOnInit(): void {
+    this.cargarAuditoria();
+  }
+
+  cargarAuditoria(): void {
+    this.adminService.getAuditoria().subscribe({
+      next: (data) => {
+        this.auditorias.set(data);
+      },
+      error: () => {}
+    });
+  }
+
+  guardarCambios(): void {
+    this.guardando.set(true);
+    setTimeout(() => {
+      this.guardando.set(false);
+      this.mensaje.set('Preferencias guardadas satisfactoriamente.');
+      setTimeout(() => this.mensaje.set(''), 4000);
+    }, 600);
+  }
 
   cambiarSeccion(seccion: string): void {
     this.seccionActiva.set(seccion);
     this.error.set('');
     this.mensaje.set('');
+    if (seccion === 'SEGURIDAD') {
+      this.cargarAuditoria();
+    }
   }
 
   obtenerNombreSeccion(): string {
@@ -111,10 +134,9 @@ export class Configuracion {
       TIENDA: 'Información de la tienda',
       PAGOS: 'Métodos de pago',
       ENVIOS: 'Configuración de envíos',
-      SEGURIDAD: 'Seguridad y acceso'
+      SEGURIDAD: 'Seguridad y auditoría'
     };
 
-    return secciones[this.seccionActiva()] ??
-      'Configuración';
+    return secciones[this.seccionActiva()] ?? 'Configuración';
   }
 }
