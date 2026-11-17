@@ -22,4 +22,22 @@ export class ProductService {
   getProductBySlug(slug: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/slug/${slug}`);
   }
+
+  createProduct(product: Partial<Product>): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
+  }
+
+  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, formData);
+  }
 }

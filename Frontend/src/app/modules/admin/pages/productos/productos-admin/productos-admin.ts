@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { ProductService } from '../../../../../core/services/product.service';
 import { Product } from '../../../../../core/models/product.interface';
+import { precios } from '../../../../../core/models/precios.interface';
 
 type FiltroStock = 'TODOS' | 'DISPONIBLE' | 'BAJO' | 'AGOTADO';
 
@@ -32,6 +33,8 @@ export class ProductosAdmin implements OnInit {
   // Estados
   cargando = signal(true);
   error = signal('');
+  guardando = signal(false);
+  errorGuardado = signal('');
 
   // Filtros
   busqueda = signal('');
@@ -43,8 +46,53 @@ export class ProductosAdmin implements OnInit {
 
   productoSeleccionado = signal<Product | null>(null);
 
-  // Se habilitará cuando existan los endpoints administrativos.
-  escrituraDisponible = signal(false);
+  // Endpoints administrativos conectados
+  escrituraDisponible = signal(true);
+
+  // Subida de imagen
+  subiendoImagen = signal(false);
+  previewImagen = signal<string | null>(null);
+
+  // Opciones para barras desplegables
+  readonly opcionesTipoCafe = [
+    'Café Molido',
+    'Café en Grano',
+    'Espresso',
+    'Proceso Honey',
+    'Proceso Natural',
+    'Edición Especial',
+    'Extracción en Frío'
+  ];
+
+  readonly opcionesMolienda = [
+    'En Grano',
+    'Molido fino',
+    'Molido medio',
+    'Molido grueso',
+    'Molido tradicional',
+    'Espresso'
+  ];
+
+  readonly opcionesTueste = [
+    'Claro',
+    'Medio claro',
+    'Medio',
+    'Medio oscuro',
+    'Oscuro'
+  ];
+
+  readonly opcionesVariedad = [
+    'Typica',
+    'Caturra',
+    'Caturra / Typica',
+    'Typica / Bourbon',
+    'Bourbon',
+    'Geisha'
+  ];
+
+  // Nuevas presentaciones en el modal
+  nuevoPeso = signal<number>(250);
+  nuevoPrecio = signal<number>(35.00);
 
   // Estadísticas
   totalProductos = computed(
@@ -70,7 +118,6 @@ export class ProductosAdmin implements OnInit {
     const filtro = this.filtroStock();
 
     return this.productos().filter(producto => {
-
       const coincideTexto =
         !texto ||
         producto.nombre.toLowerCase().includes(texto) ||
@@ -156,30 +203,33 @@ export class ProductosAdmin implements OnInit {
     }
 
     const valores = producto.precios.map(p => p.precio);
-
     return Math.min(...valores);
   }
 
   abrirNuevoProducto(): void {
     this.modoEdicion.set(false);
+    this.errorGuardado.set('');
+    this.previewImagen.set(null);
 
     this.productoSeleccionado.set({
       slug: '',
       imagenUrl: '',
       nombre: '',
       nombreSecundario: '',
-      tipoCafe: '',
-      molienda: '',
-      tueste: '',
-      variedad: '',
-      altitud: '',
+      tipoCafe: 'Café Molido',
+      molienda: 'Molido medio',
+      tueste: 'Medio',
+      variedad: 'Caturra / Typica',
+      altitud: '1,650 msnm',
       descripcion: '',
-      stock: 0,
+      stock: 50,
       esDestacado: false,
       esOscuro: false,
       badgeText: '',
       notasCata: [],
-      precios: []
+      precios: [
+        { id_product: 0, peso: 250, precio: 35.00 }
+      ]
     });
 
     this.mostrarFormulario.set(true);
@@ -187,11 +237,13 @@ export class ProductosAdmin implements OnInit {
 
   editarProducto(producto: Product): void {
     this.modoEdicion.set(true);
+    this.errorGuardado.set('');
+    this.previewImagen.set(producto.imagenUrl || null);
 
     this.productoSeleccionado.set({
       ...producto,
-      notasCata: [...producto.notasCata],
-      precios: [...producto.precios]
+      notasCata: producto.notasCata ? [...producto.notasCata] : [],
+      precios: producto.precios ? [...producto.precios] : []
     });
 
     this.mostrarFormulario.set(true);
@@ -200,11 +252,133 @@ export class ProductosAdmin implements OnInit {
   cerrarFormulario(): void {
     this.mostrarFormulario.set(false);
     this.productoSeleccionado.set(null);
+    this.previewImagen.set(null);
+    this.errorGuardado.set('');
   }
 
-  // Solo cierra el formulario.
-  // El guardado estará disponible cuando exista la API administrativa.
   cancelarEdicion(): void {
     this.cerrarFormulario();
+  }
+
+  // SUBIDA DE ARCHIVO DE IMAGEN
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+
+    // Previsualización inmediata en navegador
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewImagen.set(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Subida al servidor
+    this.subiendoImagen.set(true);
+    this.errorGuardado.set('');
+
+    this.productService.uploadImage(file).subscribe({
+      next: (res) => {
+        this.subiendoImagen.set(false);
+        const p = this.productoSeleccionado();
+        if (p) {
+          p.imagenUrl = res.imageUrl;
+          this.productoSeleccionado.set({ ...p });
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.subiendoImagen.set(false);
+        this.errorGuardado.set(err.error?.error || 'Error al subir la imagen al servidor. Verifica el formato.');
+      }
+    });
+  }
+
+  // GESTIÓN DE PRESENTACIONES Y PRECIOS
+  agregarPrecio(): void {
+    const p = this.productoSeleccionado();
+    if (!p) return;
+
+    const peso = this.nuevoPeso();
+    const precio = this.nuevoPrecio();
+
+    if (peso <= 0 || precio <= 0) {
+      this.errorGuardado.set('El peso y el precio deben ser mayores a cero.');
+      return;
+    }
+
+    const nuevoItem: precios = {
+      id_product: p.id || 0,
+      peso,
+      precio
+    };
+    p.precios = [...(p.precios || []), nuevoItem];
+    this.productoSeleccionado.set({ ...p });
+    this.errorGuardado.set('');
+  }
+
+  eliminarPrecio(index: number): void {
+    const p = this.productoSeleccionado();
+    if (!p || !p.precios) return;
+
+    p.precios.splice(index, 1);
+    this.productoSeleccionado.set({ ...p });
+  }
+
+  // GUARDAR PRODUCTO (CREAR O ACTUALIZAR)
+  guardarProducto(): void {
+    const prod = this.productoSeleccionado();
+    if (!prod) return;
+
+    if (!prod.nombre || prod.nombre.trim() === '') {
+      this.errorGuardado.set('El nombre del café es obligatorio.');
+      return;
+    }
+
+    if (!prod.precios || prod.precios.length === 0) {
+      this.errorGuardado.set('Debes registrar al menos una presentación con su precio.');
+      return;
+    }
+
+    this.guardando.set(true);
+    this.errorGuardado.set('');
+
+    const peticion = this.modoEdicion() && prod.id
+      ? this.productService.updateProduct(prod.id, prod)
+      : this.productService.createProduct(prod);
+
+    peticion.subscribe({
+      next: () => {
+        this.guardando.set(false);
+        this.cerrarFormulario();
+        this.cargarProductos();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.guardando.set(false);
+        this.errorGuardado.set(err.error?.message || 'Error al guardar el producto en el servidor.');
+      }
+    });
+  }
+
+  // ELIMINAR PRODUCTO
+  eliminarProducto(producto: Product): void {
+    if (!producto.id) return;
+
+    const confirmacion = window.confirm(
+      `¿Estás seguro de que deseas eliminar permanentemente la presentación "${producto.nombre} ${producto.nombreSecundario || ''}"?`
+    );
+
+    if (!confirmacion) return;
+
+    this.cargando.set(true);
+    this.productService.deleteProduct(producto.id).subscribe({
+      next: () => {
+        this.cargarProductos();
+      },
+      error: (err) => {
+        this.cargando.set(false);
+        alert(err.error?.message || 'No se pudo eliminar el producto.');
+      }
+    });
   }
 }

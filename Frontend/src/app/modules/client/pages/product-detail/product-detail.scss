@@ -138,6 +138,66 @@
     border: 1px solid #e2dacd;
     border-radius: 8px;
     background: #fffdf9;
+
+    &.attr-chip--highlight {
+        border-color: #8A674E;
+        background: rgba(138, 103, 78, 0.08);
+
+        .attr-label {
+            color: #8A674E;
+            font-weight: 800;
+        }
+
+        .attr-value {
+            color: #244632;
+            font-weight: 700;
+        }
+    }
+}
+
+// TARJETA DE GUÍA DE MOLIENDA
+.molienda-guide-card {
+    background: #fdfbf7;
+    border: 1px solid #e6ded0;
+    border-left: 4px solid #8A674E;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 18px 0 24px 0;
+
+    .molienda-guide-header {
+        margin-bottom: 8px;
+
+        .molienda-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #8A674E;
+
+            .molienda-dot {
+                font-size: 9px;
+                color: #2e523c;
+            }
+
+            .molienda-title-label {
+                letter-spacing: 1px;
+                font-size: 11px;
+                font-weight: 700;
+            }
+
+            .molienda-title-val {
+                color: #244632;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .molienda-guide-desc {
+        margin: 0;
+        font-size: 13.5px;
+        color: #55524c;
+        line-height: 1.6;
+    }
 }
 
 .attr-label {
@@ -420,6 +480,190 @@
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+// =============================================
+// FICHA TÉCNICA: CALIBRACIÓN EN MESA DE CATA (SCA)
+// =============================================
+.ficha-cata-section {
+    margin-top: 55px;
+    padding-top: 45px;
+    border-top: 1px solid #e1d9cb;
+
+    .ficha-cata-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.95fr;
+        gap: 40px;
+        align-items: stretch;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+
+    .ficha-cata-left {
+        display: flex;
+        flex-direction: column;
+
+        .ficha-cata-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(20px, 2.5vw, 25px);
+            color: #1f2b22;
+            font-weight: 600;
+            margin: 0 0 24px 0;
+            line-height: 1.25;
+        }
+
+        .cata-bars-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 24px;
+
+            .cata-bar-item {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .cata-bar-meta {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 13.5px;
+
+                    .cata-bar-label {
+                        color: #2b251f;
+                        font-weight: 600;
+                    }
+
+                    .cata-bar-val {
+                        color: #964F27;
+                        font-weight: 700;
+                        font-family: inherit;
+                    }
+                }
+
+                .cata-track {
+                    height: 12px;
+                    background: #eee8dc;
+                    border-radius: 6px;
+                    overflow: hidden;
+
+                    .cata-fill {
+                        height: 100%;
+                        background: #964F27;
+                        border-radius: 6px;
+                        transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+                    }
+                }
+            }
+        }
+
+        .cata-quote-box {
+            background: #f7f2e7;
+            border-radius: 6px;
+            padding: 16px 20px;
+            border-left: 3px solid #964F27;
+            margin-top: auto;
+
+            .cata-quote-text {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.65;
+                color: #554f46;
+                font-style: italic;
+                font-family: Georgia, "Times New Roman", serif;
+            }
+        }
+    }
+
+    .ficha-cata-right {
+        .radar-card {
+            background: #faf6ed;
+            border: 1px solid #ebd9c0;
+            border-radius: 12px;
+            padding: 24px 18px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+
+            .radar-svg {
+                width: 100%;
+                max-width: 320px;
+                height: auto;
+                overflow: visible;
+
+                .radar-circle-guide {
+                    fill: none;
+                    stroke: rgba(150, 79, 39, 0.16);
+                    stroke-dasharray: 2 3;
+                }
+
+                .radar-circle-outer {
+                    fill: none;
+                    stroke: rgba(150, 79, 39, 0.3);
+                    stroke-dasharray: 3 3;
+                }
+
+                .radar-axis-line {
+                    stroke: rgba(150, 79, 39, 0.15);
+                    stroke-width: 1;
+                }
+
+                .radar-polygon-fill {
+                    fill: rgba(196, 126, 78, 0.32);
+                    stroke: #964F27;
+                    stroke-width: 2.2;
+                }
+
+                .radar-vertex-dot {
+                    fill: #964F27;
+                    stroke: #faf6ed;
+                    stroke-width: 1.5;
+                }
+
+                .radar-label {
+                    font-size: 9.5px;
+                    font-weight: 700;
+                    letter-spacing: 0.6px;
+                    fill: #4c4135;
+
+                    &.radar-label--top {
+                        text-anchor: middle;
+                    }
+
+                    &.radar-label--right {
+                        text-anchor: start;
+                    }
+
+                    &.radar-label--bottom-right {
+                        text-anchor: start;
+                    }
+
+                    &.radar-label--bottom-left {
+                        text-anchor: end;
+                    }
+
+                    &.radar-label--left {
+                        text-anchor: end;
+                    }
+                }
+            }
+
+            .radar-caption {
+                font-size: 11.5px;
+                color: #7a6e60;
+                margin: 14px 0 0 0;
+                letter-spacing: 0.5px;
+                text-align: center;
+                font-weight: 500;
+            }
+        }
     }
 }
 

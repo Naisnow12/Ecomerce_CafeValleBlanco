@@ -46,7 +46,7 @@
         </span>
         }
         @if (product()!.molienda) {
-        <span class="attr-chip">
+        <span class="attr-chip attr-chip--highlight">
           <span class="attr-label">Molienda</span>
           <span class="attr-value">{{ product()!.molienda }}</span>
         </span>
@@ -70,6 +70,22 @@
         </span>
         }
       </div>
+
+      <!-- Guía de Molienda y Método Recomendado -->
+      @if (product()!.molienda) {
+      <div class="molienda-guide-card">
+        <div class="molienda-guide-header">
+          <div class="molienda-badge-pill">
+            <span class="molienda-dot">●</span>
+            <span class="molienda-title-label">MOLIENDA / MÉTODO:</span>
+            <strong class="molienda-title-val">{{ product()!.molienda }}</strong>
+          </div>
+        </div>
+        <p class="molienda-guide-desc">
+          {{ getGuiaMolienda(product()!.molienda) }}
+        </p>
+      </div>
+      }
 
       <!-- Notas de cata -->
       @if (product()!.notasCata?.length > 0) {
@@ -166,5 +182,111 @@
           </div>
     </div>
   </div>
+
+  <!-- =============================================
+       FICHA TÉCNICA: CALIBRACIÓN EN MESA DE CATA (SCA)
+       ============================================= -->
+  <section class="ficha-cata-section">
+    <div class="ficha-cata-grid">
+      
+      <!-- Columna Izquierda: Barras de calibración sensorial y cita Q-Grader -->
+      <div class="ficha-cata-left">
+        <h2 class="ficha-cata-title">
+          Calibración en Mesa de Cata ({{ fichaCata().puntajeSca | number:'1.1-1' }} Puntos)
+        </h2>
+
+        <div class="cata-bars-list">
+          <!-- 1. Cuerpo -->
+          <div class="cata-bar-item">
+            <div class="cata-bar-meta">
+              <span class="cata-bar-label">Cuerpo ({{ fichaCata().cuerpoDesc }})</span>
+              <span class="cata-bar-val">{{ fichaCata().cuerpoVal | number:'1.1-1' }} / 5.0</span>
+            </div>
+            <div class="cata-track">
+              <div class="cata-fill" [style.width.%]="(fichaCata().cuerpoVal / 5) * 100"></div>
+            </div>
+          </div>
+
+          <!-- 2. Acidez -->
+          <div class="cata-bar-item">
+            <div class="cata-bar-meta">
+              <span class="cata-bar-label">Acidez ({{ fichaCata().acidezDesc }})</span>
+              <span class="cata-bar-val">{{ fichaCata().acidezVal | number:'1.1-1' }} / 5.0</span>
+            </div>
+            <div class="cata-track">
+              <div class="cata-fill" [style.width.%]="(fichaCata().acidezVal / 5) * 100"></div>
+            </div>
+          </div>
+
+          <!-- 3. Dulzor -->
+          <div class="cata-bar-item">
+            <div class="cata-bar-meta">
+              <span class="cata-bar-label">Dulzor ({{ fichaCata().dulzorDesc }})</span>
+              <span class="cata-bar-val">{{ fichaCata().dulzorVal | number:'1.1-1' }} / 5.0</span>
+            </div>
+            <div class="cata-track">
+              <div class="cata-fill" [style.width.%]="(fichaCata().dulzorVal / 5) * 100"></div>
+            </div>
+          </div>
+
+          <!-- 4. Balance & Postgusto -->
+          <div class="cata-bar-item">
+            <div class="cata-bar-meta">
+              <span class="cata-bar-label">Balance & Postgusto</span>
+              <span class="cata-bar-val">{{ fichaCata().balanceVal | number:'1.1-1' }} / 5.0</span>
+            </div>
+            <div class="cata-track">
+              <div class="cata-fill" [style.width.%]="(fichaCata().balanceVal / 5) * 100"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caja de nota sensorial del catador Q-Grader -->
+        <div class="cata-quote-box">
+          <p class="cata-quote-text">
+            &ldquo;{{ fichaCata().notaQGrader }}&rdquo;
+          </p>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Gráfico Polígono de Intensidad Sensorial SCA -->
+      <div class="ficha-cata-right">
+        <div class="radar-card">
+          <svg class="radar-svg" viewBox="0 0 320 270">
+            <!-- Círculos concéntricos guía punteados -->
+            <circle cx="160" cy="130" r="22" class="radar-circle-guide" />
+            <circle cx="160" cy="130" r="48" class="radar-circle-guide" />
+            <circle cx="160" cy="130" r="70" class="radar-circle-guide" />
+            <circle cx="160" cy="130" r="85" class="radar-circle-outer" />
+
+            <!-- Ejes radiales a cada vértice -->
+            @for (v of radarOuterVertices; track $index) {
+              <line x1="160" y1="130" [attr.x2]="v.x" [attr.y2]="v.y" class="radar-axis-line" />
+            }
+
+            <!-- Polígono sensorial coloreado -->
+            <polygon [attr.points]="radarPolygonPoints" class="radar-polygon-fill" />
+
+            <!-- Nodos en los 5 vértices -->
+            @for (pt of radarVertices; track $index) {
+              <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="radar-vertex-dot" />
+            }
+
+            <!-- Etiquetas de los 5 atributos -->
+            <text x="160" y="24" class="radar-label radar-label--top">{{ fichaCata().etiquetaFloral }}</text>
+            <text x="262" y="105" class="radar-label radar-label--right">FRUTAL</text>
+            <text x="228" y="245" class="radar-label radar-label--bottom-right">DULZOR</text>
+            <text x="92" y="245" class="radar-label radar-label--bottom-left">CUERPO</text>
+            <text x="58" y="105" class="radar-label radar-label--left">ACIDEZ</text>
+          </svg>
+
+          <p class="radar-caption">
+            Polígono de intensidad sensorial certificado SCA
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
   }
 </div>
