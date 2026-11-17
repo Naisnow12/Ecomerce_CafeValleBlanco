@@ -1,451 +1,509 @@
-$bg-main: #F3EEE4;
-$bg-light: #FFF9F1;
-$bg-cream: #EDE6D8;
-$green-dark: #33463A;
-$green-olive: #66745F;
-$green-light: #E8EDE6;
-$brown: #8A674E;
-$brown-light: #B8956A;
-$text-dark: #27231F;
-$text-body: #4A4540;
-$text-muted: #8C8478;
-$white-warm: #FDFAF5;
-$overlay: rgba(39, 35, 31, 0.45);
-$font-body: 'DM Sans', sans-serif;
-$font-serif: 'Playfair Display', serif;
-$transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-$shadow-sm: 0 2px 20px rgba(39, 35, 31, 0.06);
-$shadow-md: 0 8px 40px rgba(39, 35, 31, 0.1);
+// ============================================================
+// VARIABLES
+// ============================================================
+$cream:       #F3EEE4;
+$cream-light: #FBF9F5;
+$dark-green:  #1E2D24;
+$mid-green:   #33463A;
+$brown:       #8A674E;
+$brown-light: #C5A880;
+$text-dark:   #27231F;
+$text-muted:  #6B6358;
+$serif: 'Playfair Display', serif;
+$sans: 'DM Sans', sans-serif;
 
-.serif {
-    font-family: $font-serif;
-    font-style: italic;
+// ============================================================
+// BASE
+// ============================================================
+.proceso-page {
+  font-family: $sans;
+  color: $text-dark;
+  background: $cream-light;
 }
 
-.container {
-    width: 90%;
-    max-width: 1300px;
-    margin: 0 auto;
+.proc-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-.section-label {
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: $text-muted;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
+// ============================================================
+// HERO
+// ============================================================
+.proceso-hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7rem 1.5rem 5rem;
+  background: url('/assets/images/nc-cosecha-mano.jpg') center 40% / cover no-repeat;
+  overflow: hidden;
 
-.reveal {
-    opacity: 1;
-    transform: translateY(40px);
-    transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.proceso {
-    padding: 7rem 0;
-    background: $bg-main;
-    position: relative;
-    overflow: hidden;
-}
-
-.proceso-header {
-    text-align: center;
-    margin-bottom: 5rem;
-}
-
-.proceso-header h2 {
-    font-family: $font-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: $text-dark;
-    font-weight: 400;
-    margin-bottom: 0.8rem;
-    line-height: 1.2;
-}
-
-.proceso-header h2 .serif {
-    font-family: $font-serif;
-    font-style: italic;
-    color: $brown;
-}
-
-.proceso-header p {
-    color: $text-muted;
-    font-size: 0.95rem;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-/* $- Momentos $- */
-.momento {
-    position: relative;
-    padding: 3rem 2rem;
-    margin-bottom: 4rem;
-    border-radius: 14px;
-    overflow: hidden;
-    isolation: isolate;
-}
-
-.momento::before {
-    content: '';
+  .proceso-hero-overlay {
     position: absolute;
     inset: 0;
-    background-image: var(--bg-momento);
-    background-size: cover;
-    background-position: center;
-    opacity: 0.06;
-    z-index: -1;
-    transition: opacity 0.6s ease;
-}
+    background: linear-gradient(180deg, rgba(20,35,25,0.82) 0%, rgba(20,35,25,0.92) 100%);
+  }
 
-.momento:hover::before {
-    opacity: 0.12;
-}
-
-.momento-title {
-    font-family: $font-serif;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    font-weight: 400;
-    color: $green-dark;
-    letter-spacing: 0.5px;
-    margin-bottom: 2rem;
-    padding-left: 3rem;
+  .proceso-hero-content {
     position: relative;
-}
+    z-index: 2;
+    max-width: 760px;
 
-.momento-title::before {
-    content: '';
+    .proc-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      font-weight: 700;
+      color: $brown-light;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: $serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.15;
+      margin: 0 0 1.25rem;
+
+      em {
+        font-style: italic;
+        color: $brown-light;
+      }
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+  }
+
+  .proceso-hero-scroll {
     position: absolute;
-    left: 0;
-    top: 50%;
-    width: 2rem;
-    height: 1px;
-    background: $brown-light;
-}
-
-/* $- Grid de etapas $- */
-.etapas-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    position: relative;
-}
-
-/* $- Tarjeta de etapa (base) $- */
-.etapa {
-    position: relative;
-    background: rgba(255, 249, 241, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(138, 103, 78, 0.12);
-    border-radius: 12px;
-    padding: 0;
-    transition: $transition;
-    cursor: default;
-    overflow: hidden;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 
-    .etapa-thumb {
-        width: 100%;
-        height: 180px;
-        overflow: hidden;
-        position: relative;
-        background: #27231F;
+    svg { animation: bounce-down 1.6s ease infinite; }
+  }
+}
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+// ============================================================
+// NAV DE ETAPAS
+// ============================================================
+.proceso-nav {
+  background: $mid-green;
+  padding: 0 1.5rem;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  .proc-nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: max-content;
+  }
+
+  .proc-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    color: rgba(255,255,255,0.55);
+    transition: color 0.2s;
+    white-space: nowrap;
+
+    &:hover { color: $brown-light; }
+
+    .pni-num {
+      font-family: $serif;
+      font-size: 0.95rem;
+      line-height: 1;
+      color: $brown-light;
+      margin-bottom: 0.2rem;
     }
 
-    &:hover .etapa-thumb img {
-        transform: scale(1.08);
+    .pni-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
+  }
 
-    .etapa-content {
-        padding: 1.8rem 1.6rem;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-    }
+  .pni-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    min-width: 20px;
+  }
 }
 
-/* Línea superior que se expande al hover */
-.etapa::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, $green-olive, $brown-light);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s ease;
-    z-index: 2;
+// ============================================================
+// BLOQUES DE MOMENTOS
+// ============================================================
+.proceso-bloque {
+  background: $cream-light;
+  padding: 1px 0;
+
+  &--dark {
+    background: $dark-green;
+  }
 }
 
-.etapa:hover::before {
-    transform: scaleX(1);
-}
+.proc-bloque-label {
+  text-align: center;
+  padding: 3rem 1.5rem 0.5rem;
 
-.etapa:hover {
-    transform: translateY(-6px);
-    background: rgba(255, 249, 241, 1);
-    border-color: rgba(138, 103, 78, 0.2);
-    box-shadow: 0 12px 40px rgba(138, 103, 78, 0.12);
-}
+  span {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: $brown;
+    font-weight: 700;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid rgba(138,103,78,0.3);
+    border-radius: 20px;
+  }
 
-/* Número de etapa */
-.etapa-number {
-    position: absolute;
-    top: 1.2rem;
-    right: 1.5rem;
-    font-family: $font-serif;
-    font-size: 2.8rem;
-    font-weight: 400;
-    line-height: 1;
+  &--light span {
     color: $brown-light;
-    opacity: 0.25;
-    transition: $transition;
-    pointer-events: none;
+    border-color: rgba(197,168,128,0.3);
+  }
 }
 
-.etapa:hover .etapa-number {
-    opacity: 0.6;
-    transform: translateY(-4px);
+// ============================================================
+// ETAPA ROW
+// ============================================================
+.etapa-row {
+  padding: 5rem 0;
+  scroll-margin-top: 80px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+
+  &:last-child { border-bottom: none; }
+
+  &--dark {
+    border-bottom-color: rgba(255,255,255,0.05);
+  }
+
+  &--featured {
+    background: linear-gradient(135deg, #f6f1e8 0%, $cream 100%);
+  }
+
+  .etapa-row-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  &--inv .etapa-row-inner {
+    direction: rtl;
+    > * { direction: ltr; }
+
+    @media (max-width: 900px) {
+      direction: ltr;
+    }
+  }
 }
 
-/* Icono SVG */
-.etapa-icon {
-    width: 42px;
-    height: 42px;
+// ============================================================
+// IMAGEN DE ETAPA
+// ============================================================
+.etapa-imagen {
+  position: relative;
+  border-radius: 14px;
+  overflow: visible;
+
+  img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+    box-shadow: 0 20px 50px rgba(30,45,36,0.2);
+
+    @media (max-width: 600px) { height: 280px; }
+  }
+
+  .etapa-imagen-badge {
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: $mid-green;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.2rem;
-    color: $green-olive;
-    transition: $transition;
-}
-
-.etapa-icon svg {
-    width: 100%;
-    height: 100%;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.etapa:hover .etapa-icon {
-    color: $brown;
-    transform: scale(1.1) rotate(-4deg);
-}
-
-.etapa h4 {
-    font-size: 0.95rem;
+    font-family: $serif;
+    font-size: 1.3rem;
     font-weight: 600;
-    color: $text-dark;
-    margin-bottom: 0.6rem;
-    letter-spacing: 0.3px;
-}
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    z-index: 2;
+  }
 
-.etapa p {
-    font-size: 0.82rem;
-    color: $text-muted;
-    line-height: 1.65;
-}
-
-/* $- Badges (tiempo / temperatura) $- */
-.etapa-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 1rem;
-}
-
-.etapa-badge {
-    font-size: 0.62rem;
+  .etapa-featured-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: $brown;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
-    border-radius: 20px;
-    background: $green-light;
-    color: $green-dark;
-    font-weight: 500;
-    border: 1px solid rgba(102, 116, 95, 0.15);
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+  }
+
+  &--featured img {
+    height: 500px;
+    box-shadow: 0 30px 70px rgba(30,45,36,0.25);
+
+    @media (max-width: 600px) { height: 300px; }
+  }
 }
 
-/* $- Acordeón: info extra que aparece al hover $- */
-.etapa-extra {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.4s ease;
-    margin-top: 0;
-}
-
-.etapa:hover .etapa-extra {
-    max-height: 200px;
-    opacity: 1;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(138, 103, 78, 0.2);
-}
-
-.etapa-extra p {
-    font-size: 0.75rem;
-    font-style: italic;
-    color: $brown;
-    line-height: 1.5;
-}
-
-/* $- Tarjeta destacada (Tostado) $- */
-.etapa--destacada {
-    grid-column: span 2;
-    background: linear-gradient(135deg, $green-dark, #2a3a30);
-    border-color: transparent;
-    color: #fff;
-}
-
-.etapa--destacada::before {
-    background: linear-gradient(90deg, $brown-light, $brown);
-}
-
-.etapa--destacada .etapa-number {
-    color: rgba(255, 255, 255, 0.15);
-}
-
-.etapa--destacada:hover .etapa-number {
-    color: rgba(255, 255, 255, 0.35);
-}
-
-.etapa--destacada .etapa-icon {
-    color: $brown-light;
-}
-
-.etapa--destacada:hover .etapa-icon {
-    color: #fff;
-}
-
-.etapa--destacada h4 {
-    color: #fff;
-    font-size: 1.1rem;
-}
-
-.etapa--destacada p {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.85rem;
-}
-
-.etapa--destacada .etapa-badge {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.85);
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-.etapa--destacada .etapa-extra {
-    border-top-color: rgba(255, 255, 255, 0.2);
-}
-
-.etapa--destacada .etapa-extra p {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-/* $- Fix: hover de tarjeta destacada mantiene fondo oscuro $- */
-.etapa--destacada:hover {
-    background: linear-gradient(135deg, #2a3a30, $green-dark);
-    border-color: transparent;
-    box-shadow: 0 16px 50px rgba(42, 58, 48, 0.35);
-}
-
-.etapa--destacada:hover h4 {
-    color: #fff;
-}
-
-.etapa--destacada:hover p {
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.etapa--destacada:hover .etapa-badge {
-    background: rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* $- Dato curioso $- */
-.proceso-dato {
-    margin: 3rem auto;
-    max-width: 720px;
-    text-align: center;
-    padding: 2.5rem 2rem;
-    background: linear-gradient(135deg, $green-light, $bg-cream);
-    border-radius: 12px;
-    border-left: 3px solid $brown;
-    position: relative;
-}
-
-.proceso-dato-label {
+// ============================================================
+// TEXTO DE ETAPA
+// ============================================================
+.etapa-texto {
+  .etapa-fase {
+    display: block;
     font-size: 0.72rem;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: $brown;
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-}
+    font-weight: 700;
+    margin-bottom: 0.6rem;
 
-.proceso-dato-text {
-    font-family: $font-serif;
-    font-size: 1.15rem;
-    line-height: 1.6;
+    &--light { color: $brown-light; }
+  }
+
+  h2 {
+    font-family: $serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 500;
     color: $text-dark;
+    margin: 0 0 1.25rem;
+    line-height: 1.1;
+  }
+
+  .etapa-lead {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: $text-muted;
+    margin: 0 0 2rem;
+  }
+
+  &--light {
+    h2 { color: #fff; }
+    .etapa-lead { color: rgba(255,255,255,0.65); }
+  }
 }
 
-.proceso-dato-text strong {
-    color: $green-dark;
-    font-weight: 600;
+// ============================================================
+// DATA ITEMS (estadísticas)
+// ============================================================
+.etapa-data {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+
+  .edata-item {
+    padding: 0.9rem 1rem;
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.06);
+
+    strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: $mid-green;
+      margin-bottom: 0.2rem;
+      line-height: 1.2;
+    }
+
+    span {
+      font-size: 0.75rem;
+      color: $text-muted;
+    }
+  }
+
+  &--light .edata-item {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+
+    strong { color: $brown-light; }
+    span { color: rgba(255,255,255,0.5); }
+  }
 }
 
-/* $- Responsive de Proceso $- */
-@media (max-width: 992px) {
-    .etapas-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+// ============================================================
+// CITA
+// ============================================================
+.etapa-quote {
+  font-family: $serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: $brown;
+  margin: 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid $brown-light;
 
-    .etapa--destacada {
-        grid-column: span 2;
-    }
+  &--light {
+    color: rgba(255,255,255,0.65);
+    border-left-color: rgba(197,168,128,0.5);
+  }
 }
 
-@media (max-width: 600px) {
-    .etapas-grid {
-        grid-template-columns: 1fr;
+// ============================================================
+// DATO STRIP
+// ============================================================
+.proceso-dato-strip {
+  background: #EDE7DA;
+  border-top: 1px solid #DDD5C5;
+  border-bottom: 1px solid #DDD5C5;
+  padding: 2rem 1.5rem;
+  text-align: center;
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: $text-muted;
+    margin: 0;
+    max-width: 700px;
+    margin: 0 auto;
+
+    strong {
+      color: $mid-green;
+      font-weight: 700;
+    }
+  }
+}
+
+// ============================================================
+// CTA FINAL
+// ============================================================
+.proceso-cta {
+  padding: 5rem 0 7rem;
+  background: $cream-light;
+
+  .proc-cta-card {
+    background: $mid-green;
+    border-radius: 16px;
+    padding: 4rem 3rem;
+    text-align: center;
+    color: #fff;
+
+    @media (max-width: 600px) { padding: 3rem 1.5rem; }
+
+    .proc-cta-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: $brown-light;
+      font-weight: 700;
+      margin-bottom: 1rem;
     }
 
-    .etapa--destacada {
-        grid-column: span 1;
+    h2 {
+      font-family: $serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 500;
+      color: #fff;
+      margin: 0 0 1rem;
+      line-height: 1.25;
     }
 
-    .momento {
-        padding: 2rem 1rem;
+    p {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
     }
 
-    .etapa-number {
-        font-size: 2.2rem;
+    .proc-cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    .etapa-extra {
-        max-height: none;
-        opacity: 1;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px dashed rgba(138, 103, 78, 0.2);
+    .proc-btn-primary {
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      background: $brown;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+
+      &:hover { background: #73543D; }
     }
+
+    .proc-btn-secondary {
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.3);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255,255,255,0.08);
+        border-color: rgba(255,255,255,0.5);
+      }
+    }
+  }
 }

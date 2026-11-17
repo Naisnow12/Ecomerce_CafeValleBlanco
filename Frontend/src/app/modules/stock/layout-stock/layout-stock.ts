@@ -18,6 +18,7 @@ export class LayoutStock {
   private readonly router = inject(Router);
 
   currentUser = this.authService.currentUser;
+  isAdmin = this.authService.isAdmin;
   sidebarOpen = signal(false);
   userMenuOpen = signal(false);
 
@@ -35,6 +36,11 @@ export class LayoutStock {
 
   closeUserMenu(): void {
     this.userMenuOpen.set(false);
+  }
+
+  volverAdmin(): void {
+    this.closeSidebar();
+    this.router.navigate(['/admin/dashboard']);
   }
 
   volverTienda(): void {
