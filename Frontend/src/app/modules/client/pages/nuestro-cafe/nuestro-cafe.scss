@@ -4,6 +4,569 @@
   background-color: #F8F6F2;
 }
 
+/* ============================================================
+   ORIGEN: VILLA RICA
+============================================================ */
+.nc-origin {
+  padding: 5.5rem 0;
+  background: #faf8f4;
+  border-bottom: 1px solid #E5DEC9;
+
+  .origin-wrapper {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 4rem;
+    align-items: center;
+
+    @media (max-width: 991px) {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  .origin-image-col {
+    .origin-img-frame {
+      position: relative;
+      border-radius: 14px;
+      overflow: visible;
+
+      img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 14px;
+        display: block;
+        box-shadow: 0 20px 50px rgba(36, 51, 42, 0.18);
+      }
+
+      .origin-img-badge {
+        position: absolute;
+        bottom: -1.25rem;
+        right: -1.25rem;
+        background: #33463A;
+        color: #F3EEE4;
+        border-radius: 10px;
+        padding: 1rem 1.4rem;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+        .oib-num {
+          display: block;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #C5A880;
+          line-height: 1.1;
+        }
+
+        .oib-label {
+          display: block;
+          font-size: 0.75rem;
+          letter-spacing: 1px;
+          color: #BFB7AA;
+          margin-top: 0.2rem;
+        }
+      }
+    }
+  }
+
+  .origin-content-col {
+    .section-tag {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: #8A674E;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: #24332A;
+      margin: 0 0 1.25rem;
+      line-height: 1.25;
+
+      em {
+        font-style: italic;
+        color: #8A674E;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 1.9rem;
+      }
+    }
+
+    .origin-lead {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: #555;
+      margin: 0 0 2.5rem;
+    }
+
+    .origin-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+
+      @media (max-width: 600px) {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .ostat {
+        padding: 1.1rem 1rem;
+        background: #fff;
+        border: 1px solid #EBE5D8;
+        border-radius: 10px;
+        text-align: center;
+
+        strong {
+          display: block;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.3rem;
+          color: #33463A;
+          margin-bottom: 0.3rem;
+        }
+
+        span {
+          font-size: 0.78rem;
+          color: #888;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+}
+
+/* ============================================================
+   TERRITORIO: CONDICIONES NATURALES
+============================================================ */
+.nc-territory {
+  padding: 5.5rem 0;
+  background: #24332A;
+
+  .section-heading-left {
+    max-width: 640px;
+    margin-bottom: 3.5rem;
+
+    .section-tag {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: #C5A880;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: #F3EEE4;
+      margin: 0 0 0.75rem;
+      line-height: 1.25;
+
+      @media (max-width: 768px) {
+        font-size: 1.75rem;
+      }
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: #AAA49C;
+      margin: 0;
+    }
+  }
+
+  .territory-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+
+    @media (max-width: 991px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .territory-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem 1.75rem;
+    transition: background 0.2s, transform 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.09);
+      transform: translateY(-3px);
+    }
+
+    .tc-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      background: rgba(197, 168, 128, 0.15);
+      color: #C5A880;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: #F3EEE4;
+      margin: 0 0 0.6rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #AAA49C;
+      margin: 0;
+    }
+  }
+}
+
+/* ============================================================
+   PARALLAX BAND: PAISAJE OXAPAMPA
+============================================================ */
+.nc-parallax-band {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+    display: block;
+  }
+
+  .npb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 35, 25, 0.5) 0%, rgba(20, 35, 25, 0.75) 100%);
+    display: flex;
+    align-items: center;
+
+    .npb-quote {
+      max-width: 680px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #F3EEE4;
+      line-height: 1.55;
+      margin: 0;
+      padding-left: 1.5rem;
+      border-left: 3px solid #C5A880;
+
+      cite {
+        display: block;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        font-style: normal;
+        color: #C5A880;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 1.15rem;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    height: 280px;
+  }
+}
+
+/* ============================================================
+   TERRITORY CARDS WITH IMAGE
+============================================================ */
+.territory-card.tc-with-image {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .tc-image-wrap {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  .tc-body {
+    padding: 1.5rem 1.75rem;
+    flex: 1;
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #F3EEE4;
+      margin: 0 0 0.6rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #AAA49C;
+      margin: 0;
+    }
+  }
+}
+
+/* ============================================================
+   VARIEDADES HERO + SECTION
+============================================================ */
+.nc-varieties {
+  padding: 0 0 5.5rem;
+  background: #F3EEE4;
+  border-bottom: 1px solid #E5DEC9;
+
+  .nc-varieties-hero {
+    position: relative;
+    height: 340px;
+    overflow: hidden;
+    margin-bottom: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .nvh-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(30, 45, 35, 0.3) 0%, rgba(20, 35, 25, 0.82) 100%);
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 2.5rem;
+
+      .section-tag-light {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: #C5A880;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.6rem;
+      }
+
+      h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.4rem;
+        color: #fff;
+        margin: 0;
+        line-height: 1.2;
+
+        @media (max-width: 768px) {
+          font-size: 1.75rem;
+        }
+      }
+    }
+
+    @media (max-width: 600px) {
+      height: 240px;
+    }
+  }
+
+  .varieties-intro {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #555;
+    max-width: 760px;
+    margin: 2.5rem 0 3rem;
+  }
+
+  .section-heading {
+    display: none; // replaced by nc-varieties-hero
+  }
+
+  .varieties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+
+    @media (max-width: 991px) {
+      grid-template-columns: 1fr;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  }
+
+  .variety-card {
+    background: #fff;
+    border: 1px solid #EBE5D8;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+      transform: translateY(-4px);
+    }
+
+    &.variety-featured {
+      border-color: #C5A880;
+      box-shadow: 0 4px 20px rgba(138, 103, 78, 0.12);
+    }
+
+    .variety-header {
+      padding: 1.5rem 1.75rem 1.25rem;
+      border-bottom: 1px solid #F0EAE0;
+
+      .variety-tag {
+        font-size: 0.72rem;
+        letter-spacing: 1.5px;
+        color: #8A674E;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.4rem;
+      }
+
+      h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        color: #24332A;
+        margin: 0;
+      }
+    }
+
+    .variety-body {
+      padding: 1.5rem 1.75rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+
+      .variety-desc {
+        font-size: 0.9rem;
+        line-height: 1.65;
+        color: #555;
+        margin: 0;
+      }
+
+      .variety-attributes {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+
+        .va-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+
+          .va-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #666;
+            min-width: 52px;
+          }
+
+          .va-bar {
+            flex: 1;
+            height: 5px;
+            background: #EBE5D8;
+            border-radius: 10px;
+            overflow: hidden;
+
+            .va-fill {
+              height: 100%;
+              background: linear-gradient(90deg, #8A674E, #C5A880);
+              border-radius: 10px;
+            }
+          }
+        }
+      }
+
+      .variety-notes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: auto;
+
+        span {
+          background: #F4EFE6;
+          color: #5C4B3C;
+          padding: 0.25rem 0.65rem;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+/* ============================================================
+   DATA STRIP
+============================================================ */
+.nc-data-strip {
+  background: #8A674E;
+  padding: 2.75rem 0;
+
+  .data-strip-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 450px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .ds-item {
+    strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    span {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.4;
+    }
+  }
+}
+
+
+
 .nc-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -13,7 +576,7 @@
 /* HERO */
 .nc-hero {
   position: relative;
-  background: url('/assets/images/Valle-Rica-Oxapampa.png') center/cover no-repeat;
+  background: url('/assets/images/nc-hero-nuestrocafe.jpg') center/cover no-repeat;
   padding: 6.5rem 1.5rem 5.5rem;
   text-align: center;
   color: #fff;
@@ -361,7 +924,14 @@
     align-items: flex-start;
 
     .benefit-bullet {
-      font-size: 1.75rem;
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      background: #F4EFE6;
+      color: #8A674E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
