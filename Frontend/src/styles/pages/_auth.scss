@@ -1,0 +1,274 @@
+// ==========================================
+// CAFETERÍA VALLE BLANCO
+// LOGIN Y REGISTRO
+// ==========================================
+
+.auth-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 42px 20px 70px;
+    background:
+        radial-gradient(circle at 10% 0%, #e9e5d9 0%, transparent 38%),
+        #f6f2e9;
+    color: #302c25;
+}
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-logo-link {
+    text-decoration: none;
+}
+
+.auth-brand-name {
+    display: block;
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: clamp(27px, 4vw, 38px);
+    color: #304e3a;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.auth-brand-sub {
+    margin: 10px 0 0;
+    color: #8b7761;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.auth-content {
+    width: 100%;
+    max-width: 570px;
+}
+
+.auth-card {
+    width: 100%;
+    background: #fffdf9;
+    padding: 42px;
+    border: 1px solid #e9e1d5;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(55, 42, 26, 0.08);
+}
+
+.auth-card-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-title {
+    margin: 0 0 10px;
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: clamp(27px, 4vw, 34px);
+    font-weight: 500;
+    color: #304e3a;
+}
+
+.auth-subtitle {
+    margin: 0;
+    color: #8b7761;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+.auth-form .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.auth-form .form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.auth-form .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #493e32;
+}
+
+.auth-form .optional {
+    color: #9a8b79;
+    font-weight: 400;
+}
+
+.auth-form .form-control {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #d9d0c3;
+    border-radius: 8px;
+    background: #fff;
+    color: #302c25;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.auth-form .form-control::placeholder {
+    color: #a79e94;
+}
+
+.auth-form .form-control:focus {
+    outline: none;
+    border-color: #587759;
+    box-shadow: 0 0 0 3px rgba(88, 119, 89, .13);
+}
+
+.auth-form .has-error .form-control {
+    border-color: #b84949;
+}
+
+.auth-form .has-error .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(184, 73, 73, .12);
+}
+
+.auth-form .form-error {
+    display: block;
+    margin-top: 6px;
+    color: #b84949;
+    font-size: 12px;
+}
+
+.auth-form .input-password-wrapper {
+    position: relative;
+}
+
+.auth-form .input-password-wrapper .form-control {
+    padding-right: 48px;
+}
+
+.auth-form .toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #756b60;
+    cursor: pointer;
+}
+
+.auth-form .toggle-password:hover {
+    color: #304e3a;
+}
+
+.auth-form .btn-auth {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 8px;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: #385b41;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+.auth-form .btn-auth:hover:not(:disabled) {
+    background: #294831;
+    transform: translateY(-1px);
+}
+
+.auth-form .btn-auth:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.auth-link-text {
+    margin: 24px 0 0;
+    text-align: center;
+    color: #766a5d;
+    font-size: 14px;
+}
+
+.auth-link {
+    color: #385b41;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.auth-link:hover {
+    color: #243d2b;
+}
+
+.auth-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 22px;
+    border: 1px solid #e9baba;
+    border-radius: 8px;
+    background: #fff1f1;
+    color: #a33b3b;
+    font-size: 13px;
+}
+
+.auth-error svg {
+    flex-shrink: 0;
+}
+
+.spinner-inline {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 8px;
+    border: 2px solid rgba(255, 255, 255, .4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: auth-spin .7s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes auth-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-layout {
+        padding: 28px 16px 45px;
+    }
+
+    .auth-brand {
+        margin-bottom: 24px;
+    }
+
+    .auth-card {
+        padding: 28px 22px;
+        border-radius: 12px;
+    }
+
+    .auth-form .form-row {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,416 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Panel de Control de Inventario & Almacén</h1>
+      <p class="page-subtitle">Supervisión en tiempo real de existencias, salidas por ventas y abastecimiento</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-primary" (click)="abrirModalMovimiento()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Registrar Entrada / Salida
+      </button>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando información del inventario...</p>
+    </div>
+  } @else {
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">Variedades Registradas</span>
+        <span class="kpi-value">{{ stats().totalProductos }}</span>
+        <span class="kpi-hint">Productos en catálogo</span>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-label">Stock Físico Total</span>
+        <span class="kpi-value">{{ stats().totalExistencias }}</span>
+        <span class="kpi-hint">Unidades en almacén</span>
+      </div>
+
+      <div class="kpi-card" [class.alert]="stats().stockBajo > 0">
+        <span class="kpi-label">Stock en Nivel Crítico</span>
+        <span class="kpi-value">{{ stats().stockBajo }}</span>
+        <span class="kpi-hint">Por debajo del mínimo</span>
+      </div>
+
+      <div class="kpi-card" [class.danger]="stats().agotados > 0">
+        <span class="kpi-label">Agotados</span>
+        <span class="kpi-value">{{ stats().agotados }}</span>
+        <span class="kpi-hint">Sin existencias (0 uds)</span>
+      </div>
+
+      <div class="kpi-card success">
+        <span class="kpi-label">Total Entradas</span>
+        <span class="kpi-value">+{{ stats().totalEntradas }}</span>
+        <span class="kpi-hint">Abastecimientos</span>
+      </div>
+
+      <div class="kpi-card danger">
+        <span class="kpi-label">Salidas por Ventas</span>
+        <span class="kpi-value">-{{ stats().totalSalidas }}</span>
+        <span class="kpi-hint">Despachadas en pedidos</span>
+      </div>
+    </div>
+
+    <!-- Pestañas de Navegación del Almacén -->
+    <div class="stock-tabs">
+      <button type="button" class="tab-pill" [class.active]="tabActiva() === 'RESUMEN'" (click)="setTab('RESUMEN')">
+        Vista General
+      </button>
+      <button type="button" class="tab-pill" [class.active]="tabActiva() === 'PRODUCTOS'" (click)="setTab('PRODUCTOS')">
+        Inventario por Producto ({{ productos().length }})
+      </button>
+      <button type="button" class="tab-pill" [class.active]="tabActiva() === 'MOVIMIENTOS'" (click)="setTab('MOVIMIENTOS')">
+        Historial de Movimientos ({{ movimientos().length }})
+      </button>
+      <button type="button" class="tab-pill" [class.active]="tabActiva() === 'ALERTAS'" (click)="setTab('ALERTAS')">
+        Alertas y Mínimos ({{ alertas().length }})
+      </button>
+    </div>
+
+    <!-- TAB 1: VISTA GENERAL -->
+    @if (tabActiva() === 'RESUMEN') {
+      <div class="content-grid">
+        <!-- Últimos Movimientos -->
+        <div class="card movimientos-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Últimos Movimientos de Stock</h2>
+              <p class="card-subtitle">Ventas de clientes, ingresos de lote y ajustes manuales</p>
+            </div>
+            <button type="button" class="btn-sm btn-outline" (click)="setTab('MOVIMIENTOS')">Ver todos</button>
+          </div>
+          <div class="card-body">
+            @if (movimientos().length === 0) {
+              <p class="empty-text">No se han registrado movimientos todavía. Realiza una compra o un movimiento para visualizarlo.</p>
+            } @else {
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha / Hora</th>
+                      <th>Tipo</th>
+                      <th>Producto</th>
+                      <th>Cantidad</th>
+                      <th>Stock Anterior &rarr; Resultante</th>
+                      <th>Motivo / Referencia</th>
+                      <th>Usuario</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (m of movimientos().slice(0, 8); track m.id) {
+                      <tr>
+                        <td>{{ m.creadoEn | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>
+                          <span class="tag" [class.tag-entrada]="m.tipo === 'ENTRADA'" [class.tag-salida]="m.tipo === 'SALIDA'" [class.tag-ajuste]="m.tipo === 'AJUSTE'">
+                            {{ m.tipo }}
+                          </span>
+                        </td>
+                        <td class="font-bold">{{ m.producto.nombre }} {{ m.producto.nombreSecundario }}</td>
+                        <td class="font-bold" [style.color]="m.tipo === 'SALIDA' ? '#c0392b' : '#27ae60'">
+                          {{ m.tipo === 'SALIDA' ? '-' : '+' }}{{ m.cantidad }}
+                        </td>
+                        <td>{{ m.stockAnterior }} &rarr; <strong>{{ m.stockNuevo }}</strong></td>
+                        <td>{{ m.motivo || 'Sin motivo' }}</td>
+                        <td class="text-muted">{{ m.emailUsuario }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Alertas de Stock Crítico -->
+        <div class="card alertas-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Productos en Alerta de Stock</h2>
+              <p class="card-subtitle">Requieren reposición inmediata</p>
+            </div>
+            <span class="badge badge-warning">{{ alertas().length }} productos</span>
+          </div>
+          <div class="card-body">
+            @if (alertas().length === 0) {
+              <p class="empty-text">Excelente: todas las existencias están por encima del nivel mínimo de alerta.</p>
+            } @else {
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Stock Actual</th>
+                      <th>Mínimo</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (p of alertas(); track p.id) {
+                      <tr>
+                        <td class="font-bold">{{ p.nombre }} {{ p.nombreSecundario }}</td>
+                        <td>
+                          <span class="stock-badge" [class.stock-zero]="p.stock === 0" [class.stock-low]="p.stock > 0">
+                            {{ p.stock }} unidades
+                          </span>
+                        </td>
+                        <td>{{ p.nivelMinimoStock || 10 }} uds</td>
+                        <td>
+                          <button type="button" class="btn-sm btn-outline" (click)="abrirModalMovimiento(p.id)">
+                            + Abastecer
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 2: INVENTARIO POR PRODUCTO -->
+    @if (tabActiva() === 'PRODUCTOS') {
+      <div class="card">
+        <div class="card-header flex-header">
+          <div>
+            <h2 class="card-title">Existencias Detalladas por Presentación</h2>
+            <p class="card-subtitle">Control de stock de cada café de Valle Blanco</p>
+          </div>
+          <div class="search-input-wrap">
+            <input type="text" [ngModel]="busquedaProducto()" (ngModelChange)="busquedaProducto.set($event)" placeholder="Buscar producto, molienda o tipo..." class="form-control-sm" />
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Producto</th>
+                  <th>Molienda</th>
+                  <th>Tueste</th>
+                  <th>Stock Actual</th>
+                  <th>Mínimo Alerta</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of productosFiltrados(); track p.id) {
+                  <tr>
+                    <td>#{{ p.id }}</td>
+                    <td class="font-bold">{{ p.nombre }} <span class="text-muted">{{ p.nombreSecundario }}</span></td>
+                    <td>{{ p.molienda }}</td>
+                    <td>{{ p.tueste }}</td>
+                    <td class="font-bold">{{ p.stock }} uds</td>
+                    <td>{{ p.nivelMinimoStock || 10 }} uds</td>
+                    <td>
+                      @if (p.stock === 0) {
+                        <span class="stock-badge stock-zero">Agotado</span>
+                      } @else if (p.stock <= (p.nivelMinimoStock || 10)) {
+                        <span class="stock-badge stock-low">Stock Bajo</span>
+                      } @else {
+                        <span class="tag tag-entrada">Disponible</span>
+                      }
+                    </td>
+                    <td>
+                      <div class="action-buttons">
+                        <button type="button" class="btn-sm btn-outline" (click)="abrirModalMovimiento(p.id)">
+                          Registrar Movimiento
+                        </button>
+                        <button type="button" class="btn-sm btn-ghost" (click)="abrirModalNivel(p)">
+                          Ajustar Mínimo
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 3: HISTORIAL DE MOVIMIENTOS COMPLETO -->
+    @if (tabActiva() === 'MOVIMIENTOS') {
+      <div class="card">
+        <div class="card-header flex-header">
+          <div>
+            <h2 class="card-title">Auditoría Completa de Movimientos</h2>
+            <p class="card-subtitle">Historial de entradas, salidas y ajustes manuales</p>
+          </div>
+          <div class="filter-select-wrap">
+            <select [ngModel]="filtroTipoMovimiento()" (ngModelChange)="filtroTipoMovimiento.set($event)" class="form-control-sm">
+              <option value="TODOS">Todos los tipos</option>
+              <option value="SALIDA">Solo Salidas (Ventas / Bajas)</option>
+              <option value="ENTRADA">Solo Entradas (Lotes recibidos)</option>
+              <option value="AJUSTE">Solo Ajustes manuales</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th>Tipo</th>
+                  <th>Producto</th>
+                  <th>Variación</th>
+                  <th>Stock Antes / Después</th>
+                  <th>Motivo / Comprobante</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of movimientosFiltrados(); track m.id) {
+                  <tr>
+                    <td>{{ m.creadoEn | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>
+                      <span class="tag" [class.tag-entrada]="m.tipo === 'ENTRADA'" [class.tag-salida]="m.tipo === 'SALIDA'" [class.tag-ajuste]="m.tipo === 'AJUSTE'">
+                        {{ m.tipo }}
+                      </span>
+                    </td>
+                    <td class="font-bold">{{ m.producto.nombre }} {{ m.producto.nombreSecundario }}</td>
+                    <td class="font-bold" [style.color]="m.tipo === 'SALIDA' ? '#c0392b' : '#27ae60'">
+                      {{ m.tipo === 'SALIDA' ? '-' : '+' }}{{ m.cantidad }}
+                    </td>
+                    <td>{{ m.stockAnterior }} &rarr; <strong>{{ m.stockNuevo }}</strong></td>
+                    <td>{{ m.motivo || 'Sin motivo registrado' }}</td>
+                    <td class="text-muted">{{ m.emailUsuario }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 4: ALERTAS Y NIVELES MÍNIMOS -->
+    @if (tabActiva() === 'ALERTAS') {
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Gestión de Niveles Mínimos y Políticas de Reabastecimiento</h2>
+            <p class="card-subtitle">Configura el umbral de alerta individual para cada café</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Stock Actual</th>
+                  <th>Nivel Mínimo Configurado</th>
+                  <th>Estado del Umbral</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of productos(); track p.id) {
+                  <tr>
+                    <td class="font-bold">{{ p.nombre }} {{ p.nombreSecundario }}</td>
+                    <td>{{ p.stock }} unidades</td>
+                    <td><strong>{{ p.nivelMinimoStock || 10 }}</strong> unidades</td>
+                    <td>
+                      @if (p.stock <= (p.nivelMinimoStock || 10)) {
+                        <span class="stock-badge stock-low">⚠️ Requiere Abastecer</span>
+                      } @else {
+                        <span class="tag tag-entrada">Nivel Óptimo</span>
+                      }
+                    </td>
+                    <td>
+                      <button type="button" class="btn-sm btn-outline" (click)="abrirModalNivel(p)">
+                        Modificar Umbral Mínimo
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  <!-- Modal Registrar Movimiento -->
+  @if (mostrarModalMovimiento()) {
+    <div class="modal-backdrop" (click)="cerrarModalMovimiento()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Registrar Movimiento de Inventario</h3>
+          <button type="button" class="btn-close" (click)="cerrarModalMovimiento()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Seleccionar Producto</label>
+            <select [(ngModel)]="movimientoForm.productoId" class="form-control">
+              @for (prod of productos(); track prod.id) {
+                <option [value]="prod.id">{{ prod.nombre }} {{ prod.nombreSecundario }} (Stock: {{ prod.stock }})</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de Operación</label>
+            <select [(ngModel)]="movimientoForm.tipo" class="form-control">
+              <option value="ENTRADA">ENTRADA (+ Ingreso de lote tostado)</option>
+              <option value="SALIDA">SALIDA (- Despacho o merma)</option>
+              <option value="AJUSTE">AJUSTE (= Establecer conteo físico exacto)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cantidad de Unidades</label>
+            <input type="number" [(ngModel)]="movimientoForm.cantidad" min="1" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Motivo o Referencia</label>
+            <input type="text" [(ngModel)]="movimientoForm.motivo" placeholder="Ej: Recepción lote semanal, descarte de paquete..." class="form-control" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModalMovimiento()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarMovimiento()">Confirmar Movimiento</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Ajustar Nivel Mínimo -->
+  @if (mostrarModalNivel()) {
+    <div class="modal-backdrop" (click)="cerrarModalNivel()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Configurar Nivel Mínimo de Alerta</h3>
+          <button type="button" class="btn-close" (click)="cerrarModalNivel()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Producto: <strong>{{ productoSeleccionadoParaNivel?.nombre }} {{ productoSeleccionadoParaNivel?.nombreSecundario }}</strong></p>
+          <div class="form-group">
+            <label>Cantidad Mínima para Notificar Alerta</label>
+            <input type="number" [(ngModel)]="nuevoNivelMinimo" min="1" class="form-control" />
+            <small class="text-muted">Si las existencias bajan de este número, aparecerá en rojo en las alertas de compra.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModalNivel()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarNivelMinimo()">Guardar Configuración</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
