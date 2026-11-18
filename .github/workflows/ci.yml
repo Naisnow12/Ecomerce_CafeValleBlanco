@@ -1,0 +1,67 @@
+name: CI - Integración Continua
+
+on:
+  push:
+    branches: [ "main", "dev", "new_dev" ]
+  pull_request:
+    branches: [ "main", "dev", "new_dev" ]
+
+jobs:
+  # ==========================================
+  # Job 1: Build y Validación del Frontend
+  # ==========================================
+  frontend-ci:
+    name: Build & Validación Frontend (Angular)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Frontend
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Configurar entorno Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: Frontend/pnpm-lock.yaml
+
+      - name: Instalar dependencias con pnpm
+        run: pnpm install --frozen-lockfile --dangerously-allow-all-builds
+
+      - name: Compilar Frontend (Angular ng build)
+        run: pnpm run build
+
+  # ==========================================
+  # Job 2: Build y Validación del Backend
+  # ==========================================
+  backend-ci:
+    name: Build & Validación Backend (Spring Boot / Java 21)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Backend
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Eclipse Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Conceder permisos de ejecución al Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Compilar y empaquetar Backend (Maven Package)
+        run: ./mvnw clean package -DskipTests
