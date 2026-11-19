@@ -1,1 +1,1 @@
-style: refine admin aesthetics - typography, copper accents, SVG icons
+feat: reportes independientes de ventas, productos, pedidos y clientes con descarga PDF individual
