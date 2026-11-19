@@ -74,10 +74,11 @@ public class AdminService {
                 .toList();
 
         // Últimos 5 pedidos
+        Map<Long, String> productImages = obtenerMapaImagenesProductos();
         List<PedidoResponse> ultimosPedidos = pedidos.stream()
                 .sorted((a, b) -> b.getCreadoEn().compareTo(a.getCreadoEn()))
                 .limit(5)
-                .map(this::toPedidoResponse)
+                .map(p -> toPedidoResponse(p, productImages))
                 .toList();
 
         return Map.of(
@@ -94,17 +95,33 @@ public class AdminService {
 
     // --- Gestión de Usuarios ---
     public List<Map<String, Object>> listarUsuarios() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        Map<Long, Long> pedidosPorUsuario = pedidos.stream()
+                .filter(p -> p.getUsuario() != null)
+                .collect(Collectors.groupingBy(p -> p.getUsuario().getId(), Collectors.counting()));
+
+        Map<Long, BigDecimal> comprasPorUsuario = pedidos.stream()
+                .filter(p -> p.getUsuario() != null && !"CANCELADO".equalsIgnoreCase(p.getEstado()))
+                .collect(Collectors.groupingBy(
+                        p -> p.getUsuario().getId(),
+                        Collectors.reducing(BigDecimal.ZERO, Pedido::getTotal, BigDecimal::add)
+                ));
+
         return usuarioRepository.findAll().stream()
-                .map(u -> Map.<String, Object>of(
-                        "id", u.getId(),
-                        "nombres", u.getNombres(),
-                        "apellidos", u.getApellidos(),
-                        "email", u.getEmail(),
-                        "telefono", u.getTelefono() != null ? u.getTelefono() : "",
-                        "activo", u.getActivo(),
-                        "roles", u.getRoles().stream().map(Role::getNombre).toList(),
-                        "creadoEn", u.getCreadoEn()
-                ))
+                .map(u -> {
+                    Map<String, Object> map = new LinkedHashMap<>();
+                    map.put("id", u.getId());
+                    map.put("nombres", u.getNombres());
+                    map.put("apellidos", u.getApellidos());
+                    map.put("email", u.getEmail());
+                    map.put("telefono", u.getTelefono() != null ? u.getTelefono() : "");
+                    map.put("activo", u.getActivo());
+                    map.put("roles", u.getRoles().stream().map(Role::getNombre).toList());
+                    map.put("creadoEn", u.getCreadoEn());
+                    map.put("totalPedidos", pedidosPorUsuario.getOrDefault(u.getId(), 0L));
+                    map.put("totalGastado", comprasPorUsuario.getOrDefault(u.getId(), BigDecimal.ZERO));
+                    return map;
+                })
                 .toList();
     }
 
@@ -161,9 +178,10 @@ public class AdminService {
 
     // --- Gestión de Pedidos ---
     public List<PedidoResponse> listarTodosLosPedidos() {
+        Map<Long, String> productImages = obtenerMapaImagenesProductos();
         return pedidoRepository.findAll().stream()
                 .sorted((a, b) -> b.getCreadoEn().compareTo(a.getCreadoEn()))
-                .map(this::toPedidoResponse)
+                .map(p -> toPedidoResponse(p, productImages))
                 .toList();
     }
 
@@ -190,7 +208,16 @@ public class AdminService {
         return toPedidoResponse(saved);
     }
 
+    private Map<Long, String> obtenerMapaImagenesProductos() {
+        return productRepository.findAll().stream()
+                .collect(Collectors.toMap(Product::getId, Product::getImagenUrl, (a, b) -> a));
+    }
+
     private PedidoResponse toPedidoResponse(Pedido pedido) {
+        return toPedidoResponse(pedido, obtenerMapaImagenesProductos());
+    }
+
+    private PedidoResponse toPedidoResponse(Pedido pedido, Map<Long, String> productImages) {
         List<PedidoItemResponse> items = pedido.getItems().stream()
                 .map(item -> PedidoItemResponse.builder()
                         .productoId(item.getProductoId())
@@ -200,8 +227,14 @@ public class AdminService {
                         .precioUnitario(item.getPrecioUnitario())
                         .cantidad(item.getCantidad())
                         .subtotal(item.getSubtotal())
+                        .imagenUrl(productImages.get(item.getProductoId()))
                         .build())
                 .toList();
+
+        String clienteEmail = pedido.getUsuario() != null ? pedido.getUsuario().getEmail() : null;
+        String clienteNombre = pedido.getUsuario() != null
+                ? pedido.getUsuario().getNombres() + " " + pedido.getUsuario().getApellidos()
+                : pedido.getDirDestinatario();
 
         return PedidoResponse.builder()
                 .id(pedido.getId())
@@ -221,6 +254,8 @@ public class AdminService {
                 .dirDepartamento(pedido.getDirDepartamento())
                 .dirDestinatario(pedido.getDirDestinatario())
                 .dirTelefono(pedido.getDirTelefono())
+                .clienteEmail(clienteEmail)
+                .clienteNombre(clienteNombre)
                 .build();
     }
 

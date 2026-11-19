@@ -85,8 +85,8 @@ export class PedidosAdmin implements OnInit {
         this.pedidos.set(data.map(p => ({
           id: p.id,
           numeroPedido: p.numeroPedido,
-          clienteNombre: p.dirDestinatario || 'Cliente',
-          clienteEmail: p.dirTelefono ? `Tel: ${p.dirTelefono}` : 'Registrado',
+          clienteNombre: p.clienteNombre || p.dirDestinatario || 'Cliente',
+          clienteEmail: p.clienteEmail || (p.dirTelefono ? `Tel: ${p.dirTelefono}` : 'Registrado'),
           estado: p.estado as EstadoPedido,
           items: p.items || [],
           subtotal: p.subtotal,

@@ -19,4 +19,5 @@ public class PedidoItemResponse {
     private BigDecimal precioUnitario;
     private Integer cantidad;
     private BigDecimal subtotal;
+    private String imagenUrl;
 }

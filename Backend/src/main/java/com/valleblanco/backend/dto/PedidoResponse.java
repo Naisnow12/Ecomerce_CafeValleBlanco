@@ -32,4 +32,6 @@ public class PedidoResponse {
     private String dirDepartamento;
     private String dirDestinatario;
     private String dirTelefono;
+    private String clienteEmail;
+    private String clienteNombre;
 }

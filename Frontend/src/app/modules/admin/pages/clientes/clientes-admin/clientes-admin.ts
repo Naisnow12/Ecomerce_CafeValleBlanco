@@ -7,7 +7,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../../../core/services/admin.service';
 
@@ -29,7 +29,8 @@ interface ClienteAdmin {
   standalone: true,
   imports: [
     FormsModule,
-    DatePipe
+    DatePipe,
+    DecimalPipe
   ],
   templateUrl: './clientes-admin.html',
   styleUrl: './clientes-admin.scss',
@@ -76,8 +77,8 @@ export class ClientesAdmin implements OnInit {
           activo: u.activo,
           creadoEn: u.creadoEn,
           roles: u.roles,
-          totalPedidos: 0,
-          totalGastado: 0
+          totalPedidos: Number(u.totalPedidos ?? 0),
+          totalGastado: Number(u.totalGastado ?? 0)
         })));
         this.datosDisponibles.set(true);
         this.cargando.set(false);
