@@ -20,6 +20,7 @@ import { ProductosAdmin } from './modules/admin/pages/productos/productos-admin/
 import { PedidosAdmin } from './modules/admin/pages/pedidos/pedidos-admin/pedidos-admin';
 import { ClientesAdmin } from './modules/admin/pages/clientes/clientes-admin/clientes-admin';
 import { Configuracion } from './modules/admin/pages/configuracion/configuracion';
+import { ReportesAdmin } from './modules/admin/pages/reportes/reportes';
 import { StockDashboard } from './modules/stock/pages/dashboard/stock-dashboard';
 
 export const routes: Routes = [
@@ -59,6 +60,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
+      { path: 'reportes', component: ReportesAdmin },
       { path: 'productos', component: ProductosAdmin },
       { path: 'pedidos', component: PedidosAdmin },
       { path: 'clientes', component: ClientesAdmin },

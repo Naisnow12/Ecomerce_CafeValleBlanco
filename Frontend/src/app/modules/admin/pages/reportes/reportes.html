@@ -1,0 +1,398 @@
+<div class="reportes-page">
+
+    <!-- ENCABEZADO DE PÁGINA (PANTALLA) -->
+    <header class="reportes-header no-print">
+        <div class="reportes-header__title">
+            <span class="reportes-tag">ADMINISTRACIÓN · VALLE BLANCO</span>
+            <h1>Reportes & Analítica de Negocio</h1>
+            <p>
+                Visualiza los indicadores clave del e-commerce, analiza ventas, productos más demandados
+                y descarga informes ejecutivos en formato PDF.
+            </p>
+        </div>
+
+        <div class="reportes-header__actions">
+            <button type="button" class="btn-action btn-action--secondary" (click)="imprimirReporte()" title="Imprimir reporte en formato documento">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9" />
+                    <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+                    <rect x="6" y="14" width="12" height="8" />
+                </svg>
+                <span>Imprimir</span>
+            </button>
+
+            <button type="button" class="btn-action btn-action--primary" (click)="descargarPdf()" [disabled]="descargandoPdf()">
+                @if (descargandoPdf()) {
+                    <span class="spinner-small"></span>
+                    <span>Generando PDF...</span>
+                } @else {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Descargar Reporte PDF</span>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- MEMBRETE EXCLUSIVO PARA IMPRESIÓN / PDF -->
+    <div class="print-only print-header">
+        <div class="print-brand">
+            <h2>CAFÉ VALLE BLANCO</h2>
+            <span>ORIGEN VILLA RICA · RESERVA DE BIOSFERA UNESCO</span>
+        </div>
+        <div class="print-meta">
+            <strong>REPORTE EJECUTIVO DE VENTAS Y RENDIMIENTO</strong>
+            <p>Período: {{ reporte()?.rangoTexto || 'General' }}</p>
+            <p>Generado: {{ fechaHoy | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+    </div>
+
+    <!-- PANEL DE FILTROS Y CONSULTAS -->
+    <section class="filtros-card no-print">
+        <div class="filtros-grid">
+
+            <!-- PERÍODO -->
+            <div class="filtro-group">
+                <label for="filtro-periodo">Período temporal</label>
+                <select id="filtro-periodo" [ngModel]="periodoSeleccionado()" (ngModelChange)="periodoSeleccionado.set($event); consultarReportes()">
+                    @for (p of periodos; track p.id) {
+                        <option [value]="p.id">{{ p.label }}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- ESTADO DEL PEDIDO -->
+            <div class="filtro-group">
+                <label for="filtro-estado">Estado del pedido</label>
+                <select id="filtro-estado" [ngModel]="estadoSeleccionado()" (ngModelChange)="estadoSeleccionado.set($event); consultarReportes()">
+                    @for (e of estados; track e.id) {
+                        <option [value]="e.id">{{ e.label }}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- MÉTODO DE PAGO -->
+            <div class="filtro-group">
+                <label for="filtro-metodo">Método de pago</label>
+                <select id="filtro-metodo" [ngModel]="metodoPagoSeleccionado()" (ngModelChange)="metodoPagoSeleccionado.set($event); consultarReportes()">
+                    @for (m of metodosPago; track m.id) {
+                        <option [value]="m.id">{{ m.label }}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- BOTÓN CONSULTAR -->
+            <div class="filtro-group filtro-group--btn">
+                <button type="button" class="btn-consultar" (click)="consultarReportes()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <span>Consultar</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- RANGO PERSONALIZADO SI APLICA -->
+        @if (periodoSeleccionado() === 'PERSONALIZADO') {
+            <div class="filtros-custom-date">
+                <div class="filtro-date-item">
+                    <label>Desde:</label>
+                    <input type="date" [ngModel]="fechaInicio()" (ngModelChange)="fechaInicio.set($event)">
+                </div>
+                <div class="filtro-date-item">
+                    <label>Hasta:</label>
+                    <input type="date" [ngModel]="fechaFin()" (ngModelChange)="fechaFin.set($event)">
+                </div>
+                <button type="button" class="btn-aplicar-rango" (click)="consultarReportes()">Aplicar fechas</button>
+            </div>
+        }
+
+        <!-- BADGE DEL RANGO ACTUAL ACTIVO -->
+        <div class="filtro-resumen">
+            <span>Consultando: <strong>{{ reporte()?.rangoTexto || 'Todo el historial' }}</strong></span>
+            @if (estadoSeleccionado() !== 'TODOS') {
+                <span class="filtro-pill">Estado: {{ estadoSeleccionado() }}</span>
+            }
+            @if (metodoPagoSeleccionado() !== 'TODOS') {
+                <span class="filtro-pill">Método: {{ metodoPagoSeleccionado() }}</span>
+            }
+        </div>
+    </section>
+
+    <!-- MENSAJE DE ERROR -->
+    @if (errorMensaje()) {
+        <div class="error-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{{ errorMensaje() }}</span>
+        </div>
+    }
+
+    <!-- SPINNER DE CARGA -->
+    @if (cargando()) {
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Calculando métricas y analíticas de ventas...</p>
+        </div>
+    } @else if (reporte()) {
+
+        <!-- 1. RESUMEN DE INDICADORES CLAVE (KPIS) -->
+        <section class="kpis-section">
+            <div class="kpis-grid">
+
+                <!-- INGRESOS TOTALES -->
+                <div class="kpi-card kpi-card--green">
+                    <div class="kpi-card__top">
+                        <span class="kpi-label">Ingresos Totales</span>
+                        <div class="kpi-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23" />
+                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                            </svg>
+                        </div>
+                    </div>
+                    <strong class="kpi-value">S/ {{ reporte()!.totalIngresos | number:'1.2-2' }}</strong>
+                    <span class="kpi-hint">Pedidos no cancelados</span>
+                </div>
+
+                <!-- TOTAL PEDIDOS -->
+                <div class="kpi-card kpi-card--gold">
+                    <div class="kpi-card__top">
+                        <span class="kpi-label">Total Pedidos</span>
+                        <div class="kpi-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <path d="M16 10a4 4 0 01-8 0" />
+                            </svg>
+                        </div>
+                    </div>
+                    <strong class="kpi-value">{{ reporte()!.totalPedidos }}</strong>
+                    <span class="kpi-hint">{{ reporte()!.pedidosCompletados }} completados · {{ reporte()!.pedidosPendientes }} pendientes</span>
+                </div>
+
+                <!-- TICKET PROMEDIO -->
+                <div class="kpi-card kpi-card--blue">
+                    <div class="kpi-card__top">
+                        <span class="kpi-label">Ticket Promedio</span>
+                        <div class="kpi-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                        </div>
+                    </div>
+                    <strong class="kpi-value">S/ {{ reporte()!.ticketPromedio | number:'1.2-2' }}</strong>
+                    <span class="kpi-hint">Gasto promedio por compra</span>
+                </div>
+
+                <!-- BOLSAS VENDIDAS -->
+                <div class="kpi-card kpi-card--amber">
+                    <div class="kpi-card__top">
+                        <span class="kpi-label">Bolsas Despachadas</span>
+                        <div class="kpi-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8h1a4 4 0 010 8h-1" />
+                                <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+                                <line x1="6" y1="1" x2="6" y2="4" />
+                                <line x1="10" y1="1" x2="10" y2="4" />
+                                <line x1="14" y1="1" x2="14" y2="4" />
+                            </svg>
+                        </div>
+                    </div>
+                    <strong class="kpi-value">{{ reporte()!.totalUnidadesVendidas }}</strong>
+                    <span class="kpi-hint">{{ reporte()!.totalClientesCompradores }} clientes compradores</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. ANÁLISIS DE PRODUCTOS & MÉTODOS DE PAGO -->
+        <section class="analisis-grid">
+
+            <!-- TOP PRODUCTOS MÁS VENDIDOS -->
+            <div class="panel-card">
+                <div class="panel-card__header">
+                    <h3>Top Productos Más Vendidos</h3>
+                    <span class="panel-badge">Ranking por unidades</span>
+                </div>
+
+                @if (reporte()!.topProductos && reporte()!.topProductos.length > 0) {
+                    <div class="top-list">
+                        @for (prod of reporte()!.topProductos; track prod.nombre; let i = $index) {
+                            <div class="top-item">
+                                <div class="top-item__info">
+                                    <span class="top-rank">#{{ i + 1 }}</span>
+                                    <div class="top-details">
+                                        <strong>{{ prod.nombre }}</strong>
+                                        <small>{{ prod.unidadesVendidas }} bolsas · S/ {{ prod.totalGenerado | number:'1.2-2' }}</small>
+                                    </div>
+                                    <span class="top-porcentaje">{{ prod.porcentaje | number:'1.1-1' }}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" [style.width.%]="prod.porcentaje"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="empty-state">
+                        <p>No hay ventas registradas en el período seleccionado.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- DISTRIBUCIÓN POR MÉTODO DE PAGO Y ESTADOS -->
+            <div class="panel-card">
+                <div class="panel-card__header">
+                    <h3>Ventas por Método de Pago</h3>
+                    <span class="panel-badge">Ingresos acumulados</span>
+                </div>
+
+                @if (obtenerMetodosArray().length > 0) {
+                    <div class="metodos-list">
+                        @for (m of obtenerMetodosArray(); track m.metodo) {
+                            <div class="metodo-row">
+                                <div class="metodo-row__left">
+                                    <span class="metodo-name">{{ m.metodo }}</span>
+                                    <span class="metodo-total">S/ {{ m.total | number:'1.2-2' }}</span>
+                                </div>
+                                <div class="metodo-bar-container">
+                                    <div class="metodo-bar-fill" [style.width.%]="m.porcentaje"></div>
+                                    <span class="metodo-pct">{{ m.porcentaje }}%</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="empty-state">
+                        <p>Sin transacciones registradas.</p>
+                    </div>
+                }
+
+                <div class="estados-divider">
+                    <h4>Distribución por Estado</h4>
+                    <div class="estados-badges">
+                        @for (est of obtenerEstadosArray(); track est.estado) {
+                            <div class="estado-pill">
+                                <span class="badge" [ngClass]="getEstadoClass(est.estado)">{{ est.estado }}</span>
+                                <strong>{{ est.cantidad }}</strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 3. ALERTAS DE INVENTARIO / STOCK CRÍTICO -->
+        @if (reporte()!.stockCritico && reporte()!.stockCritico.length > 0) {
+            <section class="alertas-section">
+                <div class="panel-card panel-card--warning">
+                    <div class="panel-card__header">
+                        <div class="alert-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            <h3>Alertas de Inventario (Stock Bajo o Agotado)</h3>
+                        </div>
+                        <span class="badge badge--danger">{{ reporte()!.stockCritico.length }} productos requieren reposición</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="reporte-table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th class="text-right">Stock Actual</th>
+                                    <th class="text-right">Nivel Mínimo</th>
+                                    <th class="text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of reporte()!.stockCritico; track item.id) {
+                                    <tr>
+                                        <td><strong>{{ item.nombre }}</strong></td>
+                                        <td class="text-right"><strong [class.text-danger]="item.stockActual <= 5">{{ item.stockActual }} unid.</strong></td>
+                                        <td class="text-right">{{ item.nivelMinimo }} unid.</td>
+                                        <td class="text-center">
+                                            <span class="badge" [ngClass]="item.estado === 'AGOTADO' ? 'badge--danger' : 'badge--warning'">
+                                                {{ item.estado }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        }
+
+        <!-- 4. LISTADO DE PEDIDOS DEL PERÍODO -->
+        <section class="pedidos-section">
+            <div class="panel-card">
+                <div class="panel-card__header">
+                    <div>
+                        <h3>Detalle de Pedidos del Período</h3>
+                        <p class="subtitle">Muestra cronológica de las transacciones procesadas</p>
+                    </div>
+                    <span class="panel-badge">{{ reporte()!.pedidos.length }} pedidos registrados</span>
+                </div>
+
+                @if (reporte()!.pedidos && reporte()!.pedidos.length > 0) {
+                    <div class="table-responsive">
+                        <table class="reporte-table">
+                            <thead>
+                                <tr>
+                                    <th>N° Pedido</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Método</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-right">Total (S/)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (p of reporte()!.pedidos; track p.id) {
+                                    <tr>
+                                        <td><strong>{{ p.numeroPedido }}</strong></td>
+                                        <td>{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                                        <td>{{ p.cliente }}</td>
+                                        <td><span class="metodo-tag">{{ p.metodoPago || 'Estándar' }}</span></td>
+                                        <td class="text-center">
+                                            <span class="badge" [ngClass]="getEstadoClass(p.estado)">{{ p.estado }}</span>
+                                        </td>
+                                        <td class="text-right"><strong>S/ {{ p.total | number:'1.2-2' }}</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                } @else {
+                    <div class="empty-state">
+                        <p>No se encontraron pedidos que coincidan con los filtros aplicados.</p>
+                    </div>
+                }
+            </div>
+        </section>
+
+    }
+
+    <!-- PIE DE PÁGINA IMPRIMIBLE -->
+    <div class="print-only print-footer">
+        <p>Documento oficial emitido por el Sistema E-commerce Café Valle Blanco · Villa Rica, Perú</p>
+        <p>Valle Blanco garantiza la autenticidad de los registros de compra y auditoría correspondientes al período indicado.</p>
+    </div>
+
+</div>
