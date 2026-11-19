@@ -5,6 +5,7 @@ import com.valleblanco.backend.dto.ReporteMetricasResponse;
 import com.valleblanco.backend.model.Usuario;
 import com.valleblanco.backend.service.AdminService;
 import com.valleblanco.backend.service.ReportePdfService;
+import com.valleblanco.backend.service.ReportePdfIndividualService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final ReportePdfService reportePdfService;
+    private final ReportePdfIndividualService reportePdfIndividualService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboard() {
@@ -105,5 +107,85 @@ public class AdminController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdfBytes);
+    }
+
+    @GetMapping("/reportes/ventas/pdf")
+    public ResponseEntity<byte[]> descargarReporteVentasPdf(
+            @RequestParam(defaultValue = "HISTORICO") String periodo,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
+            @AuthenticationPrincipal Usuario admin
+    ) {
+        ReporteMetricasResponse metricas = adminService.generarReporteMetricas(periodo, estado, metodoPago, fechaInicio, fechaFin);
+        byte[] pdfBytes = reportePdfIndividualService.generarReporteVentas(metricas, admin != null ? admin.getEmail() : "Administrador");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "Reporte_Ventas_ValleBlanco_" + LocalDate.now() + ".pdf";
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+        return ResponseEntity.ok().headers(headers).body(pdfBytes);
+    }
+
+    @GetMapping("/reportes/productos/pdf")
+    public ResponseEntity<byte[]> descargarReporteProductosPdf(
+            @RequestParam(defaultValue = "HISTORICO") String periodo,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
+            @AuthenticationPrincipal Usuario admin
+    ) {
+        ReporteMetricasResponse metricas = adminService.generarReporteMetricas(periodo, estado, metodoPago, fechaInicio, fechaFin);
+        byte[] pdfBytes = reportePdfIndividualService.generarReporteProductos(metricas, admin != null ? admin.getEmail() : "Administrador");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "Reporte_Productos_ValleBlanco_" + LocalDate.now() + ".pdf";
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+        return ResponseEntity.ok().headers(headers).body(pdfBytes);
+    }
+
+    @GetMapping("/reportes/pedidos/pdf")
+    public ResponseEntity<byte[]> descargarReportePedidosPdf(
+            @RequestParam(defaultValue = "HISTORICO") String periodo,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
+            @AuthenticationPrincipal Usuario admin
+    ) {
+        ReporteMetricasResponse metricas = adminService.generarReporteMetricas(periodo, estado, metodoPago, fechaInicio, fechaFin);
+        byte[] pdfBytes = reportePdfIndividualService.generarReportePedidos(metricas, admin != null ? admin.getEmail() : "Administrador");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "Reporte_Pedidos_ValleBlanco_" + LocalDate.now() + ".pdf";
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+        return ResponseEntity.ok().headers(headers).body(pdfBytes);
+    }
+
+    @GetMapping("/reportes/clientes/pdf")
+    public ResponseEntity<byte[]> descargarReporteClientesPdf(
+            @RequestParam(defaultValue = "HISTORICO") String periodo,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
+            @AuthenticationPrincipal Usuario admin
+    ) {
+        ReporteMetricasResponse metricas = adminService.generarReporteMetricas(periodo, estado, metodoPago, fechaInicio, fechaFin);
+        byte[] pdfBytes = reportePdfIndividualService.generarReporteClientes(metricas, admin != null ? admin.getEmail() : "Administrador");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "Reporte_Clientes_ValleBlanco_" + LocalDate.now() + ".pdf";
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+        return ResponseEntity.ok().headers(headers).body(pdfBytes);
     }
 }

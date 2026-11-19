@@ -59,4 +59,56 @@ export class AdminService {
       responseType: 'blob'
     });
   }
+
+  descargarReporteVentasPdf(filtros: { periodo?: string; estado?: string; metodoPago?: string; fechaInicio?: string; fechaFin?: string } = {}): Observable<Blob> {
+    const params: any = {};
+    if (filtros.periodo) params.periodo = filtros.periodo;
+    if (filtros.estado && filtros.estado !== 'TODOS') params.estado = filtros.estado;
+    if (filtros.metodoPago && filtros.metodoPago !== 'TODOS') params.metodoPago = filtros.metodoPago;
+    if (filtros.fechaInicio) params.fechaInicio = filtros.fechaInicio;
+    if (filtros.fechaFin) params.fechaFin = filtros.fechaFin;
+    return this.http.get(`${this.apiUrl}/reportes/ventas/pdf`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
+  descargarReporteProductosPdf(filtros: { periodo?: string; estado?: string; metodoPago?: string; fechaInicio?: string; fechaFin?: string } = {}): Observable<Blob> {
+    const params: any = {};
+    if (filtros.periodo) params.periodo = filtros.periodo;
+    if (filtros.estado && filtros.estado !== 'TODOS') params.estado = filtros.estado;
+    if (filtros.metodoPago && filtros.metodoPago !== 'TODOS') params.metodoPago = filtros.metodoPago;
+    if (filtros.fechaInicio) params.fechaInicio = filtros.fechaInicio;
+    if (filtros.fechaFin) params.fechaFin = filtros.fechaFin;
+    return this.http.get(`${this.apiUrl}/reportes/productos/pdf`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
+  descargarReportePedidosPdf(filtros: { periodo?: string; estado?: string; metodoPago?: string; fechaInicio?: string; fechaFin?: string } = {}): Observable<Blob> {
+    const params: any = {};
+    if (filtros.periodo) params.periodo = filtros.periodo;
+    if (filtros.estado && filtros.estado !== 'TODOS') params.estado = filtros.estado;
+    if (filtros.metodoPago && filtros.metodoPago !== 'TODOS') params.metodoPago = filtros.metodoPago;
+    if (filtros.fechaInicio) params.fechaInicio = filtros.fechaInicio;
+    if (filtros.fechaFin) params.fechaFin = filtros.fechaFin;
+    return this.http.get(`${this.apiUrl}/reportes/pedidos/pdf`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
+  descargarReporteClientesPdf(filtros: { periodo?: string; estado?: string; metodoPago?: string; fechaInicio?: string; fechaFin?: string } = {}): Observable<Blob> {
+    const params: any = {};
+    if (filtros.periodo) params.periodo = filtros.periodo;
+    if (filtros.estado && filtros.estado !== 'TODOS') params.estado = filtros.estado;
+    if (filtros.metodoPago && filtros.metodoPago !== 'TODOS') params.metodoPago = filtros.metodoPago;
+    if (filtros.fechaInicio) params.fechaInicio = filtros.fechaInicio;
+    if (filtros.fechaFin) params.fechaFin = filtros.fechaFin;
+    return this.http.get(`${this.apiUrl}/reportes/clientes/pdf`, {
+      params,
+      responseType: 'blob'
+    });
+  }
 }

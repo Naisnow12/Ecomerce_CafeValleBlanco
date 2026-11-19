@@ -63,6 +63,12 @@ export class ReportesAdmin implements OnInit {
   descargandoPdf = signal<boolean>(false);
   errorMensaje = signal<string | null>(null);
 
+  // Estados de descarga individuales
+  descargandoVentas = signal<boolean>(false);
+  descargandoProductos = signal<boolean>(false);
+  descargandoPedidos = signal<boolean>(false);
+  descargandoClientes = signal<boolean>(false);
+
   // Filtros
   periodoSeleccionado = signal<string>('30_DIAS');
   estadoSeleccionado = signal<string>('TODOS');
@@ -168,6 +174,95 @@ export class ReportesAdmin implements OnInit {
 
   imprimirReporte(): void {
     window.print();
+  }
+
+  private getFiltros() {
+    return {
+      periodo: this.periodoSeleccionado(),
+      estado: this.estadoSeleccionado(),
+      metodoPago: this.metodoPagoSeleccionado(),
+      fechaInicio: this.periodoSeleccionado() === 'PERSONALIZADO' ? this.fechaInicio() : undefined,
+      fechaFin: this.periodoSeleccionado() === 'PERSONALIZADO' ? this.fechaFin() : undefined
+    };
+  }
+
+  private triggerDownload(blob: Blob, nombre: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombre;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
+  descargarVentas(): void {
+    if (this.descargandoVentas()) return;
+    this.descargandoVentas.set(true);
+    const fechaStr = new Date().toISOString().slice(0, 10);
+    this.adminService.descargarReporteVentasPdf(this.getFiltros()).subscribe({
+      next: (blob) => {
+        this.triggerDownload(blob, `Ventas_ValleBlanco_${this.periodoSeleccionado()}_${fechaStr}.pdf`);
+        this.descargandoVentas.set(false);
+      },
+      error: (err) => {
+        console.error('Error al descargar PDF de ventas:', err);
+        alert('No se pudo generar el reporte de ventas. Intenta nuevamente.');
+        this.descargandoVentas.set(false);
+      }
+    });
+  }
+
+  descargarProductos(): void {
+    if (this.descargandoProductos()) return;
+    this.descargandoProductos.set(true);
+    const fechaStr = new Date().toISOString().slice(0, 10);
+    this.adminService.descargarReporteProductosPdf(this.getFiltros()).subscribe({
+      next: (blob) => {
+        this.triggerDownload(blob, `Productos_ValleBlanco_${this.periodoSeleccionado()}_${fechaStr}.pdf`);
+        this.descargandoProductos.set(false);
+      },
+      error: (err) => {
+        console.error('Error al descargar PDF de productos:', err);
+        alert('No se pudo generar el reporte de productos. Intenta nuevamente.');
+        this.descargandoProductos.set(false);
+      }
+    });
+  }
+
+  descargarPedidos(): void {
+    if (this.descargandoPedidos()) return;
+    this.descargandoPedidos.set(true);
+    const fechaStr = new Date().toISOString().slice(0, 10);
+    this.adminService.descargarReportePedidosPdf(this.getFiltros()).subscribe({
+      next: (blob) => {
+        this.triggerDownload(blob, `Pedidos_ValleBlanco_${this.periodoSeleccionado()}_${fechaStr}.pdf`);
+        this.descargandoPedidos.set(false);
+      },
+      error: (err) => {
+        console.error('Error al descargar PDF de pedidos:', err);
+        alert('No se pudo generar el reporte de pedidos. Intenta nuevamente.');
+        this.descargandoPedidos.set(false);
+      }
+    });
+  }
+
+  descargarClientes(): void {
+    if (this.descargandoClientes()) return;
+    this.descargandoClientes.set(true);
+    const fechaStr = new Date().toISOString().slice(0, 10);
+    this.adminService.descargarReporteClientesPdf(this.getFiltros()).subscribe({
+      next: (blob) => {
+        this.triggerDownload(blob, `Clientes_ValleBlanco_${this.periodoSeleccionado()}_${fechaStr}.pdf`);
+        this.descargandoClientes.set(false);
+      },
+      error: (err) => {
+        console.error('Error al descargar PDF de clientes:', err);
+        alert('No se pudo generar el reporte de clientes. Intenta nuevamente.');
+        this.descargandoClientes.set(false);
+      }
+    });
   }
 
   getEstadoClass(estado: string): string {
