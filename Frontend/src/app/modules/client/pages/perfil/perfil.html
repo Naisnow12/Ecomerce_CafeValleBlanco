@@ -246,7 +246,7 @@
                 </div>
 
                 @if (!mostrarCambioPassword()) {
-                <button type="button" class="perfil-btn perfil-btn--outline" (click)="toggleCambioPassword()">
+                <button type="button" class="perfil-btn perfil-btn--secondary" (click)="toggleCambioPassword()">
                     Cambiar contraseña
                 </button>
                 }
@@ -267,33 +267,33 @@
             @if (mostrarCambioPassword()) {
             <form class="perfil-form" [formGroup]="passwordForm" (ngSubmit)="cambiarContrasena()">
                 <div class="perfil-form-grid">
-                    <div class="perfil-field perfil-field--full">
+                    <div class="perfil-form-group perfil-field--full">
                         <label for="currentPassword">Contraseña actual</label>
                         <input id="currentPassword" type="password" formControlName="currentPassword" placeholder="Ingresa tu contraseña actual" />
                         @if (passwordForm.controls.currentPassword.touched && passwordForm.controls.currentPassword.invalid) {
-                        <small class="field-error">Ingresa tu contraseña actual.</small>
+                        <span class="perfil-error">Ingresa tu contraseña actual.</span>
                         }
                     </div>
 
-                    <div class="perfil-field">
+                    <div class="perfil-form-group">
                         <label for="newPassword">Nueva contraseña</label>
                         <input id="newPassword" type="password" formControlName="newPassword" placeholder="Mínimo 6 caracteres" />
                         @if (passwordForm.controls.newPassword.touched && passwordForm.controls.newPassword.invalid) {
-                        <small class="field-error">Debe tener al menos 6 caracteres.</small>
+                        <span class="perfil-error">Debe tener al menos 6 caracteres.</span>
                         }
                     </div>
 
-                    <div class="perfil-field">
+                    <div class="perfil-form-group">
                         <label for="confirmNewPassword">Confirmar nueva contraseña</label>
                         <input id="confirmNewPassword" type="password" formControlName="confirmNewPassword" placeholder="Repite la nueva contraseña" />
                         @if (passwordForm.controls.confirmNewPassword.touched && passwordForm.controls.confirmNewPassword.invalid) {
-                        <small class="field-error">Confirma tu nueva contraseña.</small>
+                        <span class="perfil-error">Confirma tu nueva contraseña.</span>
                         }
                     </div>
                 </div>
 
-                <div class="perfil-form-actions">
-                    <button type="button" class="perfil-btn perfil-btn--ghost" (click)="toggleCambioPassword()" [disabled]="cambiandoPassword()">
+                <div class="perfil-actions">
+                    <button type="button" class="perfil-btn perfil-btn--secondary" (click)="toggleCambioPassword()" [disabled]="cambiandoPassword()">
                         Cancelar
                     </button>
                     <button type="submit" class="perfil-btn perfil-btn--primary" [disabled]="cambiandoPassword()">
