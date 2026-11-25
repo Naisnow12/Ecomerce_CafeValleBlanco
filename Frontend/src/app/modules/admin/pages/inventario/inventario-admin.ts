@@ -44,7 +44,8 @@ export class InventarioAdmin implements OnInit {
     this.inventarioService.getDashboard().subscribe({
       next: (data) => {
         this.stats.set(data);
-        this.productos.set(data.productos || []);
+        const ordenados = [...(data.productos || [])].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        this.productos.set(ordenados);
         this.movimientos.set(data.ultimosMovimientos || []);
         this.alertas.set(data.alertasStock || []);
         this.cargando.set(false);
