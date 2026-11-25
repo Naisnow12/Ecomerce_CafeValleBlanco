@@ -30,6 +30,18 @@ export class Perfil implements OnInit {
   mensajeExito = signal<string | null>(null);
   mensajeError = signal<string | null>(null);
 
+  // Cambio de contraseña
+  mostrarCambioPassword = signal(false);
+  cambiandoPassword = signal(false);
+  passwordExito = signal<string | null>(null);
+  passwordError = signal<string | null>(null);
+
+  passwordForm = this.fb.group({
+    currentPassword: ['', [Validators.required]],
+    newPassword: ['', [Validators.required, Validators.minLength(6)]],
+    confirmNewPassword: ['', [Validators.required]]
+  });
+
   // Formulario de edición
   form = this.fb.group({
     nombres: ['', [
@@ -153,5 +165,46 @@ export class Perfil implements OnInit {
 
   cerrarSesion(): void {
     this.authService.logout();
+  }
+
+  toggleCambioPassword(): void {
+    this.mostrarCambioPassword.update(v => !v);
+    this.passwordExito.set(null);
+    this.passwordError.set(null);
+    this.passwordForm.reset();
+  }
+
+  cambiarContrasena(): void {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
+    const { currentPassword, newPassword, confirmNewPassword } = this.passwordForm.getRawValue();
+    if (newPassword !== confirmNewPassword) {
+      this.passwordError.set('La nueva contraseña y su confirmación no coinciden.');
+      return;
+    }
+
+    this.cambiandoPassword.set(true);
+    this.passwordError.set(null);
+    this.passwordExito.set(null);
+
+    this.usuarioService.changePassword({
+      currentPassword: currentPassword!,
+      newPassword: newPassword!,
+      confirmNewPassword: confirmNewPassword!
+    }).subscribe({
+      next: () => {
+        this.cambiandoPassword.set(false);
+        this.mostrarCambioPassword.set(false);
+        this.passwordForm.reset();
+        this.passwordExito.set('Tu contraseña se actualizó correctamente.');
+      },
+      error: (err) => {
+        this.cambiandoPassword.set(false);
+        this.passwordError.set(err.error?.message || 'No se pudo cambiar la contraseña. Verifica tu contraseña actual.');
+      }
+    });
   }
 }

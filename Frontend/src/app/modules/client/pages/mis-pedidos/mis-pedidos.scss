@@ -348,13 +348,24 @@
 .product-chip {
     display: inline-flex;
     align-items: center;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
     border: 1px solid #e2d7c7;
-    border-radius: 5px;
+    border-radius: 7px;
     background: #f8f3ea;
     color: #76654e;
     font-size: 11px;
     line-height: 1.5;
+}
+
+.chip-thumb {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 1px solid #dfd3c2;
+    background: #fff;
+    flex-shrink: 0;
 }
 
 // PIE DEL PEDIDO
@@ -372,6 +383,38 @@
 .pedido-footer-text {
     color: #a09789;
     font-size: 11px;
+}
+
+.pedido-footer-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.btn-receipt {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid #1c3829;
+    border-radius: 6px;
+    background: #1c3829;
+    color: #ffffff;
+    font: inherit;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+        background: #142a1e;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 }
 
 .btn-details {

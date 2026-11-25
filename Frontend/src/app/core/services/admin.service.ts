@@ -111,4 +111,10 @@ export class AdminService {
       responseType: 'blob'
     });
   }
+
+  descargarComprobantePedido(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/pedidos/${id}/comprobante`, {
+      responseType: 'blob'
+    });
+  }
 }

@@ -4,6 +4,7 @@ import com.valleblanco.backend.dto.PedidoResponse;
 import com.valleblanco.backend.dto.ReporteMetricasResponse;
 import com.valleblanco.backend.model.Usuario;
 import com.valleblanco.backend.service.AdminService;
+import com.valleblanco.backend.service.ComprobantePdfService;
 import com.valleblanco.backend.service.ReportePdfService;
 import com.valleblanco.backend.service.ReportePdfIndividualService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class AdminController {
     private final AdminService adminService;
     private final ReportePdfService reportePdfService;
     private final ReportePdfIndividualService reportePdfIndividualService;
+    private final ComprobantePdfService comprobantePdfService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboard() {
@@ -74,6 +76,19 @@ public class AdminController {
     ) {
         String nuevoEstado = payload.get("estado");
         return ResponseEntity.ok(adminService.actualizarEstadoPedido(id, nuevoEstado, admin.getEmail()));
+    }
+
+    @GetMapping("/pedidos/{id}/comprobante")
+    public ResponseEntity<byte[]> descargarComprobantePedido(@PathVariable Long id) {
+        PedidoResponse pedido = adminService.obtenerPedidoPorId(id);
+        byte[] pdfBytes = comprobantePdfService.generarComprobante(pedido);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "Comprobante_" + (pedido.getNumeroPedido() != null ? pedido.getNumeroPedido() : id) + ".pdf";
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+        return ResponseEntity.ok().headers(headers).body(pdfBytes);
     }
 
     @GetMapping("/reportes")

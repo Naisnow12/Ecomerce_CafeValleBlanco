@@ -236,9 +236,14 @@
                         @for (item of pedido.items; track $index) {
 
                         <span class="product-chip">
-                            {{ item.nombreProducto }}
-                            · {{ item.peso }} g
-                            × {{ item.cantidad }}
+                            @if (item.imagenUrl) {
+                            <img [src]="item.imagenUrl" [alt]="item.nombreProducto" class="chip-thumb" />
+                            }
+                            <span>
+                                {{ item.nombreProducto }}
+                                · {{ item.peso }} g
+                                × {{ item.cantidad }}
+                            </span>
                         </span>
 
                         }
@@ -256,10 +261,21 @@
                         Pedido realizado en Valle Blanco
                     </span>
 
-                    <a [routerLink]="['/client/order-confirm', pedido.id]" class="btn-details">
-                        Ver detalles
-                        <span>→</span>
-                    </a>
+                    <div class="pedido-footer-actions">
+                        <button type="button" class="btn-receipt" (click)="descargarComprobante(pedido)" [disabled]="descargandoId() === pedido.id">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            {{ descargandoId() === pedido.id ? 'Generando...' : 'Comprobante PDF' }}
+                        </button>
+
+                        <a [routerLink]="['/client/order-confirm', pedido.id]" class="btn-details">
+                            Ver detalles
+                            <span>→</span>
+                        </a>
+                    </div>
 
                 </div>
 

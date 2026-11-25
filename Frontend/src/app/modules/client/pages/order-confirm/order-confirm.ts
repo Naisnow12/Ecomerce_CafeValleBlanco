@@ -27,6 +27,7 @@ export class OrderConfirm implements OnInit {
   // Estados de la pantalla
   cargando = signal(true);
   error = signal('');
+  descargandoComprobante = signal(false);
 
   ngOnInit(): void {
     const qParams = this.route.snapshot.queryParams;
@@ -121,5 +122,29 @@ export class OrderConfirm implements OnInit {
     if (Number.isSafeInteger(id) && id > 0) {
       this.cargarPedido(id);
     }
+  }
+
+  descargarComprobante(): void {
+    const actual = this.pedido();
+    if (!actual || this.descargandoComprobante()) return;
+    this.descargandoComprobante.set(true);
+
+    this.pedidoService.descargarComprobante(actual.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Comprobante_${actual.numeroPedido || actual.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.descargandoComprobante.set(false);
+      },
+      error: () => {
+        alert('No se pudo descargar el comprobante del pedido.');
+        this.descargandoComprobante.set(false);
+      }
+    });
   }
 }

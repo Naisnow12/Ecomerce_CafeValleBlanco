@@ -359,6 +359,36 @@
 
 // CERRAR SESIÓN
 
+.perfil-password-card {
+    margin-top: 24px;
+}
+
+.perfil-password-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    h2 {
+        margin: 0 0 5px;
+        color: #244632;
+        font-family: var(--font-serif, Georgia, serif);
+        font-size: 21px;
+        font-weight: 500;
+    }
+
+    p {
+        margin: 0;
+        color: #81766b;
+        font-size: 13px;
+    }
+}
+
+.perfil-field--full {
+    grid-column: 1 / -1;
+}
+
 .perfil-logout {
     display: flex;
     justify-content: flex-end;

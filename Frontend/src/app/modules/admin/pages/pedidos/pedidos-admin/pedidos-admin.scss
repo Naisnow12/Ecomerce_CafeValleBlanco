@@ -689,6 +689,31 @@
     background: #faf8f3;
 }
 
+.btn-receipt-modal {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 1px solid #1c3829;
+    border-radius: 6px;
+    background: #1c3829;
+    color: #ffffff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        background: #142a1e;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
 .btn-close {
     min-height: 42px;
     padding: 11px 24px;

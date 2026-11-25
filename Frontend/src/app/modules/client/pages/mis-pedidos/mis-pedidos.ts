@@ -26,6 +26,7 @@ export class MisPedidos implements OnInit {
   // Estados
   cargando = signal(true);
   error = signal('');
+  descargandoId = signal<number | null>(null);
 
   // Filtro
   filtroActual = signal<string>('TODOS');
@@ -125,5 +126,28 @@ export class MisPedidos implements OnInit {
       (total, item) => total + item.cantidad,
       0
     ) ?? 0;
+  }
+
+  descargarComprobante(pedido: PedidoResponse): void {
+    if (this.descargandoId() === pedido.id) return;
+    this.descargandoId.set(pedido.id);
+
+    this.pedidoService.descargarComprobante(pedido.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Comprobante_${pedido.numeroPedido || pedido.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.descargandoId.set(null);
+      },
+      error: () => {
+        alert('No se pudo descargar el comprobante del pedido.');
+        this.descargandoId.set(null);
+      }
+    });
   }
 }

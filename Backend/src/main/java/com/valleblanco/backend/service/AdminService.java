@@ -185,6 +185,12 @@ public class AdminService {
                 .toList();
     }
 
+    public PedidoResponse obtenerPedidoPorId(Long pedidoId) {
+        Pedido p = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado: " + pedidoId));
+        return toPedidoResponse(p);
+    }
+
     @Transactional
     public PedidoResponse actualizarEstadoPedido(Long pedidoId, String nuevoEstado, String adminEmail) {
         Pedido p = pedidoRepository.findById(pedidoId)
