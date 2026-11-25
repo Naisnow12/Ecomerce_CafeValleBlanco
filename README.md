@@ -21,17 +21,16 @@ Este proyecto ha sido desarrollado como parte del curso **Herramientas de Desarr
    * [4. Panel Administrativo (`/admin`)](#2-panel-administrativo-general-admin)
    * [5. Panel de Inventario & Almacén (`/inventario`)](#3-panel-de-inventario--almacén-inventario)
 4. [Roles y Permisos del Sistema](#-roles-y-permisos-del-sistema)
-5. [Cuentas de Prueba Preconfiguradas](#-cuentas-de-prueba-preconfiguradas)
-6. [Requisitos Previos](#-requisitos-previos)
-7. [Configuración de Base de Datos](#-configuración-de-la-base-de-datos)
-8. [Instrucciones de Ejecución](#-instrucciones-de-ejecución)
-9. [Documentación de la API REST](#-documentación-de-la-api-rest)
+5. [Requisitos Previos](#-requisitos-previos)
+6. [Configuración de la Base de Datos](#-configuración-de-la-base-de-datos)
+7. [Instrucciones de Ejecución](#-instrucciones-de-ejecución)
+8. [Módulos de la API REST](#-módulos-de-la-api-rest)
 
 ---
 
 ## 🏛 Arquitectura del Sistema
 
-El proyecto opera bajo un modelo desacoplado con arquitectura de tres capas: **Frontend SPA/SSR + Backend RESTful API + Base de Datos Relacional PostgreSQL** (desplegado en Vercel, Render con Docker y Neon PostgreSQL).
+El proyecto opera bajo un modelo desacoplado con arquitectura de tres capas: **Frontend SPA/SSR + Backend RESTful API + Base de Datos Relacional PostgreSQL**.
 
 ```
 Ecomerce_CafeValleBlanco/
@@ -177,18 +176,6 @@ El sistema implementa el **Principio de Mínimo Privilegio (PoLP)**:
 
 ---
 
-## 👥 Cuentas de Prueba Preconfiguradas
-
-Al inicializarse la base de datos mediante el seeder automático (`DataInitializer`), se crean las siguientes credenciales para pruebas:
-
-| Rol | Correo Electrónico | Contraseña |
-|---|---|---|
-| **Administrador** | `admin@valleblanco.pe` | `admin123` |
-| **Encargado de Stock** | `stock@valleblanco.pe` | `stock123` |
-| **Cliente** | `cliente@valleblanco.pe` | `cliente123` |
-
----
-
 ## ⚙️ Requisitos Previos
 
 * **Java JDK:** Versión 21 o superior (`java -version`).
@@ -212,7 +199,7 @@ Al inicializarse la base de datos mediante el seeder automático (`DataInitializ
    spring.datasource.username=postgres
    spring.datasource.password=TU_CONTRASEÑA
    ```
-   > *Nota: Flyway creará automáticamente las tablas y `DataInitializer` insertará los roles, usuarios de prueba y los cafés oficiales de especialidad.*
+   > *Nota: Flyway creará automáticamente las tablas al iniciar el servidor en entorno de desarrollo. Configura las credenciales sensibles mediante variables de entorno.*
 
 ---
 
@@ -245,45 +232,16 @@ La aplicación web estará disponible en: **`http://localhost:4200`**
 
 ---
 
-## 📡 Documentación de la API REST
+## 📡 Módulos de la API REST
 
-### Autenticación (`/api/auth`)
-* `POST /api/auth/login` — Autenticación con credenciales y entrega de token JWT + roles.
-* `POST /api/auth/register` — Registro de nuevos clientes.
+La API sigue el estándar REST con autenticación stateless mediante **JWT** y control de acceso basado en roles (`@PreAuthorize` / `SecurityFilterChain`):
 
-### Perfil de Usuario (`/api/usuario`)
-* `GET /api/usuario/perfil` — Obtener datos del usuario autenticado.
-* `PUT /api/usuario/perfil` — Actualizar nombres, apellidos y teléfono.
-* `PUT /api/usuario/password` — Cambiar contraseña verificando la contraseña actual.
-
-### Catálogo y Productos (`/api/products`)
-* `GET /api/products` — Listar todos los cafés activos del catálogo.
-* `GET /api/products/{id}` — Consultar detalle de café por identificador numérico.
-* `GET /api/products/slug/{slug}` — Consultar detalle de café por slug amigable.
-* `POST /api/products` — *(Solo ADMIN)* Crear un nuevo café de especialidad.
-* `PUT /api/products/{id}` — *(Solo ADMIN)* Actualizar información y presentaciones de un café.
-* `DELETE /api/products/{id}` — *(Solo ADMIN)* Eliminar producto y su imagen física asociada del servidor.
-* `POST /api/products/upload-image` — *(Solo ADMIN)* Subir imagen multipart (hasta 10 MB) y almacenar en `public/assets/images/`.
-
-### Inventario y Almacén (`/api/inventario`)
-* `GET /api/inventario/dashboard` — *(ADMIN y ENCARGADO_STOCK)* Obtener métricas, existencias ordenadas por ID y alertas de stock.
-* `GET /api/inventario/movimientos` — *(ADMIN y ENCARGADO_STOCK)* Consultar historial de movimientos auditados.
-* `POST /api/inventario/movimientos` — *(ENCARGADO_STOCK)* Registrar entrada, salida o ajuste manual.
-* `GET /api/inventario/alertas` — *(ADMIN y ENCARGADO_STOCK)* Listar productos con existencias por debajo del umbral mínimo.
-* `PUT /api/inventario/productos/{id}/nivel-minimo` — *(ENCARGADO_STOCK)* Configurar umbral de stock mínimo de seguridad.
-
-### Carrito, Pedidos y Comprobantes (`/api/carrito`, `/api/pedidos`)
-* `GET /api/carrito` — *(Solo CLIENTE)* Obtener el carrito activo del usuario autenticado.
-* `POST /api/carrito/items` — *(Solo CLIENTE)* Agregar presentación y cantidad al carrito.
-* `DELETE /api/carrito/items/{id}` — *(Solo CLIENTE)* Quitar ítem del carrito.
-* `POST /api/pedidos` — *(Solo CLIENTE)* Generar orden a partir del carrito de compras.
-* `GET /api/pedidos/mis-pedidos` — *(Solo CLIENTE)* Consultar órdenes del cliente activo.
-* `GET /api/pedidos/{id}/comprobante` — *(Solo CLIENTE)* Descargar comprobante PDF del pedido propio.
-
-### Administración y Reportes (`/api/admin`)
-* `GET /api/admin/pedidos` — *(Solo ADMIN)* Listado y control global de órdenes de venta.
-* `GET /api/admin/pedidos/{id}/comprobante` — *(Solo ADMIN)* Descargar comprobante PDF de cualquier pedido.
-* `GET /api/admin/reportes/*` — *(Solo ADMIN)* Reportes y exportación PDF (consolidado, ventas, productos, pedidos, clientes y ventas por departamento).
+* **`/api/auth`** — Inicio de sesión y registro de clientes.
+* **`/api/products`** — Consulta pública del catálogo y gestión administrativa de productos.
+* **`/api/usuario`** — Gestión de perfil y actualización segura de contraseña del usuario autenticado.
+* **`/api/carrito` y `/api/pedidos`** — Flujo de compras, historial de pedidos y generación de comprobantes PDF (exclusivo para clientes).
+* **`/api/inventario`** — Consulta de existencias, alertas de stock mínimo y trazabilidad de movimientos de almacén.
+* **`/api/admin`** — Gestión de órdenes, clientes, auditoría y exportación de reportes y métricas en PDF.
 
 ---
 
