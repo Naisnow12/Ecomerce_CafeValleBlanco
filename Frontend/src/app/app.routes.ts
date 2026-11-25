@@ -21,6 +21,8 @@ import { PedidosAdmin } from './modules/admin/pages/pedidos/pedidos-admin/pedido
 import { ClientesAdmin } from './modules/admin/pages/clientes/clientes-admin/clientes-admin';
 import { Configuracion } from './modules/admin/pages/configuracion/configuracion';
 import { ReportesAdmin } from './modules/admin/pages/reportes/reportes';
+import { InventarioAdmin } from './modules/admin/pages/inventario/inventario-admin';
+import { SeguridadAdmin } from './modules/admin/pages/seguridad/seguridad';
 import { StockDashboard } from './modules/stock/pages/dashboard/stock-dashboard';
 
 export const routes: Routes = [
@@ -63,7 +65,9 @@ export const routes: Routes = [
       { path: 'reportes', component: ReportesAdmin },
       { path: 'productos', component: ProductosAdmin },
       { path: 'pedidos', component: PedidosAdmin },
+      { path: 'inventario', component: InventarioAdmin },
       { path: 'clientes', component: ClientesAdmin },
+      { path: 'seguridad', component: SeguridadAdmin },
       { path: 'configuracion', component: Configuracion },
     ]
   },
