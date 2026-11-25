@@ -489,6 +489,42 @@ $blanco: #ffffff;
 }
 
 // ——————————————————————————————————————
+// Sección de Gráficos Interactivos (Chart.js)
+// ——————————————————————————————————————
+.charts-section {
+  width: 100%;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 850px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+
+  &--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 270px;
+
+  &--tall {
+    height: 300px;
+  }
+}
+
+// ——————————————————————————————————————
 // Grid inferior — 2 columnas
 // ——————————————————————————————————————
 .reportes-lower-grid {

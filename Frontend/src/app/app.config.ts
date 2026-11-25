@@ -3,6 +3,7 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideClientHydration(),
-    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor]))
+    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor])),
+    provideCharts(withDefaultRegisterables())
   ]
 };

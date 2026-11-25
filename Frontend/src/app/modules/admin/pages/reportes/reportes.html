@@ -366,6 +366,111 @@
             </div>
         </section>
 
+        <!-- GRÁFICOS INTERACTIVOS (CHART.JS) -->
+        @if (isBrowser) {
+            <section class="charts-section">
+                <div class="charts-grid">
+
+                    <!-- 1. Evolución de ingresos -->
+                    <div class="panel-card chart-card chart-card--wide">
+                        <div class="panel-card__header">
+                            <div>
+                                <h3>Evolución de Ingresos</h3>
+                                <p class="subtitle">Ventas diarias registradas en el período</p>
+                            </div>
+                            <span class="panel-badge">Tendencia S/</span>
+                        </div>
+                        @if (ingresosLineData().labels && ingresosLineData().labels!.length > 0) {
+                            <div class="chart-wrapper chart-wrapper--tall">
+                                <canvas baseChart
+                                    [data]="ingresosLineData()"
+                                    [options]="ingresosLineOptions"
+                                    type="line">
+                                </canvas>
+                            </div>
+                        } @else {
+                            <div class="empty-state">
+                                <p>No hay ventas registradas para graficar la tendencia.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- 2. Ventas por método de pago -->
+                    <div class="panel-card chart-card">
+                        <div class="panel-card__header">
+                            <div>
+                                <h3>Métodos de Pago</h3>
+                                <p class="subtitle">Participación por canal de cobro</p>
+                            </div>
+                            <span class="panel-badge">Distribución</span>
+                        </div>
+                        @if (metodosDoughnutData().labels && metodosDoughnutData().labels!.length > 0) {
+                            <div class="chart-wrapper">
+                                <canvas baseChart
+                                    [data]="metodosDoughnutData()"
+                                    [options]="metodosDoughnutOptions"
+                                    type="doughnut">
+                                </canvas>
+                            </div>
+                        } @else {
+                            <div class="empty-state">
+                                <p>Sin transacciones registradas.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- 3. Top productos más vendidos -->
+                    <div class="panel-card chart-card">
+                        <div class="panel-card__header">
+                            <div>
+                                <h3>Cafés Más Vendidos</h3>
+                                <p class="subtitle">Unidades despachadas por variedad</p>
+                            </div>
+                            <span class="panel-badge">Ranking</span>
+                        </div>
+                        @if (topProductosBarData().labels && topProductosBarData().labels!.length > 0) {
+                            <div class="chart-wrapper">
+                                <canvas baseChart
+                                    [data]="topProductosBarData()"
+                                    [options]="topProductosBarOptions"
+                                    type="bar">
+                                </canvas>
+                            </div>
+                        } @else {
+                            <div class="empty-state">
+                                <p>Sin ventas de productos en este período.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- 4. Pedidos por estado -->
+                    <div class="panel-card chart-card chart-card--wide">
+                        <div class="panel-card__header">
+                            <div>
+                                <h3>Pedidos por Estado</h3>
+                                <p class="subtitle">Flujo operativo de atención de órdenes</p>
+                            </div>
+                            <span class="panel-badge">Operación</span>
+                        </div>
+                        @if (estadosBarData().labels && estadosBarData().labels!.length > 0) {
+                            <div class="chart-wrapper">
+                                <canvas baseChart
+                                    [data]="estadosBarData()"
+                                    [options]="estadosBarOptions"
+                                    type="bar">
+                                </canvas>
+                            </div>
+                        } @else {
+                            <div class="empty-state">
+                                <p>No hay pedidos registrados en este período.</p>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </section>
+        }
+
         <!-- GRID INFERIOR: TOP PRODUCTOS + MÉTODOS/ESTADOS -->
         <section class="reportes-lower-grid">
 
