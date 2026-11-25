@@ -31,31 +31,33 @@ Este proyecto ha sido desarrollado como parte del curso **Herramientas de Desarr
 
 ## 🏛 Arquitectura del Sistema
 
-El proyecto opera bajo un modelo desacoplado con arquitectura de tres capas: **Frontend SPA/SSR + Backend RESTful API + Base de Datos Relacional PostgreSQL**.
+El proyecto opera bajo un modelo desacoplado con arquitectura de tres capas: **Frontend SPA/SSR + Backend RESTful API + Base de Datos Relacional PostgreSQL** (desplegado en Vercel, Render con Docker y Neon PostgreSQL).
 
 ```
 Ecomerce_CafeValleBlanco/
-├── Backend/                              # API RESTful con Spring Boot & Java 21
+├── Backend/                              # API RESTful con Spring Boot 4.1.1 & Java 21
 │   ├── src/main/java/com/valleblanco/backend/
-│   │   ├── config/                       # Seguridad (Spring Security), CORS, JWT y DataInitializer
-│   │   ├── controller/                   # Endpoints REST (Auth, Products, Inventario, Pedidos, etc.)
+│   │   ├── config/                       # Seguridad (Spring Security), CORS, JWT, GlobalExceptionHandler y DataInitializer
+│   │   ├── controller/                   # Endpoints REST (Auth, Products, Inventario, Pedidos, Usuario, Admin)
 │   │   ├── dto/                          # Objetos de Transferencia de Datos (DTOs)
-│   │   ├── model/                        # Entidades JPA (Product, Usuario, Role, MovimientoStock, etc.)
+│   │   ├── model/                        # Entidades JPA (Product, Usuario, Role, Pedido, MovimientoStock, etc.)
 │   │   ├── repository/                   # Repositorios Spring Data JPA
-│   │   └── service/                      # Lógica de negocio y servicios de auditoría
+│   │   └── service/                      # Lógica de negocio, auditoría y generación de PDFs (OpenPDF)
 │   ├── src/main/resources/
 │   │   ├── db/migration/                 # Scripts de migración versionados con Flyway
-│   │   └── application.properties        # Configuración del servidor (puerto 8081, DB, JWT)
+│   │   └── application.properties        # Configuración del servidor (puerto 8081, DB, JWT, multipart 10MB)
+│   ├── Dockerfile                        # Imagen Docker optimizada para Render (MaxRAMPercentage=75, headless)
 │   └── pom.xml                           # Descriptor Maven y dependencias
 │
-├── Frontend/                             # Aplicación Web con Angular 22 & TypeScript
+├── Frontend/                             # Aplicación Web con Angular 22.1 & TypeScript
 │   ├── src/app/
 │   │   ├── core/                         # Guards de rutas, interceptores HTTP, modelos y servicios
 │   │   └── modules/
 │   │       ├── auth/                     # Inicio de sesión y registro de usuarios
 │   │       ├── client/                   # Tienda pública (Home, Catálogo, Detalle, Nuestro Café,
-│   │       │                             # Nuestro Proceso, Sobre Nosotros, Carrito, Checkout, Pedidos)
-│   │       ├── admin/                    # Panel administrativo (Dashboard, Productos, Pedidos, Clientes)
+│   │       │                             # Nuestro Proceso, Sobre Nosotros, Carrito, Checkout, Pedidos, Perfil)
+│   │       ├── admin/                    # Panel administrativo (Dashboard, Productos, Pedidos, Clientes,
+│   │       │                             # Reportes & Gráficos, Inventario solo lectura, Seguridad y Preferencias)
 │   │       └── stock/                    # Panel de almacén (Dashboard, Control de Stock, Movimientos)
 │   ├── public/assets/images/             # Fotografías, sellos y recursos visuales estáticos
 │   └── package.json                      # Dependencias y scripts de Angular / Node.js
@@ -68,17 +70,20 @@ Ecomerce_CafeValleBlanco/
 
 ### **Backend**
 * **Lenguaje:** Java 21 (LTS).
-* **Framework:** Spring Boot 4.1.x (`spring-boot-starter-web`, `spring-boot-starter-data-jpa`, `spring-boot-starter-security`).
+* **Framework:** Spring Boot 4.1.1 (`spring-boot-starter-webmvc`, `spring-boot-starter-data-jpa`, `spring-boot-starter-security`).
 * **Migraciones de BD:** Flyway Database Migrations con soporte para PostgreSQL.
-* **Seguridad y Cifrado:** Spring Security + JWT (JSON Web Tokens) + BCrypt Password Encoder.
-* **Base de Datos:** PostgreSQL 14+.
-* **Herramientas de Soporte:** Project Lombok, Spring Boot DevTools, Maven Wrapper (`mvnw`).
+* **Seguridad y Cifrado:** Spring Security + JWT (jjwt 0.12.6) + BCrypt Password Encoder.
+* **Generación de PDF:** OpenPDF (`com.github.librepdf:openpdf`) para reportes ejecutivos, reportes individuales y comprobantes por pedido.
+* **Base de Datos:** PostgreSQL 14+ (compatible con Neon).
+* **Herramientas de Soporte:** Project Lombok, Spring Boot DevTools, Maven Wrapper (`mvnw`), Docker.
 
 ### **Frontend**
-* **Framework:** Angular 22 (Standalone Components + Signals + Router Guards + SSR con Express).
-* **Lenguaje:** TypeScript 6.x / HTML5 / SCSS.
+* **Framework:** Angular 22.1 (Standalone Components + Signals + Router Guards + SSR con Express 5).
+* **Lenguaje:** TypeScript ~6.0 / HTML5 / SCSS.
 * **Estilos y Diseño:** SCSS modular con paleta artesanal inspirada en la finca cafetalera (`#304E3A`, `#8A674E`, `#F3EEE4`).
-* **Gráficos & Visualizaciones:** Polígono de Intensidad Sensorial interactivo en SVG nativo (Radar Chart SCA).
+* **Gráficos & Visualizaciones:**
+  * `Chart.js` 4.6 + `ng2-charts` 11.0 (protegidos con `isPlatformBrowser` para SSR) en el módulo de Reportes y Métricas.
+  * Polígono de Intensidad Sensorial interactivo en SVG nativo (Radar Chart SCA) en la ficha de producto.
 * **Cliente HTTP:** Angular `HttpClient` reactivo con RxJS.
 
 ---
@@ -95,8 +100,12 @@ Ecomerce_CafeValleBlanco/
 * **Catálogo & Filtros:** Búsqueda rápida y filtrado por molienda, variedades y tipo de café.
 * **Nuestro Café:** Vista territorial de Villa Rica, microclima de bosque de niebla (12°C–18°C), suelos volcánicos y fichas de variedades emblemáticas (*Caturra*, *Typica* y *Bourbon Rosado*).
 * **Sobre Nosotros:** Historia familiar, significado del nombre Valle Blanco, localización en la **Reserva de Biósfera Oxapampa-Asháninka-Yánesha (UNESCO)**, Misión, Visión, Valores y diferenciales.
-* **Carrito y Checkout:** Gestión de cantidades, validación de stock disponible, resumen de compra y confirmación de pedidos.
-* **Mis Pedidos & Perfil:** Historial personal de compras y estado de despacho.
+* **Carrito y Checkout:** Gestión de cantidades, validación de stock disponible, resumen de compra y confirmación de pedidos (habilitado exclusivamente para clientes).
+* **Mis Pedidos & Comprobantes:** Historial de compras con fotografías de los productos adquiridos, detalle de entrega y **descarga de comprobante PDF** por cada pedido.
+* **Perfil de Usuario:**
+  * Visualización y edición de datos personales (`nombres`, `apellidos`, `teléfono`) con sincronización inmediata en sesión.
+  * **Foto de perfil:** Carga de imagen (hasta 10 MB) con compresión automática en navegador, disponible al activar el modo de edición.
+  * **Cambio de contraseña:** Formulario dedicado con verificación de contraseña actual, validación cruzada de coincidencia e indicador visual de fortaleza.
 
 ---
 
@@ -133,19 +142,23 @@ Recorrido visual secuencial desde el cultivo en laderas andino-amazónicas hasta
 </p>
 
 * **Dashboard Gerencial:** Métricas de ventas, órdenes recientes, productos más vendidos y resumen financiero.
+* **Reportes y Métricas (`/admin/reportes`):**
+  * **Gráficos interactivos (`Chart.js`):** Evolución de ventas, distribución de métodos de pago, productos más vendidos, estados de pedidos y **ventas por departamento del Perú** (gráfico horizontal + ranking).
+  * **Reportes independientes:** Vistas y descargas en PDF individuales por módulo (Ventas, Productos, Pedidos, Clientes y Ventas por Departamento) y reporte general consolidado.
 * **Gestión de Productos:**
   * Alta, edición y baja de productos con validaciones completas.
-  * **Subida física de fotografías:** Carga multipart que almacena el archivo en el servidor y asigna la URL relativa.
+  * **Subida física de fotografías (hasta 10 MB):** Carga multipart que almacena el archivo en el servidor y asigna la URL relativa.
   * **Eliminación en cascada:** Al borrar un producto se elimina su registro en BD y su archivo de imagen asociado en disco (respetando imágenes maestras del sistema).
   * Menús desplegables controlados para *Tipo de café*, *Molienda*, *Tueste* y *Variedad*.
-* **Gestión de Pedidos:** Actualización de estados (Pendiente, Pagado, En Envío, Entregado, Cancelado).
-* **Directorio de Clientes:** Consulta de usuarios registrados y actividad de compra.
-* **Acceso y Retorno a Inventario:** Enlace bidireccional integrado con el panel de almacén.
+* **Gestión de Pedidos:** Actualización de estados (`PENDIENTE`, `PAGADO`, `ENVIADO`, `ENTREGADO`, `CANCELADO`), visualización de fotografías de los cafés del pedido y descarga de comprobante PDF por pedido.
+* **Directorio de Clientes:** Consulta de usuarios registrados, métricas de compra y detalle de actividad.
+* **Inventario Solo Lectura (`/admin/inventario`):** Consulta de existencias ordenadas por ID creciente, sin acceso a registrar entradas o salidas directas.
+* **Seguridad y Auditoría (`/admin/seguridad`):** Sección dedicada al registro de auditoría de actividad del sistema.
 
 ---
 
 ### 3. Panel de Inventario & Almacén (`/inventario`)
-* **KPIs de Almacén:** Existencias físicas totales, alertas de stock bajo y productos agotados (0 unidades).
+* **KPIs de Almacén:** Existencias físicas totales ordenadas por ID creciente, alertas de stock bajo y productos agotados (0 unidades).
 * **Registro de Movimientos:** Entradas por lote tostado, salidas por mermas/degustación y ajustes de conteo físico en estantería.
 * **Trazabilidad y Auditoría:** Cada movimiento queda registrado con usuario responsable, fecha/hora, motivo y variación de stock.
 * **Gestión de Alertas:** Configuración de umbral de stock mínimo por producto.
@@ -158,9 +171,9 @@ El sistema implementa el **Principio de Mínimo Privilegio (PoLP)**:
 
 | Rol | Alcance y Responsabilidades | Acceso a Rutas |
 |---|---|---|
-| **`ROLE_CLIENTE`** | Exploración del catálogo, compra en línea, gestión de carrito y consulta de sus pedidos propios. | `/client/**`, `/auth/**` |
-| **`ROLE_ENCARGADO_STOCK`** | Operaciones exclusivas de almacén: entradas de lote, salidas por merma, ajustes físicos y alertas de stock. Sin acceso a ventas globales ni datos privados de clientes. | `/inventario/**`, `/client/**` |
-| **`ROLE_ADMIN`** | Control total gerencial: ventas, catálogo, precios, clientes, pedidos, configuración y supervisión completa de inventario. | `/admin/**`, `/inventario/**`, `/client/**` |
+| **`ROLE_CLIENTE`** | Exploración del catálogo, compra en línea, gestión de carrito, descarga de comprobantes y consulta de sus pedidos propios. | `/client/**`, `/auth/**` |
+| **`ROLE_ENCARGADO_STOCK`** | Operaciones exclusivas de almacén: entradas de lote, salidas por merma, ajustes físicos y alertas de stock. Sin capacidad de compra ni acceso a ventas globales. | `/inventario/**`, `/client/perfil` |
+| **`ROLE_ADMIN`** | Control total gerencial: ventas, catálogo, precios, clientes, pedidos, reportes PDF/gráficos, inventario de solo lectura y auditoría de seguridad. Sin capacidad de compra en tienda. | `/admin/**`, `/client/perfil` |
 
 ---
 
@@ -199,7 +212,7 @@ Al inicializarse la base de datos mediante el seeder automático (`DataInitializ
    spring.datasource.username=postgres
    spring.datasource.password=TU_CONTRASEÑA
    ```
-   > *Nota: Flyway creará automáticamente las tablas y `DataInitializer` insertará los roles, usuarios de prueba y los 9 cafés oficiales de especialidad.*
+   > *Nota: Flyway creará automáticamente las tablas y `DataInitializer` insertará los roles, usuarios de prueba y los cafés oficiales de especialidad.*
 
 ---
 
@@ -238,6 +251,11 @@ La aplicación web estará disponible en: **`http://localhost:4200`**
 * `POST /api/auth/login` — Autenticación con credenciales y entrega de token JWT + roles.
 * `POST /api/auth/register` — Registro de nuevos clientes.
 
+### Perfil de Usuario (`/api/usuario`)
+* `GET /api/usuario/perfil` — Obtener datos del usuario autenticado.
+* `PUT /api/usuario/perfil` — Actualizar nombres, apellidos y teléfono.
+* `PUT /api/usuario/password` — Cambiar contraseña verificando la contraseña actual.
+
 ### Catálogo y Productos (`/api/products`)
 * `GET /api/products` — Listar todos los cafés activos del catálogo.
 * `GET /api/products/{id}` — Consultar detalle de café por identificador numérico.
@@ -245,22 +263,27 @@ La aplicación web estará disponible en: **`http://localhost:4200`**
 * `POST /api/products` — *(Solo ADMIN)* Crear un nuevo café de especialidad.
 * `PUT /api/products/{id}` — *(Solo ADMIN)* Actualizar información y presentaciones de un café.
 * `DELETE /api/products/{id}` — *(Solo ADMIN)* Eliminar producto y su imagen física asociada del servidor.
-* `POST /api/products/upload-image` — *(Solo ADMIN)* Subir imagen multipart y almacenar en `public/assets/images/`.
+* `POST /api/products/upload-image` — *(Solo ADMIN)* Subir imagen multipart (hasta 10 MB) y almacenar en `public/assets/images/`.
 
 ### Inventario y Almacén (`/api/inventario`)
-* `GET /api/inventario/dashboard` — *(ADMIN y ENCARGADO_STOCK)* Obtener métricas, existencias y alertas de stock.
+* `GET /api/inventario/dashboard` — *(ADMIN y ENCARGADO_STOCK)* Obtener métricas, existencias ordenadas por ID y alertas de stock.
 * `GET /api/inventario/movimientos` — *(ADMIN y ENCARGADO_STOCK)* Consultar historial de movimientos auditados.
-* `POST /api/inventario/movimientos` — *(ADMIN y ENCARGADO_STOCK)* Registrar entrada, salida o ajuste manual.
+* `POST /api/inventario/movimientos` — *(ENCARGADO_STOCK)* Registrar entrada, salida o ajuste manual.
 * `GET /api/inventario/alertas` — *(ADMIN y ENCARGADO_STOCK)* Listar productos con existencias por debajo del umbral mínimo.
-* `PUT /api/inventario/productos/{id}/nivel-minimo` — *(ADMIN y ENCARGADO_STOCK)* Configurar umbral de stock mínimo de seguridad.
+* `PUT /api/inventario/productos/{id}/nivel-minimo` — *(ENCARGADO_STOCK)* Configurar umbral de stock mínimo de seguridad.
 
-### Carrito y Pedidos (`/api/carrito`, `/api/pedidos`)
-* `GET /api/carrito` — Obtener el carrito activo del usuario autenticado.
-* `POST /api/carrito/items` — Agregar presentación y cantidad al carrito.
-* `DELETE /api/carrito/items/{id}` — Quitar ítem del carrito.
-* `POST /api/pedidos` — Generar orden a partir del carrito de compras.
-* `GET /api/pedidos/mis-pedidos` — Consultar órdenes del cliente activo.
+### Carrito, Pedidos y Comprobantes (`/api/carrito`, `/api/pedidos`)
+* `GET /api/carrito` — *(Solo CLIENTE)* Obtener el carrito activo del usuario autenticado.
+* `POST /api/carrito/items` — *(Solo CLIENTE)* Agregar presentación y cantidad al carrito.
+* `DELETE /api/carrito/items/{id}` — *(Solo CLIENTE)* Quitar ítem del carrito.
+* `POST /api/pedidos` — *(Solo CLIENTE)* Generar orden a partir del carrito de compras.
+* `GET /api/pedidos/mis-pedidos` — *(Solo CLIENTE)* Consultar órdenes del cliente activo.
+* `GET /api/pedidos/{id}/comprobante` — *(Solo CLIENTE)* Descargar comprobante PDF del pedido propio.
+
+### Administración y Reportes (`/api/admin`)
 * `GET /api/admin/pedidos` — *(Solo ADMIN)* Listado y control global de órdenes de venta.
+* `GET /api/admin/pedidos/{id}/comprobante` — *(Solo ADMIN)* Descargar comprobante PDF de cualquier pedido.
+* `GET /api/admin/reportes/*` — *(Solo ADMIN)* Reportes y exportación PDF (consolidado, ventas, productos, pedidos, clientes y ventas por departamento).
 
 ---
 
