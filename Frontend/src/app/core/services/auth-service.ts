@@ -57,6 +57,16 @@ export class AuthService {
         return null;
     }
 
+    updateCurrentUserName(nombres: string, apellidos: string): void {
+        const user = this.currentUser();
+        if (!user) return;
+        const updated: AuthResponse = { ...user, nombres, apellidos };
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(this.userKey, JSON.stringify(updated));
+        }
+        this.currentUser.set(updated);
+    }
+
     private loadUser(): AuthResponse | null {
         try {
             if (typeof localStorage !== 'undefined') {
