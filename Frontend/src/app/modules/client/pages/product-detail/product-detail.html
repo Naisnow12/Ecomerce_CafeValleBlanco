@@ -157,15 +157,17 @@
           <!-- Acciones -->
           <div class="product-actions">
             @if (isLoggedIn()) {
-            <button type="button" class="btn-add-cart"
-              [disabled]="!selectedPrecio() || product()!.stock === 0 || isAddingToCart()" (click)="agregarAlCarrito()">
-              @if (isAddingToCart()) {
-              <span class="spinner-inline"></span>
-              Agregando...
-              } @else {
-              Agregar al carrito
+              @if (puedeComprar()) {
+              <button type="button" class="btn-add-cart"
+                [disabled]="!selectedPrecio() || product()!.stock === 0 || isAddingToCart()" (click)="agregarAlCarrito()">
+                @if (isAddingToCart()) {
+                <span class="spinner-inline"></span>
+                Agregando...
+                } @else {
+                Agregar al carrito
+                }
+              </button>
               }
-            </button>
             } @else {
             <a routerLink="/auth/login" class="btn-login-to-buy">
               Inicia sesión para comprar

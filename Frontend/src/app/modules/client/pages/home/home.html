@@ -193,6 +193,7 @@
                             VER DETALLES &middot; S/ {{ getPrimaryPrice(item).toFixed(2) }}
                         </a>
 
+                        @if (puedeComprar()) {
                         <button type="button" class="btn-cart-home"
                             [disabled]="(item.stock ?? 0) <= 0 || agregandoId === item.id"
                             (click)="agregarAlCarrito(item)">
@@ -204,6 +205,7 @@
                             + Agregar al carrito
                             }
                         </button>
+                        }
                     </div>
                 </div>
 

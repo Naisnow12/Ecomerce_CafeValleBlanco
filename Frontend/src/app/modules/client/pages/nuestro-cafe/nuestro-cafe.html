@@ -532,6 +532,7 @@
                     <a [routerLink]="['/client/product', p.slug]" class="btn-detail">
                       Ver detalle
                     </a>
+                    @if (puedeComprar()) {
                     <button type="button" class="btn-add-cart" [disabled]="(p.stock ?? 0) <= 0 || agregandoId === p.id" (click)="agregarAlCarrito(p)">
                       @if (agregandoId === p.id) {
                         ...
@@ -541,6 +542,7 @@
                         + Carrito
                       }
                     </button>
+                    }
                   </div>
                 </div>
               </div>

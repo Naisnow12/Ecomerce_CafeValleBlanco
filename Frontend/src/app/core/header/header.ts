@@ -20,6 +20,7 @@ export class Header {
   isLoggedIn = this.authService.isLoggedIn;
   isAdmin = this.authService.isAdmin;
   isStockManager = this.authService.isStockManager;
+  puedeComprar = this.authService.puedeComprar;
   currentUser = this.authService.currentUser;
   cartCount = this.carritoService.itemCount;
 

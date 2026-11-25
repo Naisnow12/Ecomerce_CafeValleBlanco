@@ -15,7 +15,7 @@ export class LayoutClient implements OnInit {
   private readonly carritoService = inject(CarritoService);
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn() && this.authService.puedeComprar()) {
       this.carritoService.cargarCarrito().subscribe({ error: () => {} });
     }
   }

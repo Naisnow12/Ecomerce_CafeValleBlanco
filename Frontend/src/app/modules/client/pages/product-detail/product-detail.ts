@@ -32,6 +32,7 @@ export class ProductDetail implements OnInit {
   cartError = signal<string | null>(null);
 
   isLoggedIn = this.authService.isLoggedIn;
+  puedeComprar = this.authService.puedeComprar;
 
   // 9 PRESENTACIONES OFICIALES DE CAFÉ VALLE BLANCO
   private readonly fallbackProductos: Product[] = [

@@ -30,6 +30,7 @@ export class Catalog implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  puedeComprar = this.authService.puedeComprar;
 
   agregandoId: number | null | undefined = null;
   mensajeAgregadoId: number | null | undefined = null;

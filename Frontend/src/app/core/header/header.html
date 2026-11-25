@@ -21,7 +21,8 @@
     </nav>
 
     <div class="header-actions">
-      <!-- Carrito -->
+      <!-- Carrito (solo clientes o visitantes) -->
+      @if (puedeComprar()) {
       <a routerLink="/client/carrito" class="action-btn cart-btn" aria-label="Carrito de compras">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -32,6 +33,7 @@
         <span class="cart-badge">{{ cartCount() }}</span>
         }
       </a>
+      }
 
       <!-- Usuario -->
       @if (isLoggedIn()) {
@@ -52,6 +54,7 @@
             </svg>
             Mi Perfil
           </a>
+          @if (puedeComprar()) {
           <a routerLink="/client/mis-pedidos" class="dropdown-item" (click)="closeDropdown()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -59,6 +62,7 @@
             </svg>
             Mis Pedidos
           </a>
+          }
           @if (isAdmin()) {
           <a routerLink="/admin/dashboard" class="dropdown-item dropdown-item--admin" (click)="closeDropdown()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -114,10 +118,14 @@
       <li><a routerLink="/client/catalog" (click)="toggleMenu()">Catálogo</a></li>
       <li><a routerLink="/client/nuestro-cafe" (click)="toggleMenu()">Nuestro Café</a></li>
       <li><a routerLink="/client/sobre-nosotros" (click)="toggleMenu()">Sobre Nosotros</a></li>
+      @if (puedeComprar()) {
       <li><a routerLink="/client/carrito" (click)="toggleMenu()">Carrito</a></li>
+      }
       @if (isLoggedIn()) {
       <li><a routerLink="/client/perfil" (click)="toggleMenu()">Mi Perfil</a></li>
+      @if (puedeComprar()) {
       <li><a routerLink="/client/mis-pedidos" (click)="toggleMenu()">Mis Pedidos</a></li>
+      }
       <li><button type="button" (click)="logout()">Cerrar sesión</button></li>
       } @else {
       <li><a routerLink="/auth/login" (click)="toggleMenu()">Ingresar</a></li>

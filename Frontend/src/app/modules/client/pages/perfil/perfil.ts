@@ -47,6 +47,7 @@ export class Perfil implements OnInit {
 
   // Usuario autenticado
   currentUser = this.authService.currentUser;
+  puedeComprar = this.authService.puedeComprar;
 
   ngOnInit(): void {
     this.cargarPerfil();

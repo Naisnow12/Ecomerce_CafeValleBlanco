@@ -245,7 +245,8 @@
 
         <div class="perfil-options">
 
-            <!-- MIS PEDIDOS -->
+            <!-- MIS PEDIDOS (solo clientes) -->
+            @if (puedeComprar()) {
             <a routerLink="/client/mis-pedidos" class="perfil-option-card">
 
                 <div class="perfil-option-icon">
@@ -268,6 +269,7 @@
                 </span>
 
             </a>
+            }
 
             <!-- DIRECCIONES -->
             <div class="perfil-option-card perfil-option-card--disabled">

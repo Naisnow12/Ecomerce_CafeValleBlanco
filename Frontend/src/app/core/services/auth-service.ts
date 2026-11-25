@@ -19,6 +19,7 @@ export class AuthService {
     isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
     isStockManager = computed(() => this.currentUser()?.roles.includes('ROLE_ENCARGADO_STOCK') ?? false);
     isCliente = computed(() => this.currentUser()?.roles.includes('ROLE_CLIENTE') ?? false);
+    puedeComprar = computed(() => !this.isLoggedIn() || (this.isCliente() && !this.isAdmin() && !this.isStockManager()));
 
     register(req: RegisterRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/register`, req).pipe(

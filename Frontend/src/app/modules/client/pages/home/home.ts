@@ -17,6 +17,7 @@ export class Home implements OnInit {
   private readonly carritoService = inject(CarritoService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  puedeComprar = this.authService.puedeComprar;
 
   featuredProducts: Product[] = [];
   selectedFilter: string = 'todos';
