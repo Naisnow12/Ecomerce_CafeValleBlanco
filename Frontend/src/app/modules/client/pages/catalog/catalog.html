@@ -242,6 +242,7 @@
                                     VER DETALLES · S/ {{ getPrecioMinimo(producto).toFixed(2) }}
                                 </a>
 
+                                @if (puedeComprar()) {
                                 <button type="button" class="btn-add-cart-card"
                                     [disabled]="(producto.stock ?? 0) <= 0 || agregandoId === producto.id"
                                     (click)="agregarAlCarrito(producto)">
@@ -255,6 +256,7 @@
                                     + Agregar al carrito
                                     }
                                 </button>
+                                }
                             </div>
                         </div>
 

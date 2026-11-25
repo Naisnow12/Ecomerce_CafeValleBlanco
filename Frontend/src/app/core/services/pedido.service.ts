@@ -20,4 +20,10 @@ export class PedidoService {
   getDetallePedido(id: number): Observable<PedidoResponse> {
     return this.http.get<PedidoResponse>(`${this.apiUrl}/${id}`);
   }
+
+  descargarComprobante(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/comprobante`, {
+      responseType: 'blob'
+    });
+  }
 }

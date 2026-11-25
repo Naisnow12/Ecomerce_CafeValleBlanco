@@ -249,6 +249,16 @@
     white-space: nowrap;
 }
 
+.product-thumb-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #e2d7c7;
+    background: #fff;
+    flex-shrink: 0;
+}
+
 // ENTREGA
 .delivery-details {
     display: flex;

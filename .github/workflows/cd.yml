@@ -1,0 +1,102 @@
+name: CD - Entrega Continua
+
+on:
+  push:
+    branches: [ "main", "new_dev" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Entorno de despliegue'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - development
+
+jobs:
+  # ==========================================
+  # Job: Despliegue a Producción (rama main)
+  # ==========================================
+  deploy-production:
+    name: 🚀 Despliegue a Producción
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Disparar despliegue Backend en Render (Producción)
+        run: |
+          echo "=============================================="
+          echo "🚀 Iniciando CD - Entorno: PRODUCCIÓN"
+          echo "=============================================="
+          echo "Branch:   ${{ github.ref_name }}"
+          echo "Commit:   ${{ github.sha }}"
+          echo "----------------------------------------------"
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+            echo "Conectando con Render Deploy Hook (producción)..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}")
+            if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+              echo "✅ Despliegue en Render (prod) disparado exitosamente (HTTP $HTTP_CODE)."
+            else
+              echo "⚠️ Render respondió con código HTTP: $HTTP_CODE"
+            fi
+          else
+            echo "ℹ️ Secreto RENDER_DEPLOY_HOOK no configurado."
+            echo "   El backend se sincroniza automáticamente mediante Render Git Integration."
+          fi
+
+      - name: Resumen del despliegue (Producción)
+        run: |
+          echo "=============================================="
+          echo "🌐 URLs de Producción"
+          echo "=============================================="
+          echo "Frontend:  https://ecomerce-cafe-valle-blanco.vercel.app"
+          echo "Backend:   https://ecomerce-cafevalleblanco.onrender.com"
+          echo "Base de datos: Neon PostgreSQL Serverless (AWS us-east-1)"
+          echo "✅ Pipeline de Entrega Continua (PRODUCCIÓN) finalizado con éxito."
+
+  # ==========================================
+  # Job: Despliegue a Desarrollo (rama new_dev)
+  # ==========================================
+  deploy-development:
+    name: 🧪 Despliegue a Desarrollo
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/new_dev' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'development')
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Disparar despliegue Backend en Render (Desarrollo)
+        run: |
+          echo "=============================================="
+          echo "🧪 Iniciando CD - Entorno: DESARROLLO"
+          echo "=============================================="
+          echo "Branch:   ${{ github.ref_name }}"
+          echo "Commit:   ${{ github.sha }}"
+          echo "----------------------------------------------"
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_DEV }}" ]; then
+            echo "Conectando con Render Deploy Hook (dev)..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK_DEV }}")
+            if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+              echo "✅ Despliegue en Render (dev) disparado exitosamente (HTTP $HTTP_CODE)."
+            else
+              echo "⚠️ Render respondió con código HTTP: $HTTP_CODE"
+            fi
+          else
+            echo "ℹ️ Secreto RENDER_DEPLOY_HOOK_DEV no configurado."
+            echo "   El backend dev se sincroniza automáticamente mediante Render Git Integration."
+          fi
+
+      - name: Resumen del despliegue (Desarrollo)
+        run: |
+          echo "=============================================="
+          echo "🌐 URLs de Desarrollo"
+          echo "=============================================="
+          echo "Backend Dev:  https://ecomerce-cafevalleblanco-dev.onrender.com"
+          echo "Frontend Dev: Vercel preview branch (new_dev)"
+          echo "Base de datos: Neon PostgreSQL Serverless (AWS us-east-1)"
+          echo "✅ Pipeline de Entrega Continua (DESARROLLO) finalizado con éxito."

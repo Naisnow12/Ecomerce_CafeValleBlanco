@@ -20,6 +20,9 @@ import { ProductosAdmin } from './modules/admin/pages/productos/productos-admin/
 import { PedidosAdmin } from './modules/admin/pages/pedidos/pedidos-admin/pedidos-admin';
 import { ClientesAdmin } from './modules/admin/pages/clientes/clientes-admin/clientes-admin';
 import { Configuracion } from './modules/admin/pages/configuracion/configuracion';
+import { ReportesAdmin } from './modules/admin/pages/reportes/reportes';
+import { InventarioAdmin } from './modules/admin/pages/inventario/inventario-admin';
+import { SeguridadAdmin } from './modules/admin/pages/seguridad/seguridad';
 import { StockDashboard } from './modules/stock/pages/dashboard/stock-dashboard';
 
 export const routes: Routes = [
@@ -42,10 +45,10 @@ export const routes: Routes = [
       { path: 'home', component: Home },
       { path: 'catalog', component: Catalog },
       { path: 'product/:slug', component: ProductDetail },
-      { path: 'carrito', component: Carrito, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
-      { path: 'checkout', component: Checkout, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
-      { path: 'order-confirm/:id', component: OrderConfirm, canActivate: [authGuard] },
-      { path: 'mis-pedidos', component: MisPedidos, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE', 'ROLE_ADMIN'])] },
+      { path: 'carrito', component: Carrito, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE'])] },
+      { path: 'checkout', component: Checkout, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE'])] },
+      { path: 'order-confirm/:id', component: OrderConfirm, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE'])] },
+      { path: 'mis-pedidos', component: MisPedidos, canActivate: [authGuard, roleGuard(['ROLE_CLIENTE'])] },
       { path: 'perfil', component: Perfil, canActivate: [authGuard] },
       { path: 'proceso', component: Proceso },
       { path: 'nuestro-cafe', component: NuestroCafe },
@@ -59,9 +62,12 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
+      { path: 'reportes', component: ReportesAdmin },
       { path: 'productos', component: ProductosAdmin },
       { path: 'pedidos', component: PedidosAdmin },
+      { path: 'inventario', component: InventarioAdmin },
       { path: 'clientes', component: ClientesAdmin },
+      { path: 'seguridad', component: SeguridadAdmin },
       { path: 'configuracion', component: Configuracion },
     ]
   },

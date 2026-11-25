@@ -1,15 +1,10 @@
 
 import {
   Component,
-  signal,
-  inject,
-  OnInit
+  signal
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { AdminService } from '../../../../core/services/admin.service';
 
 interface ConfiguracionTienda {
   nombre: string;
@@ -47,24 +42,18 @@ interface ConfiguracionEnvios {
   selector: 'app-configuracion',
   standalone: true,
   imports: [
-    FormsModule,
-    RouterLink,
-    DatePipe
+    FormsModule
   ],
   templateUrl: './configuracion.html',
   styleUrl: './configuracion.scss',
 })
-export class Configuracion implements OnInit {
-  private readonly adminService = inject(AdminService);
-
+export class Configuracion {
   guardadoDisponible = signal(true);
   seccionActiva = signal<string>('TIENDA');
 
   guardando = signal(false);
   error = signal('');
   mensaje = signal('');
-
-  auditorias = signal<any[]>([]);
 
   tienda: ConfiguracionTienda = {
     nombre: 'Valle Blanco',
@@ -98,19 +87,6 @@ export class Configuracion implements OnInit {
     instrucciones: 'Empaque especial hermético para conservar aromas de tueste.'
   };
 
-  ngOnInit(): void {
-    this.cargarAuditoria();
-  }
-
-  cargarAuditoria(): void {
-    this.adminService.getAuditoria().subscribe({
-      next: (data) => {
-        this.auditorias.set(data);
-      },
-      error: () => {}
-    });
-  }
-
   guardarCambios(): void {
     this.guardando.set(true);
     setTimeout(() => {
@@ -124,17 +100,13 @@ export class Configuracion implements OnInit {
     this.seccionActiva.set(seccion);
     this.error.set('');
     this.mensaje.set('');
-    if (seccion === 'SEGURIDAD') {
-      this.cargarAuditoria();
-    }
   }
 
   obtenerNombreSeccion(): string {
     const secciones: Record<string, string> = {
       TIENDA: 'Información de la tienda',
       PAGOS: 'Métodos de pago',
-      ENVIOS: 'Configuración de envíos',
-      SEGURIDAD: 'Seguridad y auditoría'
+      ENVIOS: 'Configuración de envíos'
     };
 
     return secciones[this.seccionActiva()] ?? 'Configuración';

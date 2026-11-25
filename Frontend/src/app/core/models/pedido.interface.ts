@@ -14,6 +14,7 @@ export interface PedidoItem {
   precioUnitario: number;
   cantidad: number;
   subtotal: number;
+  imagenUrl?: string;
 }
 
 export interface PedidoResponse {
@@ -31,6 +32,8 @@ export interface PedidoResponse {
   dirProvincia?: string;
   dirDepartamento?: string;
   dirDestinatario?: string;
+  clienteEmail?: string;
+  clienteNombre?: string;
 }
 
 export interface CrearPedidoRequest {

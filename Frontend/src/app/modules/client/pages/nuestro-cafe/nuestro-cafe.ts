@@ -20,6 +20,7 @@ export class NuestroCafe implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  puedeComprar = this.authService.puedeComprar;
 
   productos = signal<Product[]>([]);
   cargando = signal(true);

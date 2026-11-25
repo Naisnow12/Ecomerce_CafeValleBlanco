@@ -8,10 +8,6 @@
       <p class="nc-hero-desc">
         Más que una taza de café, Valle Blanco es una experiencia sensorial directa desde las montañas andino-amazónicas. Cosechado a mano, seleccionado grano por grano y tostado en micro-lotes para llevar la frescura del campo a tu hogar.
       </p>
-      <div class="nc-hero-cta">
-        <a href="#catalogo-variedades" class="btn-hero-primary">Explorar Variedades &rarr;</a>
-        <a href="#experiencia-beneficios" class="btn-hero-secondary">¿Por qué Elegirnos?</a>
-      </div>
     </div>
   </section>
 
@@ -536,6 +532,7 @@
                     <a [routerLink]="['/client/product', p.slug]" class="btn-detail">
                       Ver detalle
                     </a>
+                    @if (puedeComprar()) {
                     <button type="button" class="btn-add-cart" [disabled]="(p.stock ?? 0) <= 0 || agregandoId === p.id" (click)="agregarAlCarrito(p)">
                       @if (agregandoId === p.id) {
                         ...
@@ -545,6 +542,7 @@
                         + Carrito
                       }
                     </button>
+                    }
                   </div>
                 </div>
               </div>

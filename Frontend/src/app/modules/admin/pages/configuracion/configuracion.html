@@ -41,24 +41,35 @@
             <nav class="config-nav">
 
                 <button type="button" [class.active]="seccionActiva() === 'TIENDA'" (click)="cambiarSeccion('TIENDA')">
-                    <span class="nav-icon">🏪</span>
+                    <span class="nav-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                    </span>
                     Información de la tienda
                 </button>
 
                 <button type="button" [class.active]="seccionActiva() === 'PAGOS'" (click)="cambiarSeccion('PAGOS')">
-                    <span class="nav-icon">💳</span>
+                    <span class="nav-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </span>
                     Métodos de pago
                 </button>
 
                 <button type="button" [class.active]="seccionActiva() === 'ENVIOS'" (click)="cambiarSeccion('ENVIOS')">
-                    <span class="nav-icon">🚚</span>
+                    <span class="nav-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="3" width="15" height="13" />
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                            <circle cx="5.5" cy="18.5" r="2.5" />
+                            <circle cx="18.5" cy="18.5" r="2.5" />
+                        </svg>
+                    </span>
                     Envíos y entregas
-                </button>
-
-                <button type="button" [class.active]="seccionActiva() === 'SEGURIDAD'"
-                    (click)="cambiarSeccion('SEGURIDAD')">
-                    <span class="nav-icon">🔒</span>
-                    Seguridad
                 </button>
 
             </nav>
@@ -405,120 +416,6 @@
                     <button type="button" class="btn-save" [disabled]="guardando()" (click)="guardarCambios()">
                         {{ guardando() ? 'Guardando...' : 'Guardar configuración' }}
                     </button>
-                </div>
-
-            </section>
-
-            }
-
-            <!-- SEGURIDAD -->
-            @if (seccionActiva() === 'SEGURIDAD') {
-
-            <section class="config-card">
-
-                <div class="card-heading">
-                    <h2>Seguridad y acceso</h2>
-
-                    <p>
-                        Información sobre la protección del panel administrativo.
-                    </p>
-                </div>
-
-                <div class="config-form">
-
-                    <div class="security-item">
-
-                        <div class="security-icon">🔐</div>
-
-                        <div>
-                            <h3>Autenticación de usuarios</h3>
-
-                            <p>
-                                Valle Blanco utiliza autenticación mediante
-                                credenciales y tokens para identificar a los usuarios.
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="security-item">
-
-                        <div class="security-icon">👤</div>
-
-                        <div>
-                            <h3>Permisos administrativos</h3>
-
-                            <p>
-                                El acceso al panel debe restringirse a usuarios
-                                con el rol ROLE_ADMIN. Esta protección será
-                                revisada durante la integración de seguridad.
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="security-item">
-
-                        <div class="security-icon">📋</div>
-
-                        <div style="width: 100%;">
-                            <h3>Auditoría de Actividad del Sistema</h3>
-
-                            <p>
-                                Registro histórico de eventos de seguridad y modificaciones administrativas:
-                            </p>
-
-                            @if (auditorias().length > 0) {
-                            <div style="margin-top: 1rem; max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px;">
-                                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                                    <thead>
-                                        <tr style="background: #f9f9f9; text-align: left; border-bottom: 1px solid #eee;">
-                                            <th style="padding: 0.5rem;">Fecha</th>
-                                            <th style="padding: 0.5rem;">Usuario</th>
-                                            <th style="padding: 0.5rem;">Módulo</th>
-                                            <th style="padding: 0.5rem;">Acción</th>
-                                            <th style="padding: 0.5rem;">Detalles</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (a of auditorias(); track a.id) {
-                                        <tr style="border-bottom: 1px solid #f0f0f0;">
-                                            <td style="padding: 0.5rem;">{{ a.creadoEn | date:'short' }}</td>
-                                            <td style="padding: 0.5rem; font-weight: 600;">{{ a.emailUsuario }}</td>
-                                            <td style="padding: 0.5rem;">{{ a.modulo }}</td>
-                                            <td style="padding: 0.5rem;"><span style="background: #eef2f0; padding: 2px 6px; border-radius: 4px; font-weight: 600;">{{ a.accion }}</span></td>
-                                            <td style="padding: 0.5rem; color: #666;">{{ a.detalles }}</td>
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            } @else {
-                            <p style="color: #888; margin-top: 0.5rem;">No hay registros de auditoría aún.</p>
-                            }
-                        </div>
-
-                    </div>
-
-                    <div class="security-item">
-
-                        <div class="security-icon">🔑</div>
-
-                        <div>
-                            <h3>Contraseña de la cuenta</h3>
-
-                            <p>
-                                Puedes gestionar la contraseña de tu cuenta
-                                desde las opciones de perfil.
-                            </p>
-
-                            <a routerLink="/client/perfil" class="security-link">
-                                Ir a mi perfil →
-                            </a>
-                        </div>
-
-                    </div>
-
                 </div>
 
             </section>

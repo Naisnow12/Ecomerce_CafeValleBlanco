@@ -195,6 +195,7 @@ public class PedidoService {
                         .precioUnitario(item.getPrecioUnitario())
                         .cantidad(item.getCantidad())
                         .subtotal(item.getSubtotal())
+                        .imagenUrl(productRepository.findById(item.getProductoId()).map(Product::getImagenUrl).orElse(null))
                         .build())
                 .toList();
 

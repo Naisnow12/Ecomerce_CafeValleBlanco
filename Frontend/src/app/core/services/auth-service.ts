@@ -19,6 +19,7 @@ export class AuthService {
     isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
     isStockManager = computed(() => this.currentUser()?.roles.includes('ROLE_ENCARGADO_STOCK') ?? false);
     isCliente = computed(() => this.currentUser()?.roles.includes('ROLE_CLIENTE') ?? false);
+    puedeComprar = computed(() => !this.isLoggedIn() || (this.isCliente() && !this.isAdmin() && !this.isStockManager()));
 
     register(req: RegisterRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/register`, req).pipe(
@@ -54,6 +55,16 @@ export class AuthService {
             return localStorage.getItem(this.tokenKey);
         }
         return null;
+    }
+
+    updateCurrentUserName(nombres: string, apellidos: string): void {
+        const user = this.currentUser();
+        if (!user) return;
+        const updated: AuthResponse = { ...user, nombres, apellidos };
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(this.userKey, JSON.stringify(updated));
+        }
+        this.currentUser.set(updated);
     }
 
     private loadUser(): AuthResponse | null {

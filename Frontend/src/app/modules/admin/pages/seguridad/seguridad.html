@@ -1,0 +1,128 @@
+<div class="seguridad-page">
+
+  <!-- ENCABEZADO -->
+  <header class="page-header">
+    <div class="page-heading">
+      <span class="section-label">VALLE BLANCO · SISTEMA</span>
+      <h1>Seguridad &amp; Auditoría</h1>
+      <p>Supervisa los controles de acceso del sistema y consulta el registro histórico de actividad administrativa.</p>
+    </div>
+
+    <button type="button" class="btn-refresh" (click)="cargarAuditoria()" [disabled]="cargando()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10" />
+        <polyline points="1 20 1 14 7 14" />
+        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+      </svg>
+      <span>Actualizar registros</span>
+    </button>
+  </header>
+
+  <!-- TARJETAS DE SEGURIDAD -->
+  <section class="security-cards">
+    <div class="security-card">
+      <div class="security-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0110 0v4" />
+        </svg>
+      </div>
+      <div>
+        <h3>Autenticación JWT</h3>
+        <p>El acceso al sistema utiliza tokens firmados sin estado (stateless) y contraseñas cifradas con BCrypt.</p>
+      </div>
+    </div>
+
+    <div class="security-card">
+      <div class="security-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      </div>
+      <div>
+        <h3>Control de Acceso por Roles</h3>
+        <p>Las rutas administrativas exigen <strong>ROLE_ADMIN</strong> y la operación de almacén está separada para <strong>ROLE_ENCARGADO_STOCK</strong>.</p>
+      </div>
+    </div>
+
+    <div class="security-card">
+      <div class="security-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+        </svg>
+      </div>
+      <div>
+        <h3>Contraseña de la cuenta</h3>
+        <p>Puedes actualizar la contraseña de tu cuenta administradora desde las opciones de perfil.</p>
+        <a routerLink="/client/perfil" class="security-link">Ir a mi perfil &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDITORÍA DEL SISTEMA -->
+  <section class="audit-card">
+    <div class="audit-header">
+      <div>
+        <h2>Auditoría de Actividad del Sistema</h2>
+        <p>Registro histórico de eventos de seguridad, cambios de estado y operaciones administrativas</p>
+      </div>
+
+      <div class="audit-filters">
+        <input type="search" [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"
+          placeholder="Buscar usuario, acción o detalle..." class="search-input" />
+
+        <select [ngModel]="filtroModulo()" (ngModelChange)="filtroModulo.set($event)" class="filter-select" aria-label="Filtrar por módulo">
+          <option value="TODOS">Todos los módulos</option>
+          @for (mod of modulosDisponibles(); track mod) {
+            <option [value]="mod">{{ mod }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    } @else if (cargando()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando registros de auditoría...</p>
+      </div>
+    } @else if (auditoriasFiltradas().length === 0) {
+      <div class="empty-state">
+        <p>No se encontraron registros de auditoría para los filtros seleccionados.</p>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Fecha y Hora</th>
+              <th>Usuario</th>
+              <th>Módulo</th>
+              <th>Acción</th>
+              <th>Resultado</th>
+              <th>Detalles</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of auditoriasFiltradas(); track a.id) {
+              <tr>
+                <td class="nowrap">{{ a.creadoEn | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td class="font-bold">{{ a.emailUsuario }}</td>
+                <td><span class="module-tag">{{ a.modulo }}</span></td>
+                <td><span class="action-tag">{{ a.accion }}</span></td>
+                <td>
+                  <span class="result-badge" [class.result-error]="a.resultado && a.resultado !== 'EXITO'">
+                    {{ a.resultado || 'EXITO' }}
+                  </span>
+                </td>
+                <td class="details-cell">{{ a.detalles }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+</div>

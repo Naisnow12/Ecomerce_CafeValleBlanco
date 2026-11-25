@@ -16,9 +16,20 @@
             </p>
         </div>
 
-        <div class="dashboard-date">
-            <span>Fecha actual</span>
-            <strong>{{ fechaActual | date:'dd/MM/yyyy' }}</strong>
+        <div class="dashboard-actions">
+            <a routerLink="/admin/reportes" class="btn-ver-reportes">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10" />
+                    <line x1="12" y1="20" x2="12" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                <span>Reportes & PDF</span>
+            </a>
+
+            <div class="dashboard-date">
+                <span>Fecha actual</span>
+                <strong>{{ fechaActual | date:'dd/MM/yyyy' }}</strong>
+            </div>
         </div>
 
     </div>
@@ -169,7 +180,10 @@
         <div class="secondary-stat">
 
             <div class="secondary-stat-icon">
-                <span>!</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
             </div>
 
             <div>
@@ -189,7 +203,11 @@
         <div class="secondary-stat">
 
             <div class="secondary-stat-icon secondary-stat-icon--stock">
-                <span>!</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
             </div>
 
             <div>
@@ -378,27 +396,52 @@
         <div class="quick-access-grid">
 
             <a routerLink="/admin/productos" class="quick-access-item">
-                <span class="quick-icon">☕</span>
+                <span class="quick-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                        <path d="M3.3 7L12 12l8.7-5" />
+                        <path d="M12 22V12" />
+                    </svg>
+                </span>
                 <strong>Productos</strong>
                 <span>Gestionar catálogo</span>
             </a>
 
             <a routerLink="/admin/pedidos" class="quick-access-item">
-                <span class="quick-icon">📦</span>
+                <span class="quick-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 01-8 0" />
+                    </svg>
+                </span>
                 <strong>Pedidos</strong>
                 <span>Revisar compras</span>
             </a>
 
             <a routerLink="/admin/clientes" class="quick-access-item">
-                <span class="quick-icon">👥</span>
+                <span class="quick-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                        <path d="M16 3.13a4 4 0 010 7.75" />
+                    </svg>
+                </span>
                 <strong>Clientes</strong>
                 <span>Consultar usuarios</span>
             </a>
 
-            <a routerLink="/admin/configuracion" class="quick-access-item">
-                <span class="quick-icon">⚙</span>
-                <strong>Configuración</strong>
-                <span>Ajustes generales</span>
+            <a routerLink="/admin/reportes" class="quick-access-item">
+                <span class="quick-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="18" y1="20" x2="18" y2="10" />
+                        <line x1="12" y1="20" x2="12" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                </span>
+                <strong>Reportes</strong>
+                <span>Métricas y PDF</span>
             </a>
 
         </div>

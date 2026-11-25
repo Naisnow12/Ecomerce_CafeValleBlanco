@@ -49,9 +49,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/inventario/**").hasAnyRole("ADMIN", "ENCARGADO_STOCK")
-                        .requestMatchers("/api/pedidos/**").hasAnyRole("CLIENTE", "ADMIN")
-                        .requestMatchers("/api/carrito/**").hasAnyRole("CLIENTE", "ADMIN")
-                        .requestMatchers("/api/pagos/**").hasAnyRole("CLIENTE", "ADMIN")
+                        .requestMatchers("/api/pedidos/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/carrito/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/pagos/**").hasRole("CLIENTE")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -395,7 +395,7 @@
                             <span>Total de pedidos</span>
 
                             <strong>
-                                {{ cliente.totalPedidos ?? '—' }}
+                                {{ cliente.totalPedidos ?? 0 }}
                             </strong>
                         </div>
 
@@ -403,20 +403,11 @@
                             <span>Total de compras</span>
 
                             <strong>
-                                @if (cliente.totalGastado != null) {
-                                S/ {{ cliente.totalGastado }}
-                                } @else {
-                                —
-                                }
+                                S/ {{ (cliente.totalGastado ?? 0) | number:'1.2-2' }}
                             </strong>
                         </div>
 
                     </div>
-
-                    <p class="activity-note">
-                        Las estadísticas de compras estarán disponibles
-                        cuando se conecte el backend administrativo.
-                    </p>
 
                 </div>
 

@@ -66,6 +66,7 @@ export class PedidosAdmin implements OnInit {
   // Detalle
   pedidoSeleccionado = signal<PedidoAdmin | null>(null);
   mostrarDetalle = signal(false);
+  descargandoComprobante = signal(false);
 
   // Estadísticas
   totalPedidos = computed(() => this.pedidos().length);
@@ -85,8 +86,8 @@ export class PedidosAdmin implements OnInit {
         this.pedidos.set(data.map(p => ({
           id: p.id,
           numeroPedido: p.numeroPedido,
-          clienteNombre: p.dirDestinatario || 'Cliente',
-          clienteEmail: p.dirTelefono ? `Tel: ${p.dirTelefono}` : 'Registrado',
+          clienteNombre: p.clienteNombre || p.dirDestinatario || 'Cliente',
+          clienteEmail: p.clienteEmail || (p.dirTelefono ? `Tel: ${p.dirTelefono}` : 'Registrado'),
           estado: p.estado as EstadoPedido,
           items: p.items || [],
           subtotal: p.subtotal,
@@ -209,5 +210,28 @@ export class PedidosAdmin implements OnInit {
     return this.edicionDisponible() &&
       pedido.estado !== 'CANCELADO' &&
       pedido.estado !== 'ENTREGADO';
+  }
+
+  descargarComprobante(pedido: PedidoAdmin): void {
+    if (this.descargandoComprobante()) return;
+    this.descargandoComprobante.set(true);
+
+    this.adminService.descargarComprobantePedido(pedido.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Comprobante_${pedido.numeroPedido || pedido.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.descargandoComprobante.set(false);
+      },
+      error: () => {
+        alert('No se pudo descargar el comprobante del pedido.');
+        this.descargandoComprobante.set(false);
+      }
+    });
   }
 }

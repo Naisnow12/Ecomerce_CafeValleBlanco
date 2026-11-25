@@ -1,0 +1,1 @@
+fix: quitar botones hero nuestro cafe, agregar fotos de cafes en pedidos admin y calcular metricas en detalle cliente
