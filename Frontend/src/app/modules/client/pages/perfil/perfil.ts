@@ -218,33 +218,71 @@ export class Perfil implements OnInit {
       this.mensajeError.set('Solo se permiten archivos de imagen.');
       return;
     }
-    if (archivo.size > 2 * 1024 * 1024) {
-      this.mensajeError.set('La imagen no debe superar 2 MB.');
+    if (archivo.size > 10 * 1024 * 1024) {
+      this.mensajeError.set('La imagen no debe superar 10 MB.');
       return;
     }
 
     this.subiendoFoto.set(true);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      this.avatarSrc.set(dataUrl);
-      // Guardar en localStorage vinculado al email del usuario
-      const email = this.usuario()?.email;
-      if (email && isPlatformBrowser(this.platformId)) {
-        localStorage.setItem(AVATAR_KEY_PREFIX + email, dataUrl);
-      }
-      this.subiendoFoto.set(false);
-      this.mensajeExito.set('Foto de perfil actualizada.');
-      setTimeout(() => this.mensajeExito.set(null), 3000);
-    };
-    reader.onerror = () => {
-      this.subiendoFoto.set(false);
-      this.mensajeError.set('No se pudo leer la imagen.');
-    };
-    reader.readAsDataURL(archivo);
+    this.comprimirImagen(archivo, 400, 0.82)
+      .then((dataUrl) => {
+        this.avatarSrc.set(dataUrl);
+        const email = this.usuario()?.email;
+        if (email && isPlatformBrowser(this.platformId)) {
+          localStorage.setItem(AVATAR_KEY_PREFIX + email, dataUrl);
+        }
+        this.subiendoFoto.set(false);
+        this.mensajeExito.set('Foto de perfil actualizada.');
+        setTimeout(() => this.mensajeExito.set(null), 3000);
+      })
+      .catch(() => {
+        this.subiendoFoto.set(false);
+        this.mensajeError.set('No se pudo procesar la imagen.');
+      });
 
     // Resetear el input para permitir subir la misma imagen de nuevo
     input.value = '';
+  }
+
+  /** Redimensiona y comprime la imagen para no saturar localStorage */
+  private comprimirImagen(
+    archivo: File,
+    maxDimension: number,
+    calidad: number
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Error al leer archivo'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Error al cargar imagen'));
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDimension || height > maxDimension) {
+            if (width >= height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(reader.result as string);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', calidad));
+        };
+        img.src = reader.result as string;
+      };
+      reader.readAsDataURL(archivo);
+    });
   }
 
   eliminarFoto(): void {
