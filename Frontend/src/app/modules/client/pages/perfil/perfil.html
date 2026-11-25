@@ -59,6 +59,7 @@
                         }
                     </div>
 
+                    @if (editando()) {
                     <input #fotoInput type="file" accept="image/*" (change)="seleccionarFoto($event)" hidden />
 
                     <div class="perfil-avatar-actions">
@@ -71,6 +72,7 @@
                         </button>
                         }
                     </div>
+                    }
                 </div>
 
                 <div class="perfil-user-info">
