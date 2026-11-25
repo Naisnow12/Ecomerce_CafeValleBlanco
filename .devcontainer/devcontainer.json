@@ -1,0 +1,32 @@
+{
+  "name": "Café Valle Blanco (Java 21 + Angular + Docker)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [4200, 4000, 8081, 5432],
+  "portsAttributes": {
+    "4200": { "label": "Frontend Angular (Dev)" },
+    "4000": { "label": "Frontend Angular (SSR Docker)" },
+    "8081": { "label": "Backend Spring Boot API" },
+    "5432": { "label": "PostgreSQL" }
+  },
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@11.24.0 --activate && cd Frontend && pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "angular.ng-template",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}
