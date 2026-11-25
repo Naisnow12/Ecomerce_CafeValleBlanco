@@ -47,7 +47,10 @@ public class ReportePdfService {
             // 4. MÉTODOS DE PAGO Y ESTADOS
             agregarMetodosYEstados(document, metricas);
 
-            // 5. ALERTAS DE STOCK (Si las hay)
+            // 5. VENTAS POR DEPARTAMENTO
+            agregarVentasPorDepartamento(document, metricas);
+
+            // 6. ALERTAS DE STOCK (Si las hay)
             if (metricas.getStockCritico() != null && !metricas.getStockCritico().isEmpty()) {
                 agregarAlertasStock(document, metricas);
             }
@@ -272,6 +275,39 @@ public class ReportePdfService {
         container.addCell(col2);
 
         doc.add(container);
+    }
+
+    private void agregarVentasPorDepartamento(Document doc, ReporteMetricasResponse metricas) throws DocumentException {
+        if (metricas.getVentasPorDepartamento() == null || metricas.getVentasPorDepartamento().isEmpty()) return;
+
+        Font sectionTitleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, COLOR_PRIMARY);
+        Paragraph title = new Paragraph("4. DEPARTAMENTOS CON MAYOR VENTA DE CAFÉ", sectionTitleFont);
+        title.setSpacingAfter(8);
+        doc.add(title);
+
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{38f, 15f, 15f, 20f, 12f});
+        table.setSpacingAfter(15);
+
+        table.addCell(crearHeaderCell("Departamento", Element.ALIGN_LEFT));
+        table.addCell(crearHeaderCell("Pedidos", Element.ALIGN_RIGHT));
+        table.addCell(crearHeaderCell("Unidades", Element.ALIGN_RIGHT));
+        table.addCell(crearHeaderCell("Total (S/)", Element.ALIGN_RIGHT));
+        table.addCell(crearHeaderCell("Part. %", Element.ALIGN_RIGHT));
+
+        boolean alt = false;
+        for (ReporteMetricasResponse.VentaDepartamentoReporte dep : metricas.getVentasPorDepartamento()) {
+            Color rowColor = alt ? COLOR_ROW_ALT : Color.WHITE;
+            table.addCell(crearDataCell(dep.getDepartamento(), rowColor, Element.ALIGN_LEFT, true));
+            table.addCell(crearDataCell(String.valueOf(dep.getCantidadPedidos()), rowColor, Element.ALIGN_RIGHT, false));
+            table.addCell(crearDataCell(String.valueOf(dep.getUnidadesVendidas()), rowColor, Element.ALIGN_RIGHT, false));
+            table.addCell(crearDataCell("S/ " + moneyFormat.format(dep.getTotalGenerado()), rowColor, Element.ALIGN_RIGHT, false));
+            table.addCell(crearDataCell(String.format("%.1f%%", dep.getPorcentaje()), rowColor, Element.ALIGN_RIGHT, false));
+            alt = !alt;
+        }
+
+        doc.add(table);
     }
 
     private void agregarAlertasStock(Document doc, ReporteMetricasResponse metricas) throws DocumentException {

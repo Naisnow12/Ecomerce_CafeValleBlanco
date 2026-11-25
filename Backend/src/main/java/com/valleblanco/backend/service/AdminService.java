@@ -413,6 +413,39 @@ public class AdminService {
                 })
                 .toList();
 
+        // Ventas por Departamento
+        Map<String, Object[]> ventasDeptoMap = new HashMap<>(); // [String nombreNormalizado, long pedidos, int unidades, BigDecimal total]
+        pedidosValidos.forEach(ped -> {
+            String rawDepto = ped.getDirDepartamento();
+            String depto = (rawDepto != null && !rawDepto.isBlank()) ? rawDepto.trim() : "No especificado";
+            String key = depto.toUpperCase(Locale.ROOT);
+            int unidadesPed = ped.getItems().stream()
+                    .mapToInt(item -> item.getCantidad() != null ? item.getCantidad() : 0)
+                    .sum();
+            BigDecimal totalPed = ped.getTotal() != null ? ped.getTotal() : BigDecimal.ZERO;
+
+            ventasDeptoMap.computeIfAbsent(key, k -> new Object[]{depto, 0L, 0, BigDecimal.ZERO});
+            Object[] acc = ventasDeptoMap.get(key);
+            acc[1] = (Long) acc[1] + 1L;
+            acc[2] = (Integer) acc[2] + unidadesPed;
+            acc[3] = ((BigDecimal) acc[3]).add(totalPed);
+        });
+
+        List<ReporteMetricasResponse.VentaDepartamentoReporte> ventasPorDepartamento = ventasDeptoMap.values().stream()
+                .sorted((a, b) -> ((BigDecimal) b[3]).compareTo((BigDecimal) a[3]))
+                .map(acc -> {
+                    BigDecimal totalDepto = (BigDecimal) acc[3];
+                    double porc = totalDepto.divide(ingresosParaPorcentaje, 4, RoundingMode.HALF_UP).doubleValue() * 100.0;
+                    return ReporteMetricasResponse.VentaDepartamentoReporte.builder()
+                            .departamento((String) acc[0])
+                            .cantidadPedidos((Long) acc[1])
+                            .unidadesVendidas((Integer) acc[2])
+                            .totalGenerado(totalDepto)
+                            .porcentaje(Math.min(100.0, porc))
+                            .build();
+                })
+                .toList();
+
         // Alertas de Stock
         List<Product> todosProductos = productRepository.findAll();
         List<ReporteMetricasResponse.StockCriticoReporte> stockCritico = todosProductos.stream()
@@ -460,6 +493,7 @@ public class AdminService {
                 .pedidosPorEstado(pedidosPorEstado)
                 .ventasPorMetodoPago(ventasPorMetodoPago)
                 .topProductos(topProductos)
+                .ventasPorDepartamento(ventasPorDepartamento)
                 .stockCritico(stockCritico)
                 .pedidos(pedidosResumen)
                 .build();

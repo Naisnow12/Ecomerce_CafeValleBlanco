@@ -125,6 +125,35 @@ public class ReportePdfIndividualService {
             }
             document.add(estTable);
 
+            // Tabla: Ventas por Departamento
+            if (metricas.getVentasPorDepartamento() != null && !metricas.getVentasPorDepartamento().isEmpty()) {
+                Paragraph depTitle = new Paragraph("4. VENTAS POR DEPARTAMENTO", sectionFont);
+                depTitle.setSpacingAfter(8);
+                document.add(depTitle);
+
+                PdfPTable depTable = new PdfPTable(5);
+                depTable.setWidthPercentage(100);
+                depTable.setWidths(new float[]{38f, 15f, 15f, 20f, 12f});
+                depTable.setSpacingAfter(15);
+                depTable.addCell(crearHeaderCell("Departamento", Element.ALIGN_LEFT));
+                depTable.addCell(crearHeaderCell("Pedidos", Element.ALIGN_RIGHT));
+                depTable.addCell(crearHeaderCell("Unidades", Element.ALIGN_RIGHT));
+                depTable.addCell(crearHeaderCell("Total (S/)", Element.ALIGN_RIGHT));
+                depTable.addCell(crearHeaderCell("Part. %", Element.ALIGN_RIGHT));
+
+                boolean altDep = false;
+                for (ReporteMetricasResponse.VentaDepartamentoReporte dep : metricas.getVentasPorDepartamento()) {
+                    Color c = altDep ? COLOR_ROW_ALT : Color.WHITE;
+                    depTable.addCell(crearDataCell(dep.getDepartamento(), c, Element.ALIGN_LEFT, true));
+                    depTable.addCell(crearDataCell(String.valueOf(dep.getCantidadPedidos()), c, Element.ALIGN_RIGHT, false));
+                    depTable.addCell(crearDataCell(String.valueOf(dep.getUnidadesVendidas()), c, Element.ALIGN_RIGHT, false));
+                    depTable.addCell(crearDataCell("S/ " + moneyFormat.format(dep.getTotalGenerado()), c, Element.ALIGN_RIGHT, false));
+                    depTable.addCell(crearDataCell(String.format("%.1f%%", dep.getPorcentaje()), c, Element.ALIGN_RIGHT, false));
+                    altDep = !altDep;
+                }
+                document.add(depTable);
+            }
+
             document.close();
             return out.toByteArray();
         } catch (Exception e) {

@@ -34,8 +34,21 @@ public class ReporteMetricasResponse {
     private Map<String, Long> pedidosPorEstado;
     private Map<String, BigDecimal> ventasPorMetodoPago;
     private List<TopProductoReporte> topProductos;
+    private List<VentaDepartamentoReporte> ventasPorDepartamento;
     private List<StockCriticoReporte> stockCritico;
     private List<PedidoResumenReporte> pedidos;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VentaDepartamentoReporte {
+        private String departamento;
+        private long cantidadPedidos;
+        private int unidadesVendidas;
+        private BigDecimal totalGenerado;
+        private double porcentaje;
+    }
 
     @Data
     @Builder

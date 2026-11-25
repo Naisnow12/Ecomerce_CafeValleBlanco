@@ -444,7 +444,7 @@
                     </div>
 
                     <!-- 4. Pedidos por estado -->
-                    <div class="panel-card chart-card chart-card--wide">
+                    <div class="panel-card chart-card">
                         <div class="panel-card__header">
                             <div>
                                 <h3>Pedidos por Estado</h3>
@@ -463,6 +463,30 @@
                         } @else {
                             <div class="empty-state">
                                 <p>No hay pedidos registrados en este período.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- 5. Ventas por Departamento -->
+                    <div class="panel-card chart-card">
+                        <div class="panel-card__header">
+                            <div>
+                                <h3>Departamentos con Mayor Venta</h3>
+                                <p class="subtitle">Ingresos acumulados por región de destino</p>
+                            </div>
+                            <span class="panel-badge">Geografía</span>
+                        </div>
+                        @if (departamentosBarData().labels && departamentosBarData().labels!.length > 0) {
+                            <div class="chart-wrapper">
+                                <canvas baseChart
+                                    [data]="departamentosBarData()"
+                                    [options]="departamentosBarOptions"
+                                    type="bar">
+                                </canvas>
+                            </div>
+                        } @else {
+                            <div class="empty-state">
+                                <p>No hay datos geográficos en este período.</p>
                             </div>
                         }
                     </div>
@@ -547,6 +571,43 @@
                 </div>
             </div>
 
+        </section>
+
+        <!-- DEPARTAMENTOS CON MAYOR VENTA -->
+        <section class="departamentos-section">
+            <div class="panel-card">
+                <div class="panel-card__header">
+                    <div>
+                        <h3>Departamentos con Mayor Venta de Café</h3>
+                        <p class="subtitle">Distribución geográfica de pedidos e ingresos en el período</p>
+                    </div>
+                    <span class="panel-badge">Ranking regional</span>
+                </div>
+
+                @if (reporte()!.ventasPorDepartamento && reporte()!.ventasPorDepartamento.length > 0) {
+                    <div class="top-list">
+                        @for (dep of reporte()!.ventasPorDepartamento; track dep.departamento; let i = $index) {
+                            <div class="top-item">
+                                <div class="top-item__info">
+                                    <span class="top-rank">#{{ i + 1 }}</span>
+                                    <div class="top-details">
+                                        <strong>{{ dep.departamento }}</strong>
+                                        <small>{{ dep.cantidadPedidos }} pedidos · {{ dep.unidadesVendidas }} bolsas · S/ {{ dep.totalGenerado | number:'1.2-2' }}</small>
+                                    </div>
+                                    <span class="top-porcentaje">{{ dep.porcentaje | number:'1.1-1' }}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" [style.width.%]="dep.porcentaje"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="empty-state">
+                        <p>No hay ventas registradas por departamento en el período seleccionado.</p>
+                    </div>
+                }
+            </div>
         </section>
 
         <!-- ALERTAS DE STOCK CRÍTICO -->

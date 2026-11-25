@@ -12,6 +12,14 @@ export interface TopProducto {
   porcentaje: number;
 }
 
+export interface VentaDepartamento {
+  departamento: string;
+  cantidadPedidos: number;
+  unidadesVendidas: number;
+  totalGenerado: number;
+  porcentaje: number;
+}
+
 export interface StockCritico {
   id: number;
   nombre: string;
@@ -46,6 +54,7 @@ export interface ReporteData {
   pedidosPorEstado: Record<string, number>;
   ventasPorMetodoPago: Record<string, number>;
   topProductos: TopProducto[];
+  ventasPorDepartamento: VentaDepartamento[];
   stockCritico: StockCritico[];
   pedidos: PedidoResumen[];
 }
@@ -522,6 +531,57 @@ export class ReportesAdmin implements OnInit {
         beginAtZero: true,
         grid: { color: 'rgba(226, 217, 200, 0.45)' },
         ticks: { stepSize: 1, color: '#64748b', font: { size: 11 } }
+      }
+    }
+  };
+
+  // 5. Ventas por Departamento (Barras horizontales en cobre/verde)
+  departamentosBarData = computed<ChartData<'bar'>>(() => {
+    const rep = this.reporte();
+    const deptos = (rep?.ventasPorDepartamento ?? []).slice(0, 8);
+    return {
+      labels: deptos.map(d => d.departamento),
+      datasets: [
+        {
+          label: 'Ventas (S/)',
+          data: deptos.map(d => Number(d.totalGenerado || 0)),
+          backgroundColor: '#b87c43',
+          hoverBackgroundColor: '#1c3829',
+          borderRadius: 6,
+          barThickness: 22
+        }
+      ]
+    };
+  });
+
+  departamentosBarOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1c3829',
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (ctx) => ` Ventas: S/ ${Number(ctx.parsed.x ?? 0).toFixed(2)}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        grid: { color: 'rgba(226, 217, 200, 0.45)' },
+        ticks: {
+          color: '#64748b',
+          font: { size: 11 },
+          callback: (val) => `S/ ${val}`
+        }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: '#2e3d2f', font: { size: 11, weight: 600 } }
       }
     }
   };
