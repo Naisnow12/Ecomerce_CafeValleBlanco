@@ -4,7 +4,7 @@ import { DecimalPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { PedidoService } from '../../../../core/services/pedido.service';
+import { PedidoService } from '../../../../core/services/pedido-service';
 import {
   PedidoResponse,
   EstadoPedido

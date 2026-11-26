@@ -1,8 +1,8 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductService } from '../../../../core/services/product.service';
-import { CarritoService } from '../../../../core/services/carrito.service';
+import { ProductService } from '../../../../core/services/product-service';
+import { CarritoService } from '../../../../core/services/carrito-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Product } from '../../../../core/models/product.interface';
 import { precios } from '../../../../core/models/precios.interface';

@@ -1,7 +1,8 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InventarioService, MovimientoStock } from '../../../../core/services/inventario.service';
+import { InventarioService } from '../../../../core/services/inventario-service';
+import { MovimientoStock } from '../../../../core/models/movimientos.interface';
 import { Product } from '../../../../core/models/product.interface';
 
 @Component({

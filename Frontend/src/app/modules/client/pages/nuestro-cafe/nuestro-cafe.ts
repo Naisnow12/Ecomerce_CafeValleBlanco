@@ -2,8 +2,8 @@ import { Component, OnInit, inject, signal, ChangeDetectorRef } from '@angular/c
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Product } from '../../../../core/models/product.interface';
-import { ProductService } from '../../../../core/services/product.service';
-import { CarritoService } from '../../../../core/services/carrito.service';
+import { ProductService } from '../../../../core/services/product-service';
+import { CarritoService } from '../../../../core/services/carrito-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { APP_CONFIG } from '../../../../core/constants/app-config';
 

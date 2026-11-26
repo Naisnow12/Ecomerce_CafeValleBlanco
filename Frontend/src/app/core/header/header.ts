@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth-service';
-import { CarritoService } from '../services/carrito.service';
+import { CarritoService } from '../services/carrito-service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],

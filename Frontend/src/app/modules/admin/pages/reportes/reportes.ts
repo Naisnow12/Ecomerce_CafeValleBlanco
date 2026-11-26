@@ -3,7 +3,7 @@ import { CommonModule, DecimalPipe, DatePipe, isPlatformBrowser } from '@angular
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
-import { AdminService } from '../../../../core/services/admin.service';
+import { AdminService } from '../../../../core/services/admin-service';
 
 export interface TopProducto {
   nombre: string;

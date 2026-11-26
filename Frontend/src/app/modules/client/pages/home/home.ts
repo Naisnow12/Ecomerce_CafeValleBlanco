@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { ProductService } from '../../../../core/services/product.service';
-import { CarritoService } from '../../../../core/services/carrito.service';
+import { ProductService } from '../../../../core/services/product-service';
+import { CarritoService } from '../../../../core/services/carrito-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Product } from '../../../../core/models/product.interface';
 

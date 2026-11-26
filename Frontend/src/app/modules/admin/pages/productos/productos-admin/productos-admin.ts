@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { ProductService } from '../../../../../core/services/product.service';
+import { ProductService } from '../../../../../core/services/product-service';
 import { Product } from '../../../../../core/models/product.interface';
 import { precios } from '../../../../../core/models/precios.interface';
 

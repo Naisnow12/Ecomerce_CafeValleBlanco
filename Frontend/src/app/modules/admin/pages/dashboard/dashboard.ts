@@ -2,7 +2,7 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AdminService } from '../../../../core/services/admin.service';
+import { AdminService } from '../../../../core/services/admin-service';
 
 type EstadoPedido =
   | 'PENDIENTE'

@@ -3,7 +3,7 @@ import { Header } from '../../../core/header/header';
 import { Footer } from '../../../core/footer/footer';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
-import { CarritoService } from '../../../core/services/carrito.service';
+import { CarritoService } from '../../../core/services/carrito-service';
 
 @Component({
   imports: [Header, Footer, RouterOutlet],
@@ -16,7 +16,7 @@ export class LayoutClient implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn() && this.authService.puedeComprar()) {
-      this.carritoService.cargarCarrito().subscribe({ error: () => {} });
+      this.carritoService.cargarCarrito().subscribe({ error: () => { } });
     }
   }
 }

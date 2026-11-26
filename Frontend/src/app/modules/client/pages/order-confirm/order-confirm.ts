@@ -4,8 +4,8 @@ import { DecimalPipe, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { PedidoService } from '../../../../core/services/pedido.service';
-import { PagoService } from '../../../../core/services/pago.service';
+import { PedidoService } from '../../../../core/services/pedido-service';
+import { PagoService } from '../../../../core/services/pago-service';
 import { PedidoResponse } from '../../../../core/models/pedido.interface';
 
 @Component({

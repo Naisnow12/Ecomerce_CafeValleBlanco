@@ -10,8 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { Product } from '../../../../core/models/product.interface';
-import { ProductService } from '../../../../core/services/product.service';
-import { CarritoService } from '../../../../core/services/carrito.service';
+import { ProductService } from '../../../../core/services/product-service';
+import { CarritoService } from '../../../../core/services/carrito-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
 

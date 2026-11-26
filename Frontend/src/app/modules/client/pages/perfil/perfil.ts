@@ -1,23 +1,9 @@
-
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-  computed,
-  PLATFORM_ID,
-} from '@angular/core';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { Component, OnInit, inject, signal, computed, PLATFORM_ID } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
-import { UsuarioService } from '../../../../core/services/usuario.service';
+import { UsuarioService } from '../../../../core/services/usuario-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UsuarioProfile } from '../../../../core/models/usuario.interface';
 
@@ -350,8 +336,8 @@ export class Perfil implements OnInit {
           this.cambiandoPassword.set(false);
           this.passwordError.set(
             err?.error?.error ||
-              err?.error?.message ||
-              'No se pudo cambiar la contraseña. Verifica tu contraseña actual.'
+            err?.error?.message ||
+            'No se pudo cambiar la contraseña. Verifica tu contraseña actual.'
           );
         },
       });

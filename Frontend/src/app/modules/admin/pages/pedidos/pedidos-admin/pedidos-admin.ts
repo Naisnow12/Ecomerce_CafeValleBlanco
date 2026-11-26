@@ -9,7 +9,7 @@ import {
 
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../../../../../core/services/admin.service';
+import { AdminService } from '../../../../../core/services/admin-service';
 
 import {
   EstadoPedido,

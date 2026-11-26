@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { CarritoService } from '../../../../core/services/carrito.service';
+import { CarritoService } from '../../../../core/services/carrito-service';
 import { DecimalPipe } from '@angular/common';
 
 @Component({

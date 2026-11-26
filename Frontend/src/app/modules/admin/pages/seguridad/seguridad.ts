@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AdminService } from '../../../../core/services/admin.service';
+import { AdminService } from '../../../../core/services/admin-service';
 
 @Component({
   selector: 'app-seguridad-admin',

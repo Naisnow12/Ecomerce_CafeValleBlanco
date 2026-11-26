@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { CarritoService } from '../../../../core/services/carrito.service';
-import { PedidoService } from '../../../../core/services/pedido.service';
-import { UsuarioService } from '../../../../core/services/usuario.service';
-import { PagoService } from '../../../../core/services/pago.service';
+import { CarritoService } from '../../../../core/services/carrito-service';
+import { PedidoService } from '../../../../core/services/pedido-service';
+import { UsuarioService } from '../../../../core/services/usuario-service';
+import { PagoService } from '../../../../core/services/pago-service';
 
 import { Direccion, UsuarioProfile } from '../../../../core/models/usuario.interface';
 import { CrearPedidoRequest } from '../../../../core/models/pedido.interface';
@@ -216,7 +216,7 @@ export class Checkout implements OnInit {
     this.pedidoService.crearPedido(request).subscribe({
       next: (pedido) => {
         // Actualizamos el carrito después de confirmar la compra
-        this.carritoService.cargarCarrito().subscribe({ error: () => {} });
+        this.carritoService.cargarCarrito().subscribe({ error: () => { } });
 
         if (this.metodoPago() === 'MERCADO_PAGO') {
           // Si eligió pasarela, iniciamos la sesión de pago Sandbox
