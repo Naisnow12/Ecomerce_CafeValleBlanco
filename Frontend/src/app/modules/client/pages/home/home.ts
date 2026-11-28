@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../../core/services/product-service';
 import { CarritoService } from '../../../../core/services/carrito-service';
@@ -18,6 +18,8 @@ export class Home implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   puedeComprar = this.authService.puedeComprar;
+
+  private readonly platformId = inject(PLATFORM_ID);
 
   featuredProducts: Product[] = [];
   selectedFilter: string = 'todos';
@@ -247,19 +249,23 @@ export class Home implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        if (products && products.length > 0) {
-          const oficiales = products.filter(p => this.slugsOficialesValleBlanco.includes(p.slug));
-          this.featuredProducts = (oficiales.length > 0 ? oficiales : this.fallbackProducts).slice(0, 6);
-        } else {
+
+    this.featuredProducts = this.fallbackProducts;
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.productService.getProducts().subscribe({
+        next: (products) => {
+          if (products && products.length > 0) {
+            const oficiales = products.filter(p => this.slugsOficialesValleBlanco.includes(p.slug));
+            this.featuredProducts = (oficiales.length > 0 ? oficiales : this.fallbackProducts).slice(0, 6);
+          }
+        },
+        error: () => {
           this.featuredProducts = this.fallbackProducts;
         }
-      },
-      error: () => {
-        this.featuredProducts = this.fallbackProducts;
-      }
-    });
+      });
+    }
+
   }
 
   setFilter(filter: string): void {

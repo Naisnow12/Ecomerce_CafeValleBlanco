@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InventarioService } from '../../../../core/services/inventario-service';
 import { MovimientoStock } from '../../../../core/models/movimientos.interface';
@@ -8,7 +8,7 @@ import { Product } from '../../../../core/models/product.interface';
 @Component({
   selector: 'app-stock-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, DecimalPipe, DatePipe],
+  imports: [CommonModule, FormsModule, DatePipe],
   templateUrl: './stock-dashboard.html',
   styleUrl: './stock-dashboard.scss'
 })
